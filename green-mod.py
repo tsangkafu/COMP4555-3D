@@ -1,5 +1,3 @@
-from random import random
-from random import randint
 import pygame
 import sys
 
@@ -8,9 +6,8 @@ def ball_animation():
 
     global ball_speed_x, ball_speed_y
 
-    if ball_speed_x <= 20 or ball_speed_y <= 20:
-        ball_speed_x *= 1.001
-        ball_speed_y *= 1.001
+    ball_speed_x *= 1.001
+    ball_speed_y *= 1.001
 
     ball.x += ball_speed_x
     ball.y += ball_speed_y
@@ -53,17 +50,6 @@ def opponent_ai():
     if opponent.bottom >= screen_height:
         opponent.bottom = screen_height
 
-# Reverse Y position of ball on random intervals of hitting the middle, as well as randomizing speed
-def mod(): 
-  global ball_speed_y, ball_speed_x
-  if ball.x == screen_width/2-15:
-    
-    speed = randint(6, 10)
-    ball_speed_y *= -1
-    if ball_speed_x <= -1: 
-     ball_speed_x = speed * -1
-    else: 
-     ball_speed_x = speed
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -80,8 +66,8 @@ player = pygame.Rect(screen_width-20, screen_height /
 opponent = pygame.Rect(10, screen_height/2-70, 10, 140)  # -70 missing
 
 # Colors
-light_grey = (200, 200, 200)
-bg_color = pygame.Color('grey12')
+green = (46, 176, 0)
+bg_color = (20, 59, 6)
 
 # Game Variables
 ball_speed_x = 7
@@ -112,14 +98,13 @@ while True:
     ball_animation()
     player_animation()
     opponent_ai()
-    mod()
 
     screen.fill(bg_color)
-    pygame.draw.rect(screen, light_grey, player)
-    pygame.draw.rect(screen, light_grey, opponent)
-    pygame.draw.ellipse(screen, light_grey, ball)
-    pygame.draw.aaline(screen, light_grey, (screen_width/2,
-                                            0), (screen_width/2, screen_height))
+    pygame.draw.rect(screen, green, player)
+    pygame.draw.rect(screen, green, opponent)
+    pygame.draw.ellipse(screen, green, ball)
+    pygame.draw.aaline(screen, green, (screen_width/2,
+                                       0), (screen_width/2, screen_height))
 
     pygame.display.flip()
     clock.tick(60)
