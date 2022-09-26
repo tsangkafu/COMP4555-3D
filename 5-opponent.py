@@ -1,3 +1,5 @@
+from random import random
+from random import randint
 import pygame
 import sys
 
@@ -47,6 +49,17 @@ def opponent_ai():
   if opponent.bottom >= screen_height:
     opponent.bottom = screen_height
 
+# Reverse Y position of ball on random intervals of hitting the middle, as well as randomizing speed
+def mod(): 
+  global ball_speed_y, ball_speed_x
+  if ball.x == screen_width/2-15:
+    
+    speed = randint(6, 10)
+    ball_speed_y *= -1
+    if ball_speed_x <= -1: 
+     ball_speed_x = speed * -1
+    else: 
+     ball_speed_x = speed
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -95,6 +108,7 @@ while True:
     ball_animation()
     player_animation()
     opponent_ai()
+    mod()
 
     screen.fill(bg_color)
     pygame.draw.rect(screen, light_grey, player)
