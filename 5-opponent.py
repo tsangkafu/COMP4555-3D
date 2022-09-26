@@ -7,6 +7,10 @@ def ball_animation():
 
   global ball_speed_x, ball_speed_y
 
+
+  ball_speed_x *= 1.001
+  ball_speed_y *= 1.001
+  
   ball.x += ball_speed_x
   ball.y += ball_speed_y
 
