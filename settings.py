@@ -1,0 +1,3 @@
+HEIGHT = 960
+WIDTH = 1280
+FPS = 60
