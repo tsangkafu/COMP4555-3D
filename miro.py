@@ -20,7 +20,14 @@ while 1==1:
 
 WINDOW = None # this holds the obj for the game window
 MENU = None # this holds the menu
-MODELS = {} # this holds things like the ball model etc. <> BALL:
+
+# this holds things like the ball model etc. MODELS["ball"]:
+MODELS = {} # ex. MODELS["ball"] = {"pygame":"the pygame object", "shape": "ecliplse", xSpeed:4, ySpeed:5}
+
+#------------------------------------------------------
+# COLORS
+
+LIGHT_GRAY_COLOR = (200, 200, 200)
 
 #######################################################
 # INITIALIZE
@@ -29,7 +36,7 @@ def run():
     pygame.init()
     load_window()
     load_menu()
-    while 1==1: display_menu()
+    display_menu()
  
 #------------------------------------------------------
 
@@ -71,60 +78,90 @@ def get_mode_function_names():
             l.append(key)
     return l
 
+#------------------------------------------------------
+
+def display_menu():
+    MENU.mainloop(WINDOW)
+
 #######################################################
 # MODES
+# to create a model: pygame.Rect(xCoord, yCoord, xSize, ySize)
 
 def mode_standard():
-    global MODELS
-    print("hello")
-    MODELS["ball"] = {"shape":"ellipse", "size":[30,30], "initCoords":["middle","middle"], "speed":[7,7]}
-    MODELS["player"] = {"shape":"rect", "size":[10,140], "initCoords":["right","middle"], "speed":[0,7]}
-    MODELS["opponent"] = {"shape":"rect", "size":[10,140], "initCoords":["left","middle"], "speed":[0,7]}
+    MODELS["ball"] = {"pygame":generate_pygame_model("middle", "middle", 30, 30), "shape":"ellipse", "xSpeed":7, "ySpeed":7}
+    MODELS["player"] = {"pygame":generate_pygame_model("right", "middle", 10, 140), "shape":"rect", "xSpeed":0, "ySpeed":6}
+    MODELS["opponent"] = {"pygame":generate_pygame_model("left", "middle", 10, 140), "shape":"rect", "xSpeed":7, "ySpeed":7}
+    MODELS["line"] = {"pygame":generate_pygame_model("middle", "middle", 3, get_window_dimensions()[1]), "shape":"rect", "xSpeed":0, "ySpeed":0}
     play_game()
+
+#------------------------------------------------------
+
+# the x and y coordiantes can either be a number or a word: left, right, middle, random
+def generate_pygame_model(xCoord, yCoord, xSize, ySize):
+    # first conver coordinates from words to numbers if they are
+    coordsArr = [xCoord, yCoord]
+    sizesArr = [xSize, ySize]
+    for i in range(len(coordsArr)):
+        if not re.match(r"^(left|right|middle|random)$", coordsArr[i]): continue
+        coordText = coordsArr[i]
+        modelSizeInDirection = sizesArr[i]
+        windowSizeInDirection = get_window_dimensions()[i]
+        if coordText == "middle": coordsArr[i] = (windowSizeInDirection/2)-(modelSizeInDirection/2)
+        elif coordText == "left": coordsArr[i] = modelSizeInDirection
+        elif coordText == "right": coordsArr[i] = windowSizeInDirection-modelSizeInDirection
+        elif coordText == "random": coordsArr[i] = random.randint(modelSizeInDirection, windowSizeInDirection-modelSizeInDirection) # min, max
+    xCoord, yCoord = coordsArr
+
+    # then return the object
+    return pygame.Rect(xCoord, yCoord, xSize, ySize)
 
 #######################################################
 # PLAYING THE GAME
 
 def play_game():
-    convert_models_to_pygame_compatible()
-    # game loop
-    # if input = some button go back to main menu (just stop this function with return)
+    display_models()
+    while 1==1: # game loop
+        for event in pygame.event.get():
+            result = event_processor(event)
+            if result == "update": display_models()
+            elif result == "end game": return
 
 #------------------------------------------------------
 
-# the "models" created in the modes_ functions are simply to make it easier on the developer
-# this function converts them to the actual objects they need to be for the pygame
-# the originals can still be accessd in MODELS[blag_orig], so you will still have access to size speed shape etc
-def convert_models_to_pygame_compatible():
+# screen top, left edge = 0
+def event_processor(event):
+    if hasattr(event, "key"):
+        if event.key == pygame.K_UP:
+            move_model("player", "-")
+            return "update"
+        elif event.key == pygame.K_DOWN:
+            move_model("player", "+")
+            return "update"
+        elif event.key == pygame.K_ESCAPE:
+            return "end game"
+    return "nothing important"
+
+def move_model(modelKey, plusOrMinus):
     global MODELS
+    times = 1 if plusOrMinus == "+" else -1
+    MODELS[modelKey]["pygame"].x += times * MODELS[modelKey]["xSpeed"]
+    MODELS[modelKey]["pygame"].y += times * MODELS[modelKey]["ySpeed"]
 
-    for modelKey in list(MODELS):
-        # first convert initial coordinates text to numbers
-        for i in range(2): # one for x, one for y
-            coordText = MODELS[modelKey]["initCoords"][i]
-            if not re.match(r"^(middle|left|right|random)$", coordText): break
-            modelSizeInDirection = MODELS[modelKey]["size"][i]
-            windowSizeInDirection = get_window_dimensions()[i]
+#------------------------------------------------------
 
-            if coordText == "middle": MODELS[modelKey]["initCoords"][i] = (windowSizeInDirection/2)-(modelSizeInDirection/2)
-            elif coordText == "left": MODELS[modelKey]["initCoords"][i] = modelSizeInDirection
-            elif coordText == "right": MODELS[modelKey]["initCoords"][i] = windowSizeInDirection-modelSizeInDirection
-            elif coordText == "random": MODELS[modelKey]["initCoords"][i] = random.randint(modelSizeInDirection, windowSizeInDirection-modelSizeInDirection) # min, max
-
-        # then convert to pygame compatible
-        MODELS[f"{modelKey}_orig"] = MODELS[modelKey] # so you still have access to size speed shape etc.
-        xCoord, yCoord = MODELS[modelKey]["initCoords"]
-        xSize, ySize = MODELS[modelKey]["size"]
-        MODELS[modelKey] = pygame.Rect(xCoord, yCoord, xSize, ySize)
+def display_models():
+    WINDOW.fill(pygame.Color('grey12'))
+    for modelKey in MODELS:
+        shape = MODELS[modelKey]["shape"]
+        if shape == "ellipse": pygame.draw.ellipse(WINDOW, LIGHT_GRAY_COLOR, MODELS[modelKey]["pygame"])
+        elif shape == "rect": pygame.draw.rect(WINDOW, LIGHT_GRAY_COLOR, MODELS[modelKey]["pygame"])
+    pygame.display.flip() # this updates the display
 
 #######################################################
 # OTHER
 
 def get_window_dimensions():
     return pygame.display.get_surface().get_size() # returns (x,y)
-
-def display_menu():
-    MENU.mainloop(WINDOW)
 
 #######################################################
 
