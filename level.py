@@ -5,6 +5,12 @@ from player import Player
 from opponent import Opponent
 from ball import Ball
 
+screen_width = 1280 
+screen_height = 960
+screen = pygame.display.set_mode((screen_width, screen_height))
+light_grey = (200, 200, 200)
+bg_color = pygame.Color('grey12')
+
 BALL_RADIUS = 20
 BOARD_SIZE = (10, 140)
 COLOR = (200, 200, 200)
@@ -40,5 +46,8 @@ class Level():
 
 
     def run(self):
+        screen.fill(bg_color)
         pygame.draw.aaline(self.surface, COLOR, (WIDTH / 2, 0), (WIDTH / 2, HEIGHT))
         self.sprites.draw(self.surface)
+        
+        

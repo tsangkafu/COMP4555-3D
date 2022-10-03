@@ -4,6 +4,8 @@ import sys
 from settings import *
 from level import Level
 
+
+
 class Game():
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -21,10 +23,9 @@ class Game():
                     sys.exit()
             
             self.level.run()
-
-            pygame.display.flip()
-
             self.clock.tick(FPS)
+            pygame.display.flip()
+            self.level.ball.update() 
 
 if __name__ == '__main__':
     game = Game()

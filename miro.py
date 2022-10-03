@@ -119,6 +119,7 @@ def generate_pygame_model(xCoord, yCoord, xSize, ySize):
 # PLAYING THE GAME
 
 def play_game():
+    clock = pygame.time.Clock()
     display_models()
     while 1==1: # game loop
         for event in pygame.event.get():

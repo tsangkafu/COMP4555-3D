@@ -11,4 +11,4 @@ class Opponent(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(topleft = pos)
 
     def update(self):
-        pass
+        self.rect.y += 1
