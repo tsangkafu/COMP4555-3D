@@ -1,16 +1,16 @@
 import pygame
-import sys
+pygame.init()
+pygame.mixer.pre_init(44100, -16, 2, 512)
 
+import sys
 from settings import *
 from level import Level
-
-
 
 class Game():
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
-        self.level = Level()
+        self.level = Level(self.screen)
         pygame.display.set_caption("Pong")
 
 
@@ -23,9 +23,8 @@ class Game():
                     sys.exit()
             
             self.level.run()
-            self.clock.tick(FPS)
             pygame.display.flip()
-            self.level.ball.update() 
+            self.clock.tick(FPS)
 
 if __name__ == '__main__':
     game = Game()
