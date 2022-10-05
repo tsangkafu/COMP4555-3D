@@ -1,14 +1,23 @@
 import pygame
+from powerup import Powerup
 
 from settings import *
 from player import Player
 from opponent import Opponent
 from ball import Ball
+from powerup import Powerup
 
 BG_COLOR = pygame.Color('grey12')
 BALL_RADIUS = 20
 BOARD_SIZE = (10, 140)
 OBJ_COLOR = (200, 200, 200)
+
+# POWERUP CONSTS
+POWERUP_SIZE = (50, 50)
+POWERUP1_COLOR = (200, 0, 200)
+POWERUP2_COLOR = (255, 255, 0)
+POWERUP3_COLOR = (0, 255, 255)
+
 FONT = pygame.font.Font('freesansbold.ttf', 32)
 
 class Level():
@@ -41,10 +50,19 @@ class Level():
             self.player,
             self.opponent)
 
+        self.powerup = Powerup(
+            # size
+            POWERUP_SIZE,
+            # position of the top left of the player
+            ((WIDTH - POWERUP_SIZE[0])/2, Powerup.randomizeHeight()),
+            POWERUP1_COLOR,
+            self.sprites) #sprites
+
     def run(self):
         self.screen.fill(BG_COLOR)
-        pygame.draw.aaline(self.screen, OBJ_COLOR, (WIDTH / 2, 0), (WIDTH / 2, HEIGHT))
-        
+        pygame.draw.aaline(self.screen, OBJ_COLOR,
+                           (WIDTH / 2, 0), (WIDTH / 2, HEIGHT))
+
         self.sprites.draw(self.screen)
 
         self.opponent.chase_ball(self.ball)
@@ -54,6 +72,7 @@ class Level():
 
     def create_score(self):
         player_surface = FONT.render(str(self.player.score), True, OBJ_COLOR)
-        self.screen.blit(player_surface, (660, HEIGHT / 2))
-        opponent_surface = FONT.render(str(self.opponent.score), True, OBJ_COLOR)
-        self.screen.blit(opponent_surface, (600, HEIGHT / 2))
+        self.screen.blit(player_surface, (660, 15))
+        opponent_surface = FONT.render(
+            str(self.opponent.score), True, OBJ_COLOR)
+        self.screen.blit(opponent_surface, (600, 15))
