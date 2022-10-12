@@ -3,12 +3,16 @@ import pygame
 from settings import *
 import random
 
-#global variables? cant seem to put inside of class
+# global variables? cant seem to put inside of class
 POWERUP_SIZE = (50, 50)
 POWERUP1_COLOR = (200, 0, 200)
 POWERUP2_COLOR = (255, 255, 0)
 POWERUP3_COLOR = (0, 255, 255)
 
+# temporary -> each powerup will have a unique color
+color_list = [POWERUP1_COLOR,POWERUP2_COLOR,POWERUP3_COLOR]
+
+# can make Powerup base class where different types of powerups extend this class
 class Powerup(pygame.sprite.Sprite):
 
     # pos = position
@@ -21,22 +25,15 @@ class Powerup(pygame.sprite.Sprite):
         self.vector = pygame.math.Vector2()
         
     #Generates random y-axis bounds = (below score -> bottom of screen)
-    def randomizeHeight():
+    def randomizeHeight(self):
         randomHeight = random.randrange(
-        15 + POWERUP_SIZE[0], HEIGHT - POWERUP_SIZE[1]
+        15 + POWERUP_SIZE[1], HEIGHT - POWERUP_SIZE[1]
         )
         return randomHeight
 
-    #not used currently
-    def powerupTimer(start_time, height):
-        time_elapsed = pygame.time.get_ticks()
-        changeHeight = False
-
-        if (time_elapsed - start_time) > 5000:
-            changeHeight = True
-
-        if changeHeight:
-            start_time = pygame.time.get_ticks()
-            height = Powerup.randomizeHeight()
-        
-        return start_time,height
+    def changeHeight(self):
+        self.image = pygame.Surface(POWERUP_SIZE)
+        color = random.choice(color_list)
+        self.image.fill(color)
+        new_size = ((WIDTH - POWERUP_SIZE[0]) /2 , (self.randomizeHeight()))
+        self.rect = self.image.get_rect(topleft = new_size)

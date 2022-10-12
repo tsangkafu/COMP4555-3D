@@ -26,7 +26,6 @@ class Game():
     def run(self):
             
         start_time = pygame.time.get_ticks()
-        height = Powerup.randomizeHeight()
 
         while True:
             # event detection
@@ -37,7 +36,7 @@ class Game():
             
             self.level.run()
            
-            # ~~~~ generate powerup block ~~~~~
+            # ~~~~ powerup position randomize block ~~~~~
             time_elapsed = pygame.time.get_ticks()
             changeHeight = False
 
@@ -46,12 +45,9 @@ class Game():
 
             if changeHeight:
                 start_time = pygame.time.get_ticks()
-                height = Powerup.randomizeHeight()
+                Powerup.changeHeight(self.level.powerup)
+            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-            powerup1 = pygame.Rect((WIDTH-50)/2, height, 50, 50)
-            pygame.draw.rect(self.screen, POWERUP3_COLOR, powerup1)
-            # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-           
             pygame.display.flip()
             self.clock.tick(FPS)
 

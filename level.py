@@ -41,6 +41,14 @@ class Level():
             OBJ_COLOR,
             self.sprites)
 
+        self.powerup = Powerup(
+            # size
+            POWERUP_SIZE,
+            # position of the top left of the player
+            ((WIDTH - POWERUP_SIZE[0])/2, Powerup.randomizeHeight(self)),
+            POWERUP1_COLOR,
+            self.sprites) #sprites
+
         self.ball = Ball(
             # surface
             BALL_RADIUS,
@@ -48,15 +56,9 @@ class Level():
             OBJ_COLOR,
             self.sprites,
             self.player,
-            self.opponent)
+            self.opponent,
+            self.powerup)
 
-        self.powerup = Powerup(
-            # size
-            POWERUP_SIZE,
-            # position of the top left of the player
-            ((WIDTH - POWERUP_SIZE[0])/2, Powerup.randomizeHeight()),
-            POWERUP1_COLOR,
-            self.sprites) #sprites
 
     def run(self):
         self.screen.fill(BG_COLOR)

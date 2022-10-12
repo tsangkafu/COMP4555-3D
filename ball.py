@@ -8,10 +8,11 @@ SCORE_SOUND = pygame.mixer.Sound("./lecture_code/media/score.ogg")
 class Ball(pygame.sprite.Sprite):
     # pos = position
     # group = sprite group
-    def __init__(self, radius, pos, color, group, player, opponent):
+    def __init__(self, radius, pos, color, group, player, opponent, powerup):
         super().__init__(group)
         self.player = player
         self.opponent = opponent
+        self.powerup = powerup
         self.radius = radius
         self.speed = 7
         self.velocity = [self.speed, self.speed]
@@ -36,6 +37,11 @@ class Ball(pygame.sprite.Sprite):
         elif self.rect.right >= WIDTH:
             self.opponent.score += 1
             self.restart()
+
+        # powerup collision 
+        # todo: remove powerup on collision + implement powerup timers
+        if self.rect.colliderect(self.powerup.rect):
+            self.player.change_size()
         
         # move ball after velocity is set
         self.rect.x += self.velocity[0]

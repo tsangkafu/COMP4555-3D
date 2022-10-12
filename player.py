@@ -3,6 +3,7 @@ import pygame
 from settings import *
 
 class Player(pygame.sprite.Sprite):
+
     # pos = position
     # group = sprite group
     def __init__(self, size, pos, color, group):
@@ -21,3 +22,9 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= self.speed
         elif keys[pygame.K_DOWN] and not self.rect.bottom >= HEIGHT:
             self.rect.y += self.speed
+
+    def change_size(self):
+        self.image = pygame.Surface((10,240))
+        new_size = ((WIDTH - self.image.get_width()), (self.rect.top))
+        self.rect = self.image.get_rect(topleft = new_size)
+        self.image.fill((200, 200, 200))
