@@ -1,20 +1,32 @@
 import pygame
-import sys
+pygame.init()
+pygame.mixer.pre_init(44100, -16, 2, 512)
 
+import sys
 from settings import *
 from level import Level
+import random
+# import powerup
+from powerup import *
 
 
+POWERUP_SIZE = (50, 50)
+POWERUP1_COLOR = (200, 0, 200)
+POWERUP2_COLOR = (255, 255, 0)
+POWERUP3_COLOR = (0, 255, 255)
 
 class Game():
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.clock = pygame.time.Clock()
-        self.level = Level()
+        self.level = Level(self.screen)
         pygame.display.set_caption("Pong")
 
 
     def run(self):
+            
+        start_time = pygame.time.get_ticks()
+
         while True:
             # event detection
             for event in pygame.event.get():
@@ -23,9 +35,21 @@ class Game():
                     sys.exit()
             
             self.level.run()
-            self.clock.tick(FPS)
+           
+            # ~~~~ powerup position randomize block ~~~~~
+            time_elapsed = pygame.time.get_ticks()
+            changeHeight = False
+
+            if (time_elapsed - start_time) > 5000:
+                changeHeight = True
+
+            if changeHeight:
+                start_time = pygame.time.get_ticks()
+                Powerup.changeHeight(self.level.powerup)
+            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
             pygame.display.flip()
-            self.level.ball.update() 
+            self.clock.tick(FPS)
 
 if __name__ == '__main__':
     game = Game()
