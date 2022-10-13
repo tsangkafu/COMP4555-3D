@@ -37,3 +37,11 @@ class Powerup(pygame.sprite.Sprite):
         self.image.fill(color)
         new_size = ((WIDTH - POWERUP_SIZE[0]) /2 , (self.randomizeHeight()))
         self.rect = self.image.get_rect(topleft = new_size)
+
+    # Easy way to handle "kill" sprite by moving it offscreen until powerup height resets
+    def moveOffscreen(self):
+        self.image = pygame.Surface(POWERUP_SIZE)
+        color = random.choice(color_list)
+        self.image.fill(color)
+        new_size = ((WIDTH + POWERUP_SIZE[0]  + 1) , (HEIGHT + POWERUP_SIZE[1] + 1)) #offscreen location
+        self.rect = self.image.get_rect(topleft = new_size)

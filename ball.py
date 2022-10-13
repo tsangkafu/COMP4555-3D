@@ -24,6 +24,7 @@ class Ball(pygame.sprite.Sprite):
     def update(self):
         # reverse y when the ball reaches top or bottom
         if self.rect.top <= 0 or self.rect.bottom >= HEIGHT:
+            pygame.mixer.Sound.play(PONG_SOUND)
             self.velocity[1] *= -1
         # reverse x when the ball collides the board
         if self.rect.colliderect(self.player.rect) or self.rect.colliderect(self.opponent.rect):
@@ -41,8 +42,10 @@ class Ball(pygame.sprite.Sprite):
         # powerup collision 
         # todo: remove powerup on collision + implement powerup timers
         if self.rect.colliderect(self.powerup.rect):
-            self.player.change_size()
-        
+            pygame.mixer.Sound.play(PONG_SOUND)
+            self.player.change_size(240)
+            self.powerup.moveOffscreen()
+
         # move ball after velocity is set
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]
