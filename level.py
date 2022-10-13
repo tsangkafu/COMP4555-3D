@@ -31,7 +31,8 @@ class Level():
             # position of the top left of the player
             (WIDTH - BOARD_SIZE[0], (HEIGHT - BOARD_SIZE[1]) / 2),
             OBJ_COLOR,
-            self.sprites)
+            self.sprites,
+            screen)
 
         self.opponent = Opponent(
             # size
@@ -75,6 +76,5 @@ class Level():
     def create_score(self):
         player_surface = FONT.render(str(self.player.score), True, OBJ_COLOR)
         self.screen.blit(player_surface, (660, 15))
-        opponent_surface = FONT.render(
-            str(self.opponent.score), True, OBJ_COLOR)
+        opponent_surface = FONT.render(str(self.opponent.score), True, OBJ_COLOR)
         self.screen.blit(opponent_surface, (600, 15))
