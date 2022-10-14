@@ -70,14 +70,14 @@ class Level():
 
         self.bungueBottom = Bungie(
             BUNGIE_SIZE,
-            (BUNGIE_X_POS, 0),
+            ((WIDTH - BUNGIE_SIZE[0])/2, 0),
             BUNGUE_COLOR,
             self.bungie_sprites
         )
 
         self.bungueTop = Bungie(
             BUNGIE_SIZE,
-            (BUNGIE_X_POS, HEIGHT-BUNGIE_SIZE[1]),
+            ((WIDTH - BUNGIE_SIZE[0])/2, HEIGHT-BUNGIE_SIZE[1]),
             BUNGUE_COLOR,
             self.bungie_sprites
         )
@@ -216,8 +216,13 @@ class Level():
         player_surface = font.render(str(text), True, TEXT_COLOR)
         self.screen.blit(player_surface, (WIDTH - WIDTH / 6, 15))
 
-
     def detect_bungie(self):
-        if self.ball.rect.colliderect(self.bungueBottom.rect) or self.ball.rect.colliderect(self.bungueTop.rect):
+        if self.ball.rect.colliderect(self.bungueBottom.rect):
             pygame.mixer.Sound.play(BUNGIE_SOUND)
-            self.ball.bounce("y", "on")
+            # the ball went past the bungue, hit the wall and was bounced already, so I we just need to change the speed
+            if self.ball.velocity[1] > 0: self.ball.toggle_bungie_speed("on")
+            else: self.ball.bounce("y", "on")
+        elif self.ball.rect.colliderect(self.bungueTop.rect):
+            pygame.mixer.Sound.play(BUNGIE_SOUND)
+            if self.ball.velocity[1] < 0: self.ball.toggle_bungie_speed("on")
+            else: self.ball.bounce("y", "on")

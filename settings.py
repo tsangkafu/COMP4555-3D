@@ -23,9 +23,6 @@ COLOR_LIST = [POWERUP1_COLOR, POWERUP2_COLOR, POWERUP3_COLOR]
 # BUNGUE CONSTS
 BUNGIE_SIZE = (180, 10)
 BUNGUE_COLOR = (7, 143, 226)
-# needed to prevent the ball from bouncing vertically using its default mechanic
-# when the ball is in this coordinate. Otherwise, the ball may get stuck
-BUNGIE_X_POS = (WIDTH - BUNGIE_SIZE[0])/2
 
 # sounds
 PONG_SOUND = pygame.mixer.Sound("./media/pong.ogg")

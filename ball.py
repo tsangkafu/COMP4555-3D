@@ -21,9 +21,8 @@ class Ball(pygame.sprite.Sprite):
     def update(self):
         # reverse y when the ball reaches top or bottom
         if self.rect.top <= 0 or self.rect.bottom >= HEIGHT:
-            if not self.is_on_bungies_x_axis():
-                pygame.mixer.Sound.play(PONG_SOUND)
-                self.bounce("y")
+            pygame.mixer.Sound.play(PONG_SOUND)
+            self.bounce("y")
         # reverse x when the ball collides the board
         if self.rect.colliderect(self.player.rect):
             # fixing ball getting stuck issue
@@ -79,9 +78,3 @@ class Ball(pygame.sprite.Sprite):
             newSpeed = BALL_SPEED_NORMAL if onOff == "off" else BALL_SPEED_BUNGIE
             if isNegative: newSpeed *= -1
             self.velocity[i] = newSpeed
-
-    def is_on_bungies_x_axis(self):
-        min = BUNGIE_X_POS - (BUNGIE_SIZE[0]/2)
-        max = BUNGIE_X_POS + (BUNGIE_SIZE[0]/2)
-        if min <= self.rect.x <= max: return True
-        else: return False
