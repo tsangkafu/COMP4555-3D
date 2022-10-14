@@ -4,6 +4,8 @@ from settings import *
 
 class Player(pygame.sprite.Sprite):
 
+    color_setting = 2
+
     # pos = position
     # group = sprite group
     def __init__(self, size, pos, color, group, screen):
@@ -27,6 +29,14 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= self.speed
         elif keys[pygame.K_DOWN] and not self.rect.bottom >= HEIGHT:
             self.rect.y += self.speed
+        elif keys[pygame.K_1]:
+            self.color_setting = 1
+        elif keys[pygame.K_2]:
+            self.color_setting = 2
+        elif keys[pygame.K_3]:
+            self.color_setting = 3
+        elif keys[pygame.K_4]:
+            self.color_setting = 4
 
     #     self.powerup_end_time = pygame.time.get_ticks()
     #     if (self.powerup_end_time - self.powerup_start_time  > 7000):
