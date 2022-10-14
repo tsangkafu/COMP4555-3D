@@ -20,9 +20,16 @@ class Ball(pygame.sprite.Sprite):
 
     def update(self):
         # reverse y when the ball reaches top or bottom
-        if self.rect.top <= 0 or self.rect.bottom >= HEIGHT:
-            pygame.mixer.Sound.play(PONG_SOUND)
-            self.bounce("y")
+        if self.rect.top <= 0:
+            if self.velocity[1] < 0:
+                pygame.mixer.Sound.play(PONG_SOUND)
+                self.bounce("y")
+
+        if self.rect.bottom >= HEIGHT:
+            if self.velocity[1] > 0:
+                pygame.mixer.Sound.play(PONG_SOUND)
+                self.bounce("y")
+
         # reverse x when the ball collides the board
         if self.rect.colliderect(self.player.rect):
             # fixing ball getting stuck issue
