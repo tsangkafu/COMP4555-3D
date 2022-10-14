@@ -16,11 +16,10 @@ class Level():
         # decide whose round it is
         self.player_round = False
         
-        self.player_powerup_start_time = 0
-        self.player_powerup_end_time = 0
-        self.opponent_powerup_start_time = 0
-        self.opponent_powerup_end_time = 0
-
+        self.player_powerup1_start_time = 0
+        self.player_powerup1_end_time = 0
+        self.opponent_powerup1_start_time = 0
+        self.opponent_powerup1_end_time = 0
 
         self.board_sprites = pygame.sprite.Group()
         self.ball_sprites = pygame.sprite.Group()
@@ -103,42 +102,51 @@ class Level():
 
         if self.ball.rect.colliderect(self.powerup.rect):
             pygame.mixer.Sound.play(PONG_SOUND)
+            # change size
             if self.player_round:
-                self.change_size(self.player, 240)
+                self.change_board_size(self.player, 240)
                 self.powerup.moveOffscreen()
             else:
-                self.change_size(self.opponent, 240)
+                self.change_board_size(self.opponent, 240)
                 self.powerup.moveOffscreen()
 
     def powerup_timer(self):
-        self.player_powerup_end_time = pygame.time.get_ticks()
-        self.opponent_powerup_end_time = pygame.time.get_ticks()
+        self.player_powerup1_end_time = pygame.time.get_ticks()
+        self.opponent_powerup1_end_time = pygame.time.get_ticks()
 
-        if (self.player_powerup_end_time - self.player_powerup_start_time  > 7000):
-            self.change_size(self.player, 140)
+        if (self.player_powerup1_end_time - self.player_powerup1_start_time  > 7000):
+            self.change_board_size(self.player, 140)
         if self.player.image.get_height() == 240:
             self.create_powerup_text()
 
-        if (self.opponent_powerup_end_time - self.opponent_powerup_start_time  > 7000):
-            self.change_size(self.opponent, 140)
+        if (self.opponent_powerup1_end_time - self.opponent_powerup1_start_time  > 7000):
+            self.change_board_size(self.opponent, 140)
         if self.opponent.image.get_height() == 240:
             self.create_powerup_text()
 
-    def change_size(self, board, size):
-        # self.create_powerup_text()
+    # change the size of the board/paddle
+    def change_board_size(self, board, size):
         board.image = pygame.Surface((10, size))
-
-        new_pos = ((board.rect.left), (board.rect.top))
-
-        board.rect = board.image.get_rect(topleft = new_pos)
+        board.rect = board.image.get_rect(center = board.rect.center)
         board.image.fill((200, 200, 200))
 
         if size == 240 and board.name == "player":
-            self.player_powerup_start_time = pygame.time.get_ticks()
+            self.player_powerup1_start_time = pygame.time.get_ticks()
             self.create_powerup_text()
         elif size == 240 and board.name == "opponent":
-            self.opponent_powerup_start_time = pygame.time.get_ticks()
+            self.opponent_powerup1_start_time = pygame.time.get_ticks()
             self.create_powerup_text()
+
+    # change the speed of the ball
+    def change_ball_speed(self):
+        self.ball.speed = random
+
+    # change the size of the ball
+    def change_ball_size(self):
+        pass
+
+    # change the speed of the paddle
+    def change_
         
     def create_powerup_text(self):
         TEXT_COLOR = (200, 200, 200)
