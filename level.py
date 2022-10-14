@@ -65,13 +65,13 @@ class Level():
     def run(self):
         self.player_round = self.get_round()
 
-        if Player.color_setting == 1:
+        if self.player.color_setting == 1:
             BG_COLOR = BG_DEF
-        elif Player.color_setting == 2:
+        elif self.player.color_setting == 2:
             BG_COLOR = BG_GRN
-        elif Player.color_setting == 3:
+        elif self.player.color_setting == 3:
             BG_COLOR = BG_BLU
-        elif Player.color_setting == 4:
+        elif self.player.color_setting == 4:
             BG_COLOR = BG_RED
 
 

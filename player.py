@@ -4,8 +4,6 @@ from settings import *
 
 class Player(pygame.sprite.Sprite):
 
-    color_setting = 2
-
     # pos = position
     # group = sprite group
     def __init__(self, size, pos, color, group, screen):
@@ -20,6 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.powerup_start_time = 0
         self.powerup_end_time = 0
         self.screen = screen
+        self.color_setting = 1
 
 
     def update(self):
