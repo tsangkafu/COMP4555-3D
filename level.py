@@ -163,7 +163,7 @@ class Level():
         pass
 
     # change the speed of the paddle
-    def change_
+    def change_board_speed(self, board)
         
     def create_powerup_text(self):
         TEXT_COLOR = (200, 200, 200)
