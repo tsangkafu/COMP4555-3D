@@ -1,4 +1,5 @@
 import pygame
+
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 512)
 
@@ -24,7 +25,6 @@ class Game():
 
 
     def run(self):
-            
         start_time = pygame.time.get_ticks()
 
         while True:

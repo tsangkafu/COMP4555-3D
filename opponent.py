@@ -7,6 +7,7 @@ class Opponent(pygame.sprite.Sprite):
     # group = sprite group
     def __init__(self, size, pos, color, group):
         super().__init__(group)
+        self.name = "opponent"
         self.score = 0
         self.speed = 7
         self.image = pygame.Surface(size)
@@ -25,3 +26,4 @@ class Opponent(pygame.sprite.Sprite):
             self.rect.y += self.speed
         if self.rect.top > ball.rect.bottom:
             self.rect.y -= self.speed
+            

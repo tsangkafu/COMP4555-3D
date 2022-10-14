@@ -2,9 +2,6 @@ import pygame
 import random
 from settings import *
 
-PONG_SOUND = pygame.mixer.Sound("./lecture_code/media/pong.ogg")
-SCORE_SOUND = pygame.mixer.Sound("./lecture_code/media/score.ogg")
-
 class Ball(pygame.sprite.Sprite):
     # pos = position
     # group = sprite group
@@ -41,10 +38,10 @@ class Ball(pygame.sprite.Sprite):
 
         # powerup collision 
         # todo: remove powerup on collision + implement powerup timers
-        if self.rect.colliderect(self.powerup.rect):
-            pygame.mixer.Sound.play(PONG_SOUND)
-            self.player.change_size(240)
-            self.powerup.moveOffscreen()
+        # if self.rect.colliderect(self.powerup.rect):
+        #     pygame.mixer.Sound.play(PONG_SOUND)
+        #     self.player.change_size(240)
+        #     self.powerup.moveOffscreen()
 
         # move ball after velocity is set
         self.rect.x += self.velocity[0]
@@ -55,3 +52,6 @@ class Ball(pygame.sprite.Sprite):
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
         self.velocity[0] *= random.choice((1, -1))
         self.velocity[1] *= random.choice((1, -1))
+
+    def change_speed(self):
+        pass
