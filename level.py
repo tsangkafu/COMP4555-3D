@@ -102,7 +102,7 @@ class Level():
         self.powerup_timer()
 
         if self.ball.rect.colliderect(self.powerup.rect):
-            pygame.mixer.Sound.play(PONG_SOUND)
+            pygame.mixer.Sound.play(POWERUP_SOUND)
             if self.player_round:
                 self.change_size(self.player, 240)
                 self.powerup.moveOffscreen()

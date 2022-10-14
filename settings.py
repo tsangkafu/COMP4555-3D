@@ -17,5 +17,6 @@ POWERUP3_COLOR = (0, 255, 255)
 COLOR_LIST = [POWERUP1_COLOR, POWERUP2_COLOR, POWERUP3_COLOR]
 
 # sounds
-PONG_SOUND = pygame.mixer.Sound("./lecture_code/media/pong.ogg")
-SCORE_SOUND = pygame.mixer.Sound("./lecture_code/media/score.ogg")
+PONG_SOUND = pygame.mixer.Sound("./media/pong.ogg")
+SCORE_SOUND = pygame.mixer.Sound("./media/score.ogg")
+POWERUP_SOUND = pygame.mixer.Sound("./media/powerup.ogg")

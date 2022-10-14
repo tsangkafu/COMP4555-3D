@@ -10,12 +10,6 @@ import random
 # import powerup
 from powerup import *
 
-
-POWERUP_SIZE = (50, 50)
-POWERUP1_COLOR = (200, 0, 200)
-POWERUP2_COLOR = (255, 255, 0)
-POWERUP3_COLOR = (0, 255, 255)
-
 class Game():
     def __init__(self):
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
