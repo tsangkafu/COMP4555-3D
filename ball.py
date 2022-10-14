@@ -67,7 +67,25 @@ class Ball(pygame.sprite.Sprite):
         
     def bounce(self, coord, bungieSpeed="off"):
         if coord == "x":
-                self.velocity[0] *= -1
+            self.velocity[0] *= -1
+            # if the ball is hitting the player's paddle
+            if self.rect.colliderect(self.player.rect):
+                # if the center of the ball is outside of the board
+                # meaning it's hitting the paddle on the upper edge
+                if self.rect.center[1] < self.player.rect.topleft[1]:
+                    self.velocity[1] *= -1
+                # when the ball hitting the lower edge of the paddle
+                if self.rect.center[1] > self.player.rect.bottomleft[1]:
+                    self.velocity[1] *= -1
+            elif self.rect.colliderect(self.opponent.rect):
+                # if the center of the ball is outside of the board
+                # meaning it's hitting the paddle on the upper edge
+                if self.rect.center[1] < self.opponent.rect.topright[1]:
+                    self.velocity[1] *= -1
+                # when the ball hitting the lower edge of the paddle
+                if self.rect.center[1] > self.opponent.rect.bottomright[1]:
+                    self.velocity[1] *= -1
+
         elif coord == "y": self.velocity[1] *= -1
         self.toggle_bungie_speed(bungieSpeed)
 
