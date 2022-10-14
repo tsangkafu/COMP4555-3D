@@ -64,14 +64,14 @@ class Level():
 
         self.bungueBottom = Bungie(
             BUNGIE_SIZE,
-            ((WIDTH - BUNGIE_SIZE[0])/2, 0),
+            (BUNGIE_X_POS, 0),
             BUNGUE_COLOR,
             self.bungie_sprites
         )
 
         self.bungueTop = Bungie(
             BUNGIE_SIZE,
-            ((WIDTH - BUNGIE_SIZE[0])/2, HEIGHT-BUNGIE_SIZE[1]),
+            (BUNGIE_X_POS, HEIGHT-BUNGIE_SIZE[1]),
             BUNGUE_COLOR,
             self.bungie_sprites
         )
