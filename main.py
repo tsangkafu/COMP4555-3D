@@ -34,7 +34,7 @@ class Game():
             time_elapsed = pygame.time.get_ticks()
             changeHeight = False
 
-            if (time_elapsed - start_time) > 5000:
+            if (time_elapsed - start_time) > 3000:
                 changeHeight = True
 
             if changeHeight:
