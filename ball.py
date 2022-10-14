@@ -11,7 +11,7 @@ class Ball(pygame.sprite.Sprite):
         self.opponent = opponent
         self.powerup = powerup
         self.radius = radius
-        self.speed = 7
+        self.speed = BALL_SPEED_NORMAL
         self.velocity = [self.speed, self.speed]
         # pygame.SRCALPHA to make the surface transparent
         self.image = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
@@ -22,11 +22,11 @@ class Ball(pygame.sprite.Sprite):
         # reverse y when the ball reaches top or bottom
         if self.rect.top <= 0 or self.rect.bottom >= HEIGHT:
             pygame.mixer.Sound.play(PONG_SOUND)
-            self.velocity[1] *= -1
+            self.bounce("y")
         # reverse x when the ball collides the board
         if self.rect.colliderect(self.player.rect) or self.rect.colliderect(self.opponent.rect):
             pygame.mixer.Sound.play(PONG_SOUND)
-            self.velocity[0] *= -1
+            self.bounce("x")
         
         # when the ball reaches left or right, scores
         if self.rect.left <= 0:
@@ -46,6 +46,12 @@ class Ball(pygame.sprite.Sprite):
         # move ball after velocity is set
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]
+        
+    def bounce(self, coord, bungieSpeed="off"):
+        if coord == "x": self.velocity[0] *= -1
+        elif coord == "y": self.velocity[1] *= -1
+        self.toggle_bungie_speed(bungieSpeed)
+
 
     def restart(self):
         pygame.mixer.Sound.play(SCORE_SOUND)
@@ -53,5 +59,11 @@ class Ball(pygame.sprite.Sprite):
         self.velocity[0] *= random.choice((1, -1))
         self.velocity[1] *= random.choice((1, -1))
 
-    def change_speed(self):
-        pass
+    def toggle_bungie_speed(self, onOff):
+        for i, coordSpeed in enumerate(self.velocity):
+            # need to preserve the sign, aka the direction the ball is going in
+            isNegative = True if coordSpeed < 0 else False
+            absoluteValue = abs(coordSpeed)
+            newSpeed = BALL_SPEED_NORMAL if onOff == "off" else BALL_SPEED_BUNGIE
+            if isNegative: newSpeed *= -1
+            self.velocity[i] = newSpeed

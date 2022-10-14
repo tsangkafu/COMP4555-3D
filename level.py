@@ -1,12 +1,12 @@
 import pygame
 import random
-from powerup import Powerup
 
 from settings import *
 from player import Player
 from opponent import Opponent
 from ball import Ball
 from powerup import Powerup
+from bungie import Bungie
 
 FONT = pygame.font.Font('freesansbold.ttf', 32)
 
@@ -25,6 +25,7 @@ class Level():
         self.board_sprites = pygame.sprite.Group()
         self.ball_sprites = pygame.sprite.Group()
         self.powerup_sprites = pygame.sprite.Group()
+        self.bungie_sprites = pygame.sprite.Group()
 
         self.player = Player(
             # size
@@ -61,6 +62,20 @@ class Level():
             self.opponent,
             self.powerup)
 
+        self.bungueBottom = Bungie(
+            BUNGIE_SIZE,
+            ((WIDTH - BUNGIE_SIZE[0])/2, 0),
+            BUNGUE_COLOR,
+            self.bungie_sprites
+        )
+
+        self.bungueTop = Bungie(
+            BUNGIE_SIZE,
+            ((WIDTH - BUNGIE_SIZE[0])/2, HEIGHT-BUNGIE_SIZE[1]),
+            BUNGUE_COLOR,
+            self.bungie_sprites
+        )
+
 
     def run(self):
         self.player_round = self.get_round()
@@ -71,6 +86,7 @@ class Level():
         self.board_sprites.draw(self.screen)
         self.ball_sprites.draw(self.screen)
         self.powerup_sprites.draw(self.screen)
+        self.bungie_sprites.draw(self.screen)
 
         self.opponent.chase_ball(self.ball)
 
@@ -78,10 +94,12 @@ class Level():
 
         self.detect_powerup()
 
+        self.detect_bungie()
+
         self.board_sprites.update()
         self.ball_sprites.update()
         self.powerup_sprites.update()
-
+        self.bungie_sprites.update()
 
 
     def create_score(self):
@@ -145,3 +163,9 @@ class Level():
         font = pygame.font.Font('freesansbold.ttf', 16)
         player_surface = font.render(str("SIZE INCREASE - ACTIVE"), True, TEXT_COLOR)
         self.screen.blit(player_surface, (WIDTH - WIDTH / 6, 15))
+
+
+    def detect_bungie(self):
+        if self.ball.rect.colliderect(self.bungueBottom.rect) or self.ball.rect.colliderect(self.bungueTop.rect):
+            pygame.mixer.Sound.play(BUNGIE_SOUND)
+            self.ball.bounce("y", "on")
