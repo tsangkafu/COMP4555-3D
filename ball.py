@@ -24,15 +24,26 @@ class Ball(pygame.sprite.Sprite):
             pygame.mixer.Sound.play(PONG_SOUND)
             self.bounce("y")
         # reverse x when the ball collides the board
-        if self.rect.colliderect(self.player.rect) or self.rect.colliderect(self.opponent.rect):
-            pygame.mixer.Sound.play(PONG_SOUND)
-            self.bounce("x")
+        if self.rect.colliderect(self.player.rect):
+            # fixing ball getting stuck issue
+            # if the speed x of the ball is a positive number
+            # meaning it is going to the right
+            # if it has bounced off already (x < 0)
+            # then don't change its direction
+            if self.velocity[0] > 0:
+                pygame.mixer.Sound.play(PONG_SOUND)
+                self.bounce("x")
+        
+        if self.rect.colliderect(self.opponent.rect):
+            if self.velocity[0] < 0:
+                pygame.mixer.Sound.play(PONG_SOUND)
+                self.bounce("x")
         
         # when the ball reaches left or right, scores
-        if self.rect.left <= 0:
+        if self.rect.left <= 0 - 20:
             self.player.score += 1
             self.restart()
-        elif self.rect.right >= WIDTH:
+        elif self.rect.right >= WIDTH + 20:
             self.opponent.score += 1
             self.restart()
 
@@ -48,10 +59,10 @@ class Ball(pygame.sprite.Sprite):
         self.rect.y += self.velocity[1]
         
     def bounce(self, coord, bungieSpeed="off"):
-        if coord == "x": self.velocity[0] *= -1
+        if coord == "x":
+                self.velocity[0] *= -1
         elif coord == "y": self.velocity[1] *= -1
         self.toggle_bungie_speed(bungieSpeed)
-
 
     def restart(self):
         pygame.mixer.Sound.play(SCORE_SOUND)

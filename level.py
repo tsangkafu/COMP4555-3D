@@ -16,11 +16,17 @@ class Level():
         # decide whose round it is
         self.player_round = False
         
-        self.player_powerup_start_time = 0
-        self.player_powerup_end_time = 0
-        self.opponent_powerup_start_time = 0
-        self.opponent_powerup_end_time = 0
-
+        # timer for powerups
+        self.player_speed_start_time = 0
+        self.player_speed_end_time = 0
+        self.opponent_speed_start_time = 0
+        self.opponent_speed_end_time = 0
+        self.player_size_start_time = 0
+        self.player_size_end_time = 0
+        self.opponent_size_start_time = 0
+        self.opponent_size_end_time = 0
+        self.ball_speed_start_time = 0
+        self.ball_speed_end_time = 0
 
         self.board_sprites = pygame.sprite.Group()
         self.ball_sprites = pygame.sprite.Group()
@@ -121,47 +127,93 @@ class Level():
 
         if self.ball.rect.colliderect(self.powerup.rect):
             pygame.mixer.Sound.play(POWERUP_SOUND)
-            if self.player_round:
-                self.change_size(self.player, 240)
+            # purple = change board size
+            if self.powerup.color == POWERUP1_COLOR:
+                if self.player_round:
+                    self.change_board_size(self.player, 240)
+                    self.powerup.moveOffscreen()
+                else:
+                    self.change_board_size(self.opponent, 240)
+                    self.powerup.moveOffscreen()
+            # yellow = change ball speed
+            elif self.powerup.color == POWERUP2_COLOR:
+                self.change_ball_size(LARGE_BALL_RADIUS)
                 self.powerup.moveOffscreen()
-            else:
-                self.change_size(self.opponent, 240)
-                self.powerup.moveOffscreen()
+            # blue = change board speed
+            elif self.powerup.color == POWERUP3_COLOR:
+                if self.player_round:
+                    self.change_board_speed(self.player, BALL_SPEED_ENHANCED)
+                    self.powerup.moveOffscreen()
+                else:
+                    self.change_board_speed(self.opponent, BALL_SPEED_ENHANCED)
+                    self.powerup.moveOffscreen()
 
     def powerup_timer(self):
-        self.player_powerup_end_time = pygame.time.get_ticks()
-        self.opponent_powerup_end_time = pygame.time.get_ticks()
+        self.player_size_end_time = pygame.time.get_ticks()
+        self.opponent_size_end_time = pygame.time.get_ticks()
+        self.player_speed_end_time = pygame.time.get_ticks()
+        self.opponent_speed_end_time = pygame.time.get_ticks()
+        self.ball_speed_end_time = pygame.time.get_ticks()
 
-        if (self.player_powerup_end_time - self.player_powerup_start_time  > 7000):
-            self.change_size(self.player, 140)
+        if (self.player_size_end_time - self.player_size_start_time  > 10000):
+            self.change_board_size(self.player, 140)
         if self.player.image.get_height() == 240:
-            self.create_powerup_text()
+            self.create_powerup_text("PLAYER SIZE INCREASE - ACTIVE")
 
-        if (self.opponent_powerup_end_time - self.opponent_powerup_start_time  > 7000):
-            self.change_size(self.opponent, 140)
+        if (self.opponent_size_end_time - self.opponent_size_start_time  > 10000):
+            self.change_board_size(self.opponent, 140)
         if self.opponent.image.get_height() == 240:
-            self.create_powerup_text()
+            self.create_powerup_text("OPPONENT SIZE INCREASE - ACTIVE")
 
-    def change_size(self, board, size):
-        # self.create_powerup_text()
-        board.image = pygame.Surface((10, size))
+        if (self.player_speed_end_time - self.player_speed_start_time > 10000):
+            self.change_board_speed(self.player, 7)
+        if self.player.speed == 10:
+            self.create_powerup_text("PLAYER SPPED INCREASE - ACTIVE")
 
-        new_pos = ((board.rect.left), (board.rect.top))
+        if (self.opponent_speed_end_time - self.opponent_speed_start_time > 10000):
+            self.change_board_speed(self.opponent, 7)
+        if self.opponent.speed == 10:
+            self.create_powerup_text("OPPONENT SPPED INCREASE - ACTIVE")
 
-        board.rect = board.image.get_rect(topleft = new_pos)
+        if (self.ball_speed_end_time - self.ball_speed_start_time > 10000):
+            self.change_ball_size(BALL_RADIUS)
+        if self.ball.radius == LARGE_BALL_RADIUS:
+            self.create_powerup_text("BALL SIZE INCREASE - ACTIVE")
+
+    # change the size of the board/paddle
+    def change_board_size(self, board, size):
+        board.image = pygame.Surface((BOARD_SIZE[0], size))
+        board.rect = board.image.get_rect(center = board.rect.center)
         board.image.fill((200, 200, 200))
 
         if size == 240 and board.name == "player":
-            self.player_powerup_start_time = pygame.time.get_ticks()
-            self.create_powerup_text()
+            self.player_size_start_time = pygame.time.get_ticks()
         elif size == 240 and board.name == "opponent":
-            self.opponent_powerup_start_time = pygame.time.get_ticks()
-            self.create_powerup_text()
+            self.opponent_size_start_time = pygame.time.get_ticks()
+
+    # change the speed of the paddle
+    def change_board_speed(self, board, speed):
+        board.speed = speed
+        if speed == BALL_SPEED_ENHANCED and board.name == "player":
+            self.player_speed_start_time = pygame.time.get_ticks()
+        elif speed == BALL_SPEED_ENHANCED and board.name == "opponent":
+            self.opponent_speed_start_time = pygame.time.get_ticks()
+
+    # change the speed of the ball
+    def change_ball_size(self, radius):
+        self.ball.radius = radius
+        self.ball.image = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
+        pygame.draw.circle(self.ball.image, OBJ_COLOR, (radius, radius), radius)
+        self.ball.rect = self.ball.image.get_rect(center = self.ball.rect.center)
+        if self.ball.radius == LARGE_BALL_RADIUS:
+            self.ball_speed_start_time = pygame.time.get_ticks()
+            self.create_powerup_text("BALL SIZE INCREASE - ACTIVE")
+
         
-    def create_powerup_text(self):
+    def create_powerup_text(self, text):
         TEXT_COLOR = (200, 200, 200)
         font = pygame.font.Font('freesansbold.ttf', 16)
-        player_surface = font.render(str("SIZE INCREASE - ACTIVE"), True, TEXT_COLOR)
+        player_surface = font.render(str(text), True, TEXT_COLOR)
         self.screen.blit(player_surface, (WIDTH - WIDTH / 6, 15))
 
     def detect_bungie(self):
