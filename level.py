@@ -90,7 +90,7 @@ class Level():
 
         self.create_score(OBJ_COLOR)
 
-        self.detect_powerup()
+        self.detect_powerup(OBJ_COLOR)
 
         self.board_sprites.update()
         self.ball_sprites.update(OBJ_COLOR)
@@ -115,47 +115,47 @@ class Level():
             return False
         return self.player_round
 
-    def detect_powerup(self):
-        self.powerup_timer()
+    def detect_powerup(self, color):
+        self.powerup_timer(color)
 
         if self.ball.rect.colliderect(self.powerup.rect):
             pygame.mixer.Sound.play(POWERUP_SOUND)
             if self.player_round:
-                self.change_size(self.player, 240)
+                self.change_size(self.player, 240, color)
                 self.powerup.moveOffscreen()
             else:
-                self.change_size(self.opponent, 240)
+                self.change_size(self.opponent, 240, color)
                 self.powerup.moveOffscreen()
 
-    def powerup_timer(self):
+    def powerup_timer(self, color):
         self.player_powerup_end_time = pygame.time.get_ticks()
         self.opponent_powerup_end_time = pygame.time.get_ticks()
 
         if (self.player_powerup_end_time - self.player_powerup_start_time  > 7000):
-            self.change_size(self.player, 140)
+            self.change_size(self.player, 140, color)
         if self.player.image.get_height() == 240:
-            self.create_powerup_text()
+            self.create_powerup_text(color)
 
         if (self.opponent_powerup_end_time - self.opponent_powerup_start_time  > 7000):
-            self.change_size(self.opponent, 140)
+            self.change_size(self.opponent, 140, color)
         if self.opponent.image.get_height() == 240:
-            self.create_powerup_text()
+            self.create_powerup_text(color)
 
-    def change_size(self, board, size):
+    def change_size(self, board, size, color):
         # self.create_powerup_text()
         board.image = pygame.Surface((10, size))
 
         new_pos = ((board.rect.left), (board.rect.top))
 
         board.rect = board.image.get_rect(topleft = new_pos)
-        board.image.fill((200, 200, 200))
+        board.image.fill(color)
 
         if size == 240 and board.name == "player":
             self.player_powerup_start_time = pygame.time.get_ticks()
-            self.create_powerup_text()
+            self.create_powerup_text(color)
         elif size == 240 and board.name == "opponent":
             self.opponent_powerup_start_time = pygame.time.get_ticks()
-            self.create_powerup_text()
+            self.create_powerup_text(color)
         
     def create_powerup_text(self, color):
         TEXT_COLOR = color
@@ -174,5 +174,5 @@ class Level():
         elif opt == 4:
             theme = "FIERY RED"
         font = pygame.font.Font('freesansbold.ttf', 16)
-        opponent_surface = font.render(str("CURRENT THEME: " + theme + " (numbers 1-4 to change)"), True, TEXT_COLOR)
+        opponent_surface = font.render(str("CURRENT THEME: " + theme + " (USE NUMBER KEYS 1-4 TO CHANGE)"), True, TEXT_COLOR)
         self.screen.blit(opponent_surface, (WIDTH - WIDTH / 1, 15))

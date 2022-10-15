@@ -11,13 +11,13 @@ BG_DEF = pygame.Color('grey12')
 OBJ_DEF = (200, 200, 200)
 # Green
 BG_GRN = (22, 46, 20)
-OBJ_GRN = (23, 92, 17)
+OBJ_GRN = (0, 184, 49)
 # Blue
 BG_BLU = (17, 28, 56)
-OBJ_BLU = (5, 46, 150)
+OBJ_BLU = (0, 68, 242)
 # Red
 BG_RED = (56, 24, 24)
-OBJ_RED = (138, 7, 7)
+OBJ_RED = (176, 2, 2)
 
 BALL_RADIUS = 20
 BOARD_SIZE = (10, 140)
