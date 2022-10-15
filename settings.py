@@ -3,6 +3,7 @@ import pygame
 HEIGHT = 800
 WIDTH = 1280
 FPS = 60
+ROUND = 2
 
 BG_COLOR = pygame.Color('grey12')
 BALL_RADIUS = 20

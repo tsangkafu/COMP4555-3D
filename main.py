@@ -28,19 +28,25 @@ class Game():
                     pygame.quit()
                     sys.exit()
             
+                if self.level.end_game:
+                    if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
+                        self.level = Level(self.screen)
+                        break
+            
             self.level.run()
            
-            # ~~~~ powerup position randomize block ~~~~~
-            time_elapsed = pygame.time.get_ticks()
-            changeHeight = False
+            if not self.level.end_game:
+                # ~~~~ powerup position randomize block ~~~~~
+                time_elapsed = pygame.time.get_ticks()
+                changeHeight = False
 
-            if (time_elapsed - start_time) > 3000:
-                changeHeight = True
+                if (time_elapsed - start_time) > 3000:
+                    changeHeight = True
 
-            if changeHeight:
-                start_time = pygame.time.get_ticks()
-                Powerup.changeHeight(self.level.powerup)
-            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                if changeHeight:
+                    start_time = pygame.time.get_ticks()
+                    Powerup.changeHeight(self.level.powerup)
+                #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             pygame.display.flip()
             self.clock.tick(FPS)

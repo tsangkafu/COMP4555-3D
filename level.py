@@ -1,3 +1,4 @@
+from re import X
 import pygame
 import random
 
@@ -9,22 +10,30 @@ from powerup import Powerup
 from bungie import Bungie
 
 FONT = pygame.font.Font('freesansbold.ttf', 32)
+END_GAME_FONT = pygame.font.Font('freesansbold.ttf', 70)
 
 class Level():
     def __init__(self, screen):
         self.screen = screen
         # decide whose round it is
         self.player_round = False
+
+        self.end_game = False
+        self.fader = pygame.Surface((WIDTH, HEIGHT))
+        self.fader.fill((0, 0, 0))
+        self.fader.set_alpha(150)
         
-        # timer for powerups
+        # timer for paddle speed-up powerups
         self.player_speed_start_time = 0
         self.player_speed_end_time = 0
         self.opponent_speed_start_time = 0
         self.opponent_speed_end_time = 0
+        # timer for paddle size-up powerups
         self.player_size_start_time = 0
         self.player_size_end_time = 0
         self.opponent_size_start_time = 0
         self.opponent_size_end_time = 0
+        # timer for ball speed powerups
         self.ball_speed_start_time = 0
         self.ball_speed_end_time = 0
 
@@ -84,28 +93,36 @@ class Level():
 
 
     def run(self):
-        self.player_round = self.get_round()
+        # determine when to end game
+        if self.player.score >= ROUND or self.opponent.score >= ROUND:
+            self.end_game = True
 
         self.screen.fill(BG_COLOR)
+
+        
+        self.player_round = self.get_round()
         pygame.draw.aaline(self.screen, OBJ_COLOR, (WIDTH / 2, 0), (WIDTH / 2, HEIGHT))
 
         self.board_sprites.draw(self.screen)
-        self.ball_sprites.draw(self.screen)
+        
         self.powerup_sprites.draw(self.screen)
         self.bungie_sprites.draw(self.screen)
 
-        self.opponent.chase_ball(self.ball)
-
         self.create_score()
+        
 
-        self.detect_powerup()
-
-        self.detect_bungie()
-
-        self.board_sprites.update()
-        self.ball_sprites.update()
-        self.powerup_sprites.update()
-        self.bungie_sprites.update()
+        
+        if self.end_game:
+            self.end_screen()
+        else:
+            self.ball_sprites.draw(self.screen)
+            self.opponent.chase_ball(self.ball)
+            self.detect_powerup()
+            self.detect_bungie()
+            self.board_sprites.update()
+            self.ball_sprites.update()
+            self.powerup_sprites.update()
+            self.bungie_sprites.update()
 
 
     def create_score(self):
@@ -226,3 +243,21 @@ class Level():
             pygame.mixer.Sound.play(BUNGIE_SOUND)
             if self.ball.velocity[1] < 0: self.ball.toggle_bungie_speed("on")
             else: self.ball.bounce("y", "on")
+
+    def end_screen(self):
+        def get_center_pos(text, font):
+            surface = font.render(text, True, (255, 255, 255))
+            x = WIDTH / 2 - surface.get_size()[0] // 2
+            y = HEIGHT / 2 - surface.get_size()[1] // 2
+            return (x, y)
+            
+        self.screen.blit(self.fader, (0, 0))
+        text = "YOU WIN!" if self.player.score >= ROUND else "YOU LOSE!"
+        text_surface = END_GAME_FONT.render(text, True, (255, 255, 255))
+        self.screen.blit(text_surface, get_center_pos(text, END_GAME_FONT))
+
+        text = "Press any key to continue"
+        text_surface = FONT.render(text, True, (255, 255, 255))
+        self.screen.blit(text_surface, (get_center_pos(text, FONT)[0], get_center_pos(text, FONT)[1] + 60))
+
+        

@@ -18,6 +18,8 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, color, (self.radius, self.radius), self.radius)
         self.rect = self.image.get_rect(center = pos)
 
+        
+
     def update(self):
         # reverse y when the ball reaches top or bottom
         if self.rect.top <= 0:
