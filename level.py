@@ -112,6 +112,14 @@ class Level():
         if self.end_game:
             self.end_screen()
         else:
+            #booleans for powerup text
+            self.pl_sizeEfct = False
+            self.pl_ballEfct = False
+            self.pl_speedEfct = False
+            self.op_sizeEfct = False
+            self.op_ballEfct = False
+            self.op_speedEfct = False
+
             self.ball_sprites.draw(self.screen)
             self.opponent.chase_ball(self.ball)
             self.detect_powerup()
@@ -171,28 +179,20 @@ class Level():
 
         if (self.player_size_end_time - self.player_size_start_time  > 10000):
             self.change_board_size(self.player, 140)
-        if self.player.image.get_height() == 240:
-            self.create_powerup_text("PLAYER SIZE INCREASE - ACTIVE")
 
         if (self.opponent_size_end_time - self.opponent_size_start_time  > 10000):
             self.change_board_size(self.opponent, 140)
-        if self.opponent.image.get_height() == 240:
-            self.create_powerup_text("OPPONENT SIZE INCREASE - ACTIVE")
 
         if (self.player_speed_end_time - self.player_speed_start_time > 10000):
             self.change_board_speed(self.player, 7)
-        if self.player.speed == 10:
-            self.create_powerup_text("PLAYER SPPED INCREASE - ACTIVE")
 
         if (self.opponent_speed_end_time - self.opponent_speed_start_time > 10000):
             self.change_board_speed(self.opponent, 7)
-        if self.opponent.speed == 10:
-            self.create_powerup_text("OPPONENT SPPED INCREASE - ACTIVE")
 
         if (self.ball_speed_end_time - self.ball_speed_start_time > 10000):
             self.change_ball_size(BALL_RADIUS)
-        if self.ball.radius == LARGE_BALL_RADIUS:
-            self.create_powerup_text("BALL SIZE INCREASE - ACTIVE")
+
+        self.create_powerup_text()
 
     # change the size of the board/paddle
     def change_board_size(self, board, size):
@@ -213,7 +213,7 @@ class Level():
         elif speed == BALL_SPEED_ENHANCED and board.name == "opponent":
             self.opponent_speed_start_time = pygame.time.get_ticks()
 
-    # change the speed of the ball
+    # change the size of the ball
     def change_ball_size(self, radius):
         self.ball.radius = radius
         self.ball.image = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
@@ -221,14 +221,70 @@ class Level():
         self.ball.rect = self.ball.image.get_rect(center = self.ball.rect.center)
         if self.ball.radius == LARGE_BALL_RADIUS:
             self.ball_speed_start_time = pygame.time.get_ticks()
-            self.create_powerup_text("BALL SIZE INCREASE - ACTIVE")
+
 
         
-    def create_powerup_text(self, text):
+    def create_powerup_text(self):
         TEXT_COLOR = (200, 200, 200)
         font = pygame.font.Font('freesansbold.ttf', 16)
-        player_surface = font.render(str(text), True, TEXT_COLOR)
-        self.screen.blit(player_surface, (WIDTH - WIDTH / 6, 15))
+
+       #SPEED TEXT LOCATION LOGIC --> RIGHTSIDE FOR PLAYER, LEFTSIDE FOR OPP, TOP LOCATION 
+        if self.player.image.get_height() == 240:
+            self.pl_sizeEfct = True
+            text = "PLAYER SIZE INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 15))        
+        if self.opponent.image.get_height() == 240:
+            self.op_sizeEfct = True
+            text = "OPPONENT SIZE INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (25, 15))
+
+       #SPEED TEXT LOCATION LOGIC --> RIGHTSIDE FOR PLAYER, MIDDLE LOCATION IF 2 EFFECTS ACTIVE
+        if self.player.speed > 7 and not self.pl_sizeEfct:
+            self.pl_speedEfct = True
+            text = "PLAYER SPEED INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 15))
+        elif self.player.speed > 7 and self.pl_sizeEfct:
+            self.pl_speedEfct = True
+            text = "PLAYER SPEED INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 35))     
+ 
+       #SPEED TEXT LOCATION LOGIC --> LEFTSIDE FOR OPP, MIDDLE LOCATION IF 2 EFFECTS ACTIVE
+        if self.opponent.speed > 7 and not self.op_sizeEfct:
+            self.op_speedEfct = True
+            text = "OPPONENT SPEED INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (25, 15)) 
+        elif self.opponent.speed > 7 and self.pl_sizeEfct:
+            self.pl_speedEfct = True
+            text = "PLAYER SPEED INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (25, 35))
+
+        #BALL SIZE TEXT LOCATION LOGIC --> BOTTOM LOCATION IF ALL 3 EFFECTS ACTIVE, ALWAYS RIGHT SIDE
+        if self.ball.radius == LARGE_BALL_RADIUS and not self.pl_sizeEfct and not self.pl_speedEfct:
+            self.pl_ballEfct = True
+            text = "BALL SIZE INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 15))
+        elif self.ball.radius == LARGE_BALL_RADIUS and self.pl_sizeEfct and not self.pl_speedEfct:
+            self.pl_ballEfct = True
+            text = "BALL SIZE INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 35))
+        elif self.ball.radius == LARGE_BALL_RADIUS and not self.pl_sizeEfct and self.pl_speedEfct:
+            self.pl_ballEfct = True
+            text = "BALL SIZE INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 35))          
+        elif self.ball.radius == LARGE_BALL_RADIUS and self.pl_sizeEfct and self.pl_speedEfct:
+            self.pl_ballEfct = True
+            text = "BALL SIZE INCREASE - ACTIVE"
+            player_surface = font.render(str(text), True, TEXT_COLOR)
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 55))         
 
     def detect_bungie(self):
         if self.ball.rect.colliderect(self.bungueBottom.rect):
