@@ -99,7 +99,6 @@ class Level():
 
         self.screen.fill(BG_COLOR)
 
-        
         self.player_round = self.get_round()
         pygame.draw.aaline(self.screen, OBJ_COLOR, (WIDTH / 2, 0), (WIDTH / 2, HEIGHT))
 
@@ -109,8 +108,6 @@ class Level():
         self.bungie_sprites.draw(self.screen)
 
         self.create_score()
-        
-
         
         if self.end_game:
             self.end_screen()
@@ -131,7 +128,7 @@ class Level():
         opponent_surface = FONT.render(str(self.opponent.score), True, OBJ_COLOR)
         self.screen.blit(opponent_surface, (600, 15))
 
-    # detect if it is player's round upon collusion with ball
+    # detect if it is player's round upon collision with ball
     def get_round(self):
         if self.player.rect.colliderect(self.ball.rect):
             return True
@@ -255,9 +252,9 @@ class Level():
         text = "YOU WIN!" if self.player.score >= ROUND else "YOU LOSE!"
         text_surface = END_GAME_FONT.render(text, True, (255, 255, 255))
         self.screen.blit(text_surface, get_center_pos(text, END_GAME_FONT))
+        # interpret the continuous key-stroke
+        pygame.time.delay(100)
 
         text = "Press any key to continue"
         text_surface = FONT.render(text, True, (255, 255, 255))
         self.screen.blit(text_surface, (get_center_pos(text, FONT)[0], get_center_pos(text, FONT)[1] + 60))
-
-        

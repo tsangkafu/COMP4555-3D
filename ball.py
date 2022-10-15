@@ -18,7 +18,6 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, color, (self.radius, self.radius), self.radius)
         self.rect = self.image.get_rect(center = pos)
 
-        
 
     def update(self):
         # reverse y when the ball reaches top or bottom
@@ -74,18 +73,19 @@ class Ball(pygame.sprite.Sprite):
             if self.rect.colliderect(self.player.rect):
                 # if the center of the ball is outside of the board
                 # meaning it's hitting the paddle on the upper edge
-                if self.rect.center[1] < self.player.rect.topleft[1]:
+                if self.rect.bottom >= self.player.rect.top + 20:
                     self.velocity[1] *= -1
                 # when the ball hitting the lower edge of the paddle
-                if self.rect.center[1] > self.player.rect.bottomleft[1]:
+                if self.rect.top <= self.player.rect.bottom - 20:
                     self.velocity[1] *= -1
+
             elif self.rect.colliderect(self.opponent.rect):
                 # if the center of the ball is outside of the board
                 # meaning it's hitting the paddle on the upper edge
-                if self.rect.center[1] < self.opponent.rect.topright[1]:
+                if self.rect.bottom >= self.opponent.rect.top:
                     self.velocity[1] *= -1
                 # when the ball hitting the lower edge of the paddle
-                if self.rect.center[1] > self.opponent.rect.bottomright[1]:
+                if self.rect.top <= self.opponent.rect.bottom:
                     self.velocity[1] *= -1
 
         elif coord == "y": self.velocity[1] *= -1
