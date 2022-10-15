@@ -67,12 +67,16 @@ class Level():
 
         if self.player.color_setting == 1:
             BG_COLOR = BG_DEF
+            OBJ_COLOR = OBJ_DEF
         elif self.player.color_setting == 2:
             BG_COLOR = BG_GRN
+            OBJ_COLOR = OBJ_GRN
         elif self.player.color_setting == 3:
             BG_COLOR = BG_BLU
+            OBJ_COLOR = OBJ_BLU
         elif self.player.color_setting == 4:
             BG_COLOR = BG_RED
+            OBJ_COLOR = OBJ_RED
 
 
         self.screen.fill(BG_COLOR)
@@ -84,20 +88,23 @@ class Level():
 
         self.opponent.chase_ball(self.ball)
 
-        self.create_score()
+        self.create_score(OBJ_COLOR)
 
         self.detect_powerup()
 
         self.board_sprites.update()
-        self.ball_sprites.update()
+        self.ball_sprites.update(OBJ_COLOR)
         self.powerup_sprites.update()
 
+        self.opponent.updateColor(OBJ_COLOR)
+        self.player.updateColor(OBJ_COLOR)
 
+        self.create_theme_text(OBJ_COLOR, self.player.color_setting)
 
-    def create_score(self):
-        player_surface = FONT.render(str(self.player.score), True, OBJ_COLOR)
+    def create_score(self, color):
+        player_surface = FONT.render(str(self.player.score), True, color)
         self.screen.blit(player_surface, (660, 15))
-        opponent_surface = FONT.render(str(self.opponent.score), True, OBJ_COLOR)
+        opponent_surface = FONT.render(str(self.opponent.score), True, color)
         self.screen.blit(opponent_surface, (600, 15))
 
     # detect if it is player's round upon collusion with ball
@@ -150,8 +157,22 @@ class Level():
             self.opponent_powerup_start_time = pygame.time.get_ticks()
             self.create_powerup_text()
         
-    def create_powerup_text(self):
-        TEXT_COLOR = (200, 200, 200)
+    def create_powerup_text(self, color):
+        TEXT_COLOR = color
         font = pygame.font.Font('freesansbold.ttf', 16)
         player_surface = font.render(str("SIZE INCREASE - ACTIVE"), True, TEXT_COLOR)
         self.screen.blit(player_surface, (WIDTH - WIDTH / 6, 15))
+
+    def create_theme_text(self, color, opt):
+        TEXT_COLOR = color
+        if opt == 1:
+            theme = "DEFAULT GREY"
+        elif opt == 2:
+            theme = "RETRO GREEN"
+        elif opt == 3:
+            theme = "COOL BLUE"
+        elif opt == 4:
+            theme = "FIERY RED"
+        font = pygame.font.Font('freesansbold.ttf', 16)
+        opponent_surface = font.render(str("CURRENT THEME: " + theme + " (numbers 1-4 to change)"), True, TEXT_COLOR)
+        self.screen.blit(opponent_surface, (WIDTH - WIDTH / 1, 15))

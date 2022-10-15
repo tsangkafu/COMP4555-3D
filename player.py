@@ -37,6 +37,12 @@ class Player(pygame.sprite.Sprite):
         elif keys[pygame.K_4]:
             self.color_setting = 4
 
+    
+    def updateColor(self, color):
+        #theme color change
+        self.image.fill(color)
+
+
     #     self.powerup_end_time = pygame.time.get_ticks()
     #     if (self.powerup_end_time - self.powerup_start_time  > 7000):
     #         self.change_size(140)

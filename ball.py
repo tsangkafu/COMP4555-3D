@@ -18,7 +18,7 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, color, (self.radius, self.radius), self.radius)
         self.rect = self.image.get_rect(center = pos)
 
-    def update(self):
+    def update(self, color):
         # reverse y when the ball reaches top or bottom
         if self.rect.top <= 0 or self.rect.bottom >= HEIGHT:
             pygame.mixer.Sound.play(PONG_SOUND)
@@ -46,6 +46,9 @@ class Ball(pygame.sprite.Sprite):
         # move ball after velocity is set
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]
+
+        #theme color change
+        pygame.draw.circle(self.image, color, (self.radius, self.radius), self.radius)
 
     def restart(self):
         pygame.mixer.Sound.play(SCORE_SOUND)
