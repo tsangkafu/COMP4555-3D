@@ -164,10 +164,10 @@ class Level():
             # blue = change board speed
             elif self.powerup.color == POWERUP3_COLOR:
                 if self.player_round:
-                    self.change_board_speed(self.player, BALL_SPEED_ENHANCED)
+                    self.change_board_speed(self.player, BOARD_SPEED_ENHANCED)
                     self.powerup.moveOffscreen()
                 else:
-                    self.change_board_speed(self.opponent, BALL_SPEED_ENHANCED)
+                    self.change_board_speed(self.opponent, BOARD_SPEED_ENHANCED)
                     self.powerup.moveOffscreen()
 
     def powerup_timer(self):
@@ -184,10 +184,10 @@ class Level():
             self.change_board_size(self.opponent, 140)
 
         if (self.player_speed_end_time - self.player_speed_start_time > 10000):
-            self.change_board_speed(self.player, 7)
+            self.change_board_speed(self.player, BOARD_SPEED_NORMAL)
 
         if (self.opponent_speed_end_time - self.opponent_speed_start_time > 10000):
-            self.change_board_speed(self.opponent, 7)
+            self.change_board_speed(self.opponent, BOARD_SPEED_NORMAL)
 
         if (self.ball_speed_end_time - self.ball_speed_start_time > 10000):
             self.change_ball_size(BALL_RADIUS)
@@ -208,9 +208,9 @@ class Level():
     # change the speed of the paddle
     def change_board_speed(self, board, speed):
         board.speed = speed
-        if speed == BALL_SPEED_ENHANCED and board.name == "player":
+        if speed == BOARD_SPEED_ENHANCED and board.name == "player":
             self.player_speed_start_time = pygame.time.get_ticks()
-        elif speed == BALL_SPEED_ENHANCED and board.name == "opponent":
+        elif speed == BOARD_SPEED_ENHANCED and board.name == "opponent":
             self.opponent_speed_start_time = pygame.time.get_ticks()
 
     # change the size of the ball
@@ -241,24 +241,24 @@ class Level():
             self.screen.blit(player_surface, (25, 15))
 
        #SPEED TEXT LOCATION LOGIC --> RIGHTSIDE FOR PLAYER, MIDDLE LOCATION IF 2 EFFECTS ACTIVE
-        if self.player.speed > 7 and not self.pl_sizeEfct:
+        if self.player.speed > BOARD_SPEED_NORMAL and not self.pl_sizeEfct:
             self.pl_speedEfct = True
             text = "PLAYER SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
             self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 15))
-        elif self.player.speed > 7 and self.pl_sizeEfct:
+        elif self.player.speed > BOARD_SPEED_NORMAL and self.pl_sizeEfct:
             self.pl_speedEfct = True
             text = "PLAYER SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
             self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 35))     
  
        #SPEED TEXT LOCATION LOGIC --> LEFTSIDE FOR OPP, MIDDLE LOCATION IF 2 EFFECTS ACTIVE
-        if self.opponent.speed > 7 and not self.op_sizeEfct:
+        if self.opponent.speed > BOARD_SPEED_NORMAL and not self.op_sizeEfct:
             self.op_speedEfct = True
             text = "OPPONENT SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
             self.screen.blit(player_surface, (25, 15)) 
-        elif self.opponent.speed > 7 and self.pl_sizeEfct:
+        elif self.opponent.speed > BOARD_SPEED_NORMAL and self.pl_sizeEfct:
             self.pl_speedEfct = True
             text = "PLAYER SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)

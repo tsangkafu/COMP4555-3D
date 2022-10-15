@@ -12,7 +12,7 @@ class Ball(pygame.sprite.Sprite):
         self.powerup = powerup
         self.radius = radius
         self.speed = BALL_SPEED_NORMAL
-        self.velocity = [self.speed, self.speed]
+        self.velocity = pygame.Vector2((self.speed, self.speed))
         # pygame.SRCALPHA to make the surface transparent
         self.image = pygame.Surface((self.radius * 2, self.radius * 2), pygame.SRCALPHA)
         pygame.draw.circle(self.image, color, (self.radius, self.radius), self.radius)
@@ -48,10 +48,10 @@ class Ball(pygame.sprite.Sprite):
                 self.bounce("x")
         
         # when the ball reaches left or right, scores
-        if self.rect.left <= 0 - 20:
+        if self.rect.left <= 0 - 100:
             self.player.score += 1
             self.restart()
-        elif self.rect.right >= WIDTH + 20:
+        elif self.rect.right >= WIDTH + 100:
             self.opponent.score += 1
             self.restart()
 
@@ -73,26 +73,35 @@ class Ball(pygame.sprite.Sprite):
             if self.rect.colliderect(self.player.rect):
                 # if the center of the ball is outside of the board
                 # meaning it's hitting the paddle on the upper edge
-                if self.rect.bottom >= self.player.rect.top + 20:
-                    self.velocity[1] *= -1
+                if self.rect.center[1] < self.player.rect.topleft[1]:
+                    # if the ball is coming from top to bottom, change the direction
+                    if self.velocity[1] > 0:
+                        self.velocity[1] *= -1
                 # when the ball hitting the lower edge of the paddle
-                if self.rect.top <= self.player.rect.bottom - 20:
-                    self.velocity[1] *= -1
+                if self.rect.center[1] > self.player.rect.bottomleft[1]:
+                    # if the ball is coming from bottom to top, change the direction
+                    if self.velocity[1] < 0:
+                        self.velocity[1] *= -1
 
             elif self.rect.colliderect(self.opponent.rect):
                 # if the center of the ball is outside of the board
                 # meaning it's hitting the paddle on the upper edge
-                if self.rect.bottom >= self.opponent.rect.top:
-                    self.velocity[1] *= -1
+                if self.rect.center[1] < self.opponent.rect.topright[1]:
+                    # if the ball is coming from top to bottom, change the direction
+                    if self.velocity[1] > 0:
+                        self.velocity[1] *= -1
                 # when the ball hitting the lower edge of the paddle
-                if self.rect.top <= self.opponent.rect.bottom:
-                    self.velocity[1] *= -1
+                if self.rect.center[1] > self.opponent.rect.bottomright[1]:
+                    # if the ball is coming from bottom to top, change the direction
+                    if self.velocity[0] < 0:
+                        self.velocity[1] *= -1
 
         elif coord == "y": self.velocity[1] *= -1
         self.toggle_bungie_speed(bungieSpeed)
 
     def restart(self):
         pygame.mixer.Sound.play(SCORE_SOUND)
+        self.speed = BALL_SPEED_NORMAL
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
         self.velocity[0] *= random.choice((1, -1))
         self.velocity[1] *= random.choice((1, -1))
@@ -103,5 +112,7 @@ class Ball(pygame.sprite.Sprite):
             isNegative = True if coordSpeed < 0 else False
             absoluteValue = abs(coordSpeed)
             newSpeed = BALL_SPEED_NORMAL if onOff == "off" else BALL_SPEED_BUNGIE
+            if i == 1:
+                newSpeed -= random.randint(-2, 2)
             if isNegative: newSpeed *= -1
             self.velocity[i] = newSpeed
