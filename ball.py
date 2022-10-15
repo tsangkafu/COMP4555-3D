@@ -18,8 +18,8 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.circle(self.image, color, (self.radius, self.radius), self.radius)
         self.rect = self.image.get_rect(center = pos)
 
+    def update(self, color):
 
-    def update(self):
         # reverse y when the ball reaches top or bottom
         if self.rect.top <= 0:
             if self.velocity[1] < 0:
@@ -65,6 +65,9 @@ class Ball(pygame.sprite.Sprite):
         # move ball after velocity is set
         self.rect.x += self.velocity[0]
         self.rect.y += self.velocity[1]
+
+        #theme color change
+        pygame.draw.circle(self.image, color, (self.radius, self.radius), self.radius)
         
     def bounce(self, coord, bungieSpeed="off"):
         if coord == "x":
@@ -98,6 +101,8 @@ class Ball(pygame.sprite.Sprite):
 
         elif coord == "y": self.velocity[1] *= -1
         self.toggle_bungie_speed(bungieSpeed)
+
+
 
     def restart(self):
         pygame.mixer.Sound.play(SCORE_SOUND)

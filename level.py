@@ -97,6 +97,20 @@ class Level():
         if self.player.score >= ROUND or self.opponent.score >= ROUND:
             self.end_game = True
 
+        if self.player.color_setting == 1:
+            BG_COLOR = BG_DEF
+            OBJ_COLOR = OBJ_DEF
+        elif self.player.color_setting == 2:
+            BG_COLOR = BG_GRN
+            OBJ_COLOR = OBJ_GRN
+        elif self.player.color_setting == 3:
+            BG_COLOR = BG_BLU
+            OBJ_COLOR = OBJ_BLU
+        elif self.player.color_setting == 4:
+            BG_COLOR = BG_RED
+            OBJ_COLOR = OBJ_RED
+
+
         self.screen.fill(BG_COLOR)
 
         self.player_round = self.get_round()
@@ -107,10 +121,15 @@ class Level():
         self.powerup_sprites.draw(self.screen)
         self.bungie_sprites.draw(self.screen)
 
-        self.create_score()
+        self.create_score(OBJ_COLOR)
+
+        self.opponent.updateColor(OBJ_COLOR)
+        self.player.updateColor(OBJ_COLOR)
+
+        self.create_theme_text(OBJ_COLOR, self.player.color_setting)
         
         if self.end_game:
-            self.end_screen()
+            self.end_screen(OBJ_COLOR)
         else:
             #booleans for powerup text
             self.pl_sizeEfct = False
@@ -122,18 +141,18 @@ class Level():
 
             self.ball_sprites.draw(self.screen)
             self.opponent.chase_ball(self.ball)
-            self.detect_powerup()
+            self.detect_powerup(OBJ_COLOR)
             self.detect_bungie()
             self.board_sprites.update()
-            self.ball_sprites.update()
+            self.ball_sprites.update(OBJ_COLOR)
             self.powerup_sprites.update()
             self.bungie_sprites.update()
 
 
-    def create_score(self):
-        player_surface = FONT.render(str(self.player.score), True, OBJ_COLOR)
+    def create_score(self, color):
+        player_surface = FONT.render(str(self.player.score), True, color)
         self.screen.blit(player_surface, (660, 15))
-        opponent_surface = FONT.render(str(self.opponent.score), True, OBJ_COLOR)
+        opponent_surface = FONT.render(str(self.opponent.score), True, color)
         self.screen.blit(opponent_surface, (600, 15))
 
     # detect if it is player's round upon collision with ball
@@ -144,18 +163,18 @@ class Level():
             return False
         return self.player_round
 
-    def detect_powerup(self):
-        self.powerup_timer()
+    def detect_powerup(self, color):
+        self.powerup_timer(color)
 
         if self.ball.rect.colliderect(self.powerup.rect):
             pygame.mixer.Sound.play(POWERUP_SOUND)
             # purple = change board size
             if self.powerup.color == POWERUP1_COLOR:
                 if self.player_round:
-                    self.change_board_size(self.player, 240)
+                    self.change_board_size(self.player, 240, color)
                     self.powerup.moveOffscreen()
                 else:
-                    self.change_board_size(self.opponent, 240)
+                    self.change_board_size(self.opponent, 240, color)
                     self.powerup.moveOffscreen()
             # yellow = change ball speed
             elif self.powerup.color == POWERUP2_COLOR:
@@ -170,7 +189,7 @@ class Level():
                     self.change_board_speed(self.opponent, BOARD_SPEED_ENHANCED)
                     self.powerup.moveOffscreen()
 
-    def powerup_timer(self):
+    def powerup_timer(self, color):
         self.player_size_end_time = pygame.time.get_ticks()
         self.opponent_size_end_time = pygame.time.get_ticks()
         self.player_speed_end_time = pygame.time.get_ticks()
@@ -178,10 +197,10 @@ class Level():
         self.ball_speed_end_time = pygame.time.get_ticks()
 
         if (self.player_size_end_time - self.player_size_start_time  > 10000):
-            self.change_board_size(self.player, 140)
+            self.change_board_size(self.player, 140, color)
 
         if (self.opponent_size_end_time - self.opponent_size_start_time  > 10000):
-            self.change_board_size(self.opponent, 140)
+            self.change_board_size(self.opponent, 140, color)
 
         if (self.player_speed_end_time - self.player_speed_start_time > 10000):
             self.change_board_speed(self.player, BOARD_SPEED_NORMAL)
@@ -192,13 +211,13 @@ class Level():
         if (self.ball_speed_end_time - self.ball_speed_start_time > 10000):
             self.change_ball_size(BALL_RADIUS)
 
-        self.create_powerup_text()
+        self.create_powerup_text(color)
 
     # change the size of the board/paddle
-    def change_board_size(self, board, size):
+    def change_board_size(self, board, size, color):
         board.image = pygame.Surface((BOARD_SIZE[0], size))
         board.rect = board.image.get_rect(center = board.rect.center)
-        board.image.fill((200, 200, 200))
+        board.image.fill(color)
 
         if size == 240 and board.name == "player":
             self.player_size_start_time = pygame.time.get_ticks()
@@ -222,10 +241,22 @@ class Level():
         if self.ball.radius == LARGE_BALL_RADIUS:
             self.ball_speed_start_time = pygame.time.get_ticks()
 
-
+    def create_theme_text(self, color, opt):
+        TEXT_COLOR = color
+        if opt == 1:
+            theme = "DEFAULT GREY"
+        elif opt == 2:
+            theme = "RETRO GREEN"
+        elif opt == 3:
+            theme = "COOL BLUE"
+        elif opt == 4:
+            theme = "FIERY RED"
+        font = pygame.font.Font('freesansbold.ttf', 16)
+        opponent_surface = font.render(str("CURRENT THEME: " + theme + " (USE NUMBER KEYS 1-4 TO CHANGE)"), True, TEXT_COLOR)
+        self.screen.blit(opponent_surface, (WIDTH - WIDTH / 1, 770))
         
-    def create_powerup_text(self):
-        TEXT_COLOR = (200, 200, 200)
+    def create_powerup_text(self, color):
+        TEXT_COLOR = color
         font = pygame.font.Font('freesansbold.ttf', 16)
 
        #SPEED TEXT LOCATION LOGIC --> RIGHTSIDE FOR PLAYER, LEFTSIDE FOR OPP, TOP LOCATION 
@@ -297,20 +328,20 @@ class Level():
             if self.ball.velocity[1] < 0: self.ball.toggle_bungie_speed("on")
             else: self.ball.bounce("y", "on")
 
-    def end_screen(self):
+    def end_screen(self, color):
         def get_center_pos(text, font):
-            surface = font.render(text, True, (255, 255, 255))
+            surface = font.render(text, True, color)
             x = WIDTH / 2 - surface.get_size()[0] // 2
             y = HEIGHT / 2 - surface.get_size()[1] // 2
             return (x, y)
             
         self.screen.blit(self.fader, (0, 0))
         text = "YOU WIN!" if self.player.score >= ROUND else "YOU LOSE!"
-        text_surface = END_GAME_FONT.render(text, True, (255, 255, 255))
+        text_surface = END_GAME_FONT.render(text, True, color)
         self.screen.blit(text_surface, get_center_pos(text, END_GAME_FONT))
         # interpret the continuous key-stroke
         pygame.time.delay(100)
 
         text = "Press any key to continue"
-        text_surface = FONT.render(text, True, (255, 255, 255))
+        text_surface = FONT.render(text, True, color)
         self.screen.blit(text_surface, (get_center_pos(text, FONT)[0], get_center_pos(text, FONT)[1] + 60))

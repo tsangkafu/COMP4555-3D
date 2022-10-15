@@ -21,6 +21,10 @@ class Opponent(pygame.sprite.Sprite):
         if self.rect.bottom >= HEIGHT:
             self.rect.bottom = HEIGHT
 
+    def updateColor(self, color):
+        #theme color change
+        self.image.fill(color)
+
     def chase_ball(self, ball):
         if self.rect.top < ball.rect.top:
             self.rect.y += self.speed

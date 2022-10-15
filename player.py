@@ -18,7 +18,7 @@ class Player(pygame.sprite.Sprite):
         self.powerup_start_time = 0
         self.powerup_end_time = 0
         self.screen = screen
-
+        self.color_setting = 1
 
     def update(self):
         # get key press and move up or down
@@ -27,6 +27,19 @@ class Player(pygame.sprite.Sprite):
             self.rect.y -= self.speed
         elif keys[pygame.K_DOWN] and not self.rect.bottom >= HEIGHT:
             self.rect.y += self.speed
+        elif keys[pygame.K_1]:
+            self.color_setting = 1
+        elif keys[pygame.K_2]:
+            self.color_setting = 2
+        elif keys[pygame.K_3]:
+            self.color_setting = 3
+        elif keys[pygame.K_4]:
+            self.color_setting = 4
+
+    def updateColor(self, color):
+        #theme color change
+        self.image.fill(color)
+
 
     #     self.powerup_end_time = pygame.time.get_ticks()
     #     if (self.powerup_end_time - self.powerup_start_time  > 7000):
