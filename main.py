@@ -4,7 +4,7 @@ from pygame import mixer
 
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 512)
-mixer.music.load('lecture_code/media/music.ogg')
+mixer.music.load('media/music.ogg')
 mixer.music.play(loops = -1)
 
 import sys
