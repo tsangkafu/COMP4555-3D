@@ -41,7 +41,7 @@ BUNGIE_SIZE = (180, 10)
 BUNGUE_COLOR = (7, 143, 226)
 
 # sounds
-PONG_SOUND = pygame.mixer.Sound("./media/pong.ogg")
-SCORE_SOUND = pygame.mixer.Sound("./media/score.ogg")
-POWERUP_SOUND = pygame.mixer.Sound("./media/powerup.ogg")
-BUNGIE_SOUND = pygame.mixer.Sound("./media/bungie.ogg")
+#PONG_SOUND = pygame.mixer.Sound("./media/pong.ogg")
+#SCORE_SOUND = pygame.mixer.Sound("./media/score.ogg")
+#POWERUP_SOUND = pygame.mixer.Sound("./media/powerup.ogg")
+#BUNGIE_SOUND = pygame.mixer.Sound("./media/bungie.ogg")

@@ -2,17 +2,20 @@ import pygame
 from pygame.locals import *
 from pygame import mixer
 
+import random
+from powerup import *
+from level import Level
+from settings import *
+import sys
+
+
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 512)
-mixer.music.load('lecture_code/media/music.ogg')
-mixer.music.play(loops = -1)
+# mixer.music.load('lecture_code/media/music.ogg')
+# mixer.music.play(loops=-1)
 
-import sys
-from settings import *
-from level import Level
-import random
 # import powerup
-from powerup import *
+
 
 class Game():
     def __init__(self):
@@ -20,7 +23,6 @@ class Game():
         self.clock = pygame.time.Clock()
         self.level = Level(self.screen)
         pygame.display.set_caption("Pong")
-
 
     def run(self):
         start_time = pygame.time.get_ticks()
@@ -31,14 +33,14 @@ class Game():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            
+
                 if self.level.end_game:
                     if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
                         self.level = Level(self.screen)
                         break
-            
+
             self.level.run()
-           
+
             if not self.level.end_game:
                 # ~~~~ powerup position randomize block ~~~~~
                 time_elapsed = pygame.time.get_ticks()
@@ -50,10 +52,11 @@ class Game():
                 if changeHeight:
                     start_time = pygame.time.get_ticks()
                     Powerup.changeHeight(self.level.powerup)
-                #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             pygame.display.flip()
             self.clock.tick(FPS)
+
 
 if __name__ == '__main__':
     game = Game()

@@ -2,6 +2,7 @@ import pygame
 
 from settings import *
 
+
 class Bungie(pygame.sprite.Sprite):
 
     # pos = position

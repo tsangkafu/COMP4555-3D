@@ -2,6 +2,7 @@ import pygame
 
 from settings import *
 
+
 class Player(pygame.sprite.Sprite):
 
     # pos = position
@@ -13,8 +14,13 @@ class Player(pygame.sprite.Sprite):
         self.speed = 7
         self.image = pygame.Surface(size)
         self.image.fill(color)
-        self.rect = self.image.get_rect(topleft = pos)
+        self.rect = self.image.get_rect(topleft=pos)
         self.vector = pygame.math.Vector2()
+        self.start = 0
+        self.criticalCD = 0
+        self.critical_end = 0
+        self.deactivatestart = 0
+        self.active = 0
         self.powerup_start_time = 0
         self.powerup_end_time = 0
         self.screen = screen
@@ -36,10 +42,18 @@ class Player(pygame.sprite.Sprite):
         elif keys[pygame.K_4]:
             self.color_setting = 4
 
-    def updateColor(self, color):
-        #theme color change
-        self.image.fill(color)
+        self.critical_end = pygame.time.get_ticks()
+        if keys[pygame.K_SPACE]:
+            if (self.critical_end - self.criticalCD > 2500) or self.start == 0:
+                self.start = 1
+                self.criticalHitactive()
 
+        if (self.critical_end - self.criticalCD > 300 and self.active == 1):
+            self.criticalDeactivate()
+
+    def updateColor(self, color):
+        # theme color change
+        self.image.fill(color)
 
     #     self.powerup_end_time = pygame.time.get_ticks()
     #     if (self.powerup_end_time - self.powerup_start_time  > 7000):
@@ -62,3 +76,15 @@ class Player(pygame.sprite.Sprite):
     #     FONT = pygame.font.Font('freesansbold.ttf', 16)
     #     player_surface = FONT.render(str("SIZE INCREASE - ACTIVE"), True, TEXT_COLOR)
     #     self.screen.blit(player_surface, (WIDTH - WIDTH / 6, 15))
+
+    def criticalHitactive(self):
+        while self.rect.right != WIDTH - 56:
+            self.rect.x -= 1
+        self.criticalCD = pygame.time.get_ticks()
+        self.active = 1
+
+    def criticalDeactivate(self):
+        while self.rect.right != WIDTH:
+            self.rect.x += 1
+        self.deactivatestart = pygame.time.get_ticks()
+        self.active = 0

@@ -1,7 +1,6 @@
 from re import X
 import pygame
 import random
-
 from settings import *
 from player import Player
 from opponent import Opponent
@@ -9,8 +8,11 @@ from ball import Ball
 from powerup import Powerup
 from bungie import Bungie
 
+pygame.font.init()
+
 FONT = pygame.font.Font('freesansbold.ttf', 32)
 END_GAME_FONT = pygame.font.Font('freesansbold.ttf', 70)
+
 
 class Level():
     def __init__(self, screen):
@@ -22,7 +24,7 @@ class Level():
         self.fader = pygame.Surface((WIDTH, HEIGHT))
         self.fader.fill((0, 0, 0))
         self.fader.set_alpha(150)
-        
+
         # timer for paddle speed-up powerups
         self.player_speed_start_time = 0
         self.player_speed_end_time = 0
@@ -65,7 +67,7 @@ class Level():
             # position of the top left of the player
             ((WIDTH - POWERUP_SIZE[0])/2, Powerup.randomizeHeight(self)),
             random.choice(COLOR_LIST),
-            self.powerup_sprites) #sprites
+            self.powerup_sprites)  # sprites
 
         self.ball = Ball(
             # surface
@@ -91,7 +93,6 @@ class Level():
             self.bungie_sprites
         )
 
-
     def run(self):
         # determine when to end game
         if self.player.score >= ROUND or self.opponent.score >= ROUND:
@@ -110,14 +111,14 @@ class Level():
             BG_COLOR = BG_RED
             OBJ_COLOR = OBJ_RED
 
-
         self.screen.fill(BG_COLOR)
 
         self.player_round = self.get_round()
-        pygame.draw.aaline(self.screen, OBJ_COLOR, (WIDTH / 2, 0), (WIDTH / 2, HEIGHT))
+        pygame.draw.aaline(self.screen, OBJ_COLOR,
+                           (WIDTH / 2, 0), (WIDTH / 2, HEIGHT))
 
         self.board_sprites.draw(self.screen)
-        
+
         self.powerup_sprites.draw(self.screen)
         self.bungie_sprites.draw(self.screen)
 
@@ -127,11 +128,11 @@ class Level():
         self.player.updateColor(OBJ_COLOR)
 
         self.create_theme_text(OBJ_COLOR, self.player.color_setting)
-        
+
         if self.end_game:
             self.end_screen(OBJ_COLOR)
         else:
-            #booleans for powerup text
+            # booleans for powerup text
             self.pl_sizeEfct = False
             self.pl_ballEfct = False
             self.pl_speedEfct = False
@@ -147,7 +148,6 @@ class Level():
             self.ball_sprites.update(OBJ_COLOR)
             self.powerup_sprites.update()
             self.bungie_sprites.update()
-
 
     def create_score(self, color):
         player_surface = FONT.render(str(self.player.score), True, color)
@@ -167,7 +167,7 @@ class Level():
         self.powerup_timer(color)
 
         if self.ball.rect.colliderect(self.powerup.rect):
-            pygame.mixer.Sound.play(POWERUP_SOUND)
+            # pygame.mixer.Sound.play(POWERUP_SOUND)
             # purple = change board size
             if self.powerup.color == POWERUP1_COLOR:
                 if self.player_round:
@@ -186,7 +186,8 @@ class Level():
                     self.change_board_speed(self.player, BOARD_SPEED_ENHANCED)
                     self.powerup.moveOffscreen()
                 else:
-                    self.change_board_speed(self.opponent, BOARD_SPEED_ENHANCED)
+                    self.change_board_speed(
+                        self.opponent, BOARD_SPEED_ENHANCED)
                     self.powerup.moveOffscreen()
 
     def powerup_timer(self, color):
@@ -196,10 +197,10 @@ class Level():
         self.opponent_speed_end_time = pygame.time.get_ticks()
         self.ball_speed_end_time = pygame.time.get_ticks()
 
-        if (self.player_size_end_time - self.player_size_start_time  > 10000):
+        if (self.player_size_end_time - self.player_size_start_time > 10000):
             self.change_board_size(self.player, 140, color)
 
-        if (self.opponent_size_end_time - self.opponent_size_start_time  > 10000):
+        if (self.opponent_size_end_time - self.opponent_size_start_time > 10000):
             self.change_board_size(self.opponent, 140, color)
 
         if (self.player_speed_end_time - self.player_speed_start_time > 10000):
@@ -216,7 +217,7 @@ class Level():
     # change the size of the board/paddle
     def change_board_size(self, board, size, color):
         board.image = pygame.Surface((BOARD_SIZE[0], size))
-        board.rect = board.image.get_rect(center = board.rect.center)
+        board.rect = board.image.get_rect(center=board.rect.center)
         board.image.fill(color)
 
         if size == 240 and board.name == "player":
@@ -235,9 +236,11 @@ class Level():
     # change the size of the ball
     def change_ball_size(self, radius):
         self.ball.radius = radius
-        self.ball.image = pygame.Surface((radius * 2, radius * 2), pygame.SRCALPHA)
-        pygame.draw.circle(self.ball.image, OBJ_COLOR, (radius, radius), radius)
-        self.ball.rect = self.ball.image.get_rect(center = self.ball.rect.center)
+        self.ball.image = pygame.Surface(
+            (radius * 2, radius * 2), pygame.SRCALPHA)
+        pygame.draw.circle(self.ball.image, OBJ_COLOR,
+                           (radius, radius), radius)
+        self.ball.rect = self.ball.image.get_rect(center=self.ball.rect.center)
         if self.ball.radius == LARGE_BALL_RADIUS:
             self.ball_speed_start_time = pygame.time.get_ticks()
 
@@ -252,26 +255,27 @@ class Level():
         elif opt == 4:
             theme = "FIERY RED"
         font = pygame.font.Font('freesansbold.ttf', 16)
-        opponent_surface = font.render(str("CURRENT THEME: " + theme + " (USE NUMBER KEYS 1-4 TO CHANGE)"), True, TEXT_COLOR)
+        opponent_surface = font.render(str(
+            "CURRENT THEME: " + theme + " (USE NUMBER KEYS 1-4 TO CHANGE)"), True, TEXT_COLOR)
         self.screen.blit(opponent_surface, (WIDTH - WIDTH / 1, 770))
-        
+
     def create_powerup_text(self, color):
         TEXT_COLOR = color
         font = pygame.font.Font('freesansbold.ttf', 16)
 
-       #SPEED TEXT LOCATION LOGIC --> RIGHTSIDE FOR PLAYER, LEFTSIDE FOR OPP, TOP LOCATION 
+       # SPEED TEXT LOCATION LOGIC --> RIGHTSIDE FOR PLAYER, LEFTSIDE FOR OPP, TOP LOCATION
         if self.player.image.get_height() == 240:
             self.pl_sizeEfct = True
             text = "PLAYER SIZE INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
-            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 15))        
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 15))
         if self.opponent.image.get_height() == 240:
             self.op_sizeEfct = True
             text = "OPPONENT SIZE INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
             self.screen.blit(player_surface, (25, 15))
 
-       #SPEED TEXT LOCATION LOGIC --> RIGHTSIDE FOR PLAYER, MIDDLE LOCATION IF 2 EFFECTS ACTIVE
+       # SPEED TEXT LOCATION LOGIC --> RIGHTSIDE FOR PLAYER, MIDDLE LOCATION IF 2 EFFECTS ACTIVE
         if self.player.speed > BOARD_SPEED_NORMAL and not self.pl_sizeEfct:
             self.pl_speedEfct = True
             text = "PLAYER SPEED INCREASE - ACTIVE"
@@ -281,21 +285,21 @@ class Level():
             self.pl_speedEfct = True
             text = "PLAYER SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
-            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 35))     
- 
-       #SPEED TEXT LOCATION LOGIC --> LEFTSIDE FOR OPP, MIDDLE LOCATION IF 2 EFFECTS ACTIVE
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 35))
+
+       # SPEED TEXT LOCATION LOGIC --> LEFTSIDE FOR OPP, MIDDLE LOCATION IF 2 EFFECTS ACTIVE
         if self.opponent.speed > BOARD_SPEED_NORMAL and not self.op_sizeEfct:
             self.op_speedEfct = True
             text = "OPPONENT SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
-            self.screen.blit(player_surface, (25, 15)) 
+            self.screen.blit(player_surface, (25, 15))
         elif self.opponent.speed > BOARD_SPEED_NORMAL and self.pl_sizeEfct:
             self.pl_speedEfct = True
             text = "PLAYER SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
             self.screen.blit(player_surface, (25, 35))
 
-        #BALL SIZE TEXT LOCATION LOGIC --> BOTTOM LOCATION IF ALL 3 EFFECTS ACTIVE, ALWAYS RIGHT SIDE
+        # BALL SIZE TEXT LOCATION LOGIC --> BOTTOM LOCATION IF ALL 3 EFFECTS ACTIVE, ALWAYS RIGHT SIDE
         if self.ball.radius == LARGE_BALL_RADIUS and not self.pl_sizeEfct and not self.pl_speedEfct:
             self.pl_ballEfct = True
             text = "BALL SIZE INCREASE - ACTIVE"
@@ -310,23 +314,27 @@ class Level():
             self.pl_ballEfct = True
             text = "BALL SIZE INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
-            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 35))          
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 35))
         elif self.ball.radius == LARGE_BALL_RADIUS and self.pl_sizeEfct and self.pl_speedEfct:
             self.pl_ballEfct = True
             text = "BALL SIZE INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
-            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 55))         
+            self.screen.blit(player_surface, (WIDTH - WIDTH / 4, 55))
 
     def detect_bungie(self):
         if self.ball.rect.colliderect(self.bungueBottom.rect):
-            pygame.mixer.Sound.play(BUNGIE_SOUND)
+            # pygame.mixer.Sound.play(BUNGIE_SOUND)
             # the ball went past the bungue, hit the wall and was bounced already, so I we just need to change the speed
-            if self.ball.velocity[1] > 0: self.ball.toggle_bungie_speed("on")
-            else: self.ball.bounce("y", "on")
+            if self.ball.velocity[1] > 0:
+                self.ball.toggle_bungie_speed("on")
+            else:
+                self.ball.bounce("y", "on")
         elif self.ball.rect.colliderect(self.bungueTop.rect):
-            pygame.mixer.Sound.play(BUNGIE_SOUND)
-            if self.ball.velocity[1] < 0: self.ball.toggle_bungie_speed("on")
-            else: self.ball.bounce("y", "on")
+            # pygame.mixer.Sound.play(BUNGIE_SOUND)
+            if self.ball.velocity[1] < 0:
+                self.ball.toggle_bungie_speed("on")
+            else:
+                self.ball.bounce("y", "on")
 
     def end_screen(self, color):
         def get_center_pos(text, font):
@@ -334,7 +342,7 @@ class Level():
             x = WIDTH / 2 - surface.get_size()[0] // 2
             y = HEIGHT / 2 - surface.get_size()[1] // 2
             return (x, y)
-            
+
         self.screen.blit(self.fader, (0, 0))
         text = "YOU WIN!" if self.player.score >= ROUND else "YOU LOSE!"
         text_surface = END_GAME_FONT.render(text, True, color)
@@ -344,4 +352,5 @@ class Level():
 
         text = "Press any key to continue"
         text_surface = FONT.render(text, True, color)
-        self.screen.blit(text_surface, (get_center_pos(text, FONT)[0], get_center_pos(text, FONT)[1] + 60))
+        self.screen.blit(text_surface, (get_center_pos(text, FONT)[
+                         0], get_center_pos(text, FONT)[1] + 60))
