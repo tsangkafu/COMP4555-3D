@@ -23,7 +23,7 @@ class Game():
 
     def run(self):
         start_time = pygame.time.get_ticks()
-        mixer.music.load('lecture_code/media/music.ogg')
+        mixer.music.load('media//music.ogg')
         mixer.music.play(loops=-1)
         music_playing = True
 

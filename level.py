@@ -254,10 +254,10 @@ class Level():
             theme = "COOL BLUE"
         elif opt == 4:
             theme = "FIERY RED"
-        font = pygame.font.Font('freesansbold.ttf', 16)
+        font = pygame.font.Font('freesansbold.ttf', 12)
         opponent_surface = font.render(str(
-            "CURRENT THEME: " + theme + " (USE NUMBER KEYS 1-4 TO CHANGE)"), True, TEXT_COLOR)
-        self.screen.blit(opponent_surface, (WIDTH - WIDTH / 1, 770))
+            "CURRENT THEME: " + theme + " (CHANGE W/ 1-4)"), True, TEXT_COLOR)
+        self.screen.blit(opponent_surface, (WIDTH - WIDTH + 25, 770))
 
     def create_powerup_text(self, color):
         TEXT_COLOR = color

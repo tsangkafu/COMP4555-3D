@@ -55,28 +55,6 @@ class Player(pygame.sprite.Sprite):
         # theme color change
         self.image.fill(color)
 
-    #     self.powerup_end_time = pygame.time.get_ticks()
-    #     if (self.powerup_end_time - self.powerup_start_time  > 7000):
-    #         self.change_size(140)
-    #     if self.image.get_height() == 240:
-    #         self.create_powerup_text()
-
-    # def change_size(self, size):
-    #     # self.create_powerup_text()
-    #     self.image = pygame.Surface((10, size))
-    #     new_size = ((WIDTH - self.image.get_width()), (self.rect.top))
-    #     self.rect = self.image.get_rect(topleft = new_size)
-    #     self.image.fill((200, 200, 200))
-    #     if size == 240:
-    #         self.powerup_start_time = pygame.time.get_ticks()
-    #         self.create_powerup_text()
-
-    # def create_powerup_text(self):
-    #     TEXT_COLOR = (200, 200, 200)
-    #     FONT = pygame.font.Font('freesansbold.ttf', 16)
-    #     player_surface = FONT.render(str("SIZE INCREASE - ACTIVE"), True, TEXT_COLOR)
-    #     self.screen.blit(player_surface, (WIDTH - WIDTH / 6, 15))
-
     def criticalHitactive(self):
         while self.rect.right != WIDTH - 56:
             self.rect.x -= 1

@@ -3,7 +3,7 @@ import pygame
 HEIGHT = 800
 WIDTH = 1280
 FPS = 60
-ROUND = 2
+ROUND = 5
 
 # Color Themes
 # Default
@@ -30,7 +30,7 @@ BG_COLOR = BG_DEF
 OBJ_COLOR = OBJ_DEF
 
 # POWERUP CONSTS
-POWERUP_SIZE = (200, 200)
+POWERUP_SIZE = (80, 80)
 POWERUP1_COLOR = (200, 0, 200)
 POWERUP2_COLOR = (255, 255, 0)
 POWERUP3_COLOR = (0, 255, 255)
@@ -39,9 +39,3 @@ COLOR_LIST = [POWERUP1_COLOR, POWERUP2_COLOR, POWERUP3_COLOR]
 # BUNGUE CONSTS
 BUNGIE_SIZE = (180, 10)
 BUNGUE_COLOR = (7, 143, 226)
-
-# sounds
-#PONG_SOUND = pygame.mixer.Sound("./media/pong.ogg")
-#SCORE_SOUND = pygame.mixer.Sound("./media/score.ogg")
-#POWERUP_SOUND = pygame.mixer.Sound("./media/powerup.ogg")
-#BUNGIE_SOUND = pygame.mixer.Sound("./media/bungie.ogg")
