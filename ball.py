@@ -159,7 +159,7 @@ class Ball(pygame.sprite.Sprite):
             isNegative = True if coordSpeed < 0 else False
             absoluteValue = abs(coordSpeed)
             newSpeed = BALL_SPEED_NORMAL + \
-                random.randint(-2, 2) if onOff == "off" else BALL_SPEED_BUNGIE
+                random.randint(-3, 3) if onOff == "off" else BALL_SPEED_BUNGIE
             if isNegative:
                 newSpeed *= -1
             self.velocity[i] = newSpeed
