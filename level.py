@@ -82,14 +82,14 @@ class Level():
         self.bungueBottom = Bungie(
             BUNGIE_SIZE,
             ((WIDTH - BUNGIE_SIZE[0])/2, 0),
-            BUNGUE_COLOR,
+            BUNGIE_COLOR,
             self.bungie_sprites
         )
 
         self.bungueTop = Bungie(
             BUNGIE_SIZE,
             ((WIDTH - BUNGIE_SIZE[0])/2, HEIGHT-BUNGIE_SIZE[1]),
-            BUNGUE_COLOR,
+            BUNGIE_COLOR,
             self.bungie_sprites
         )
 
@@ -172,7 +172,7 @@ class Level():
         self.powerup_timer(color)
 
         if self.ball.rect.colliderect(self.powerup.rect):
-            # pygame.mixer.Sound.play(POWERUP_SOUND)
+            pygame.mixer.Sound.play(POWERUP_SOUND)
             # purple = change board size
             if self.powerup.color == POWERUP1_COLOR:
                 if self.player_round:
@@ -328,14 +328,14 @@ class Level():
 
     def detect_bungie(self):
         if self.ball.rect.colliderect(self.bungueBottom.rect):
-            # pygame.mixer.Sound.play(BUNGIE_SOUND)
+            pygame.mixer.Sound.play(BUNGIE_SOUND)
             # the ball went past the bungue, hit the wall and was bounced already, so I we just need to change the speed
             if self.ball.velocity[1] > 0:
                 self.ball.toggle_bungie_speed("on")
             else:
                 self.ball.bounce("y", "on")
         elif self.ball.rect.colliderect(self.bungueTop.rect):
-            # pygame.mixer.Sound.play(BUNGIE_SOUND)
+            pygame.mixer.Sound.play(BUNGIE_SOUND)
             if self.ball.velocity[1] < 0:
                 self.ball.toggle_bungie_speed("on")
             else:

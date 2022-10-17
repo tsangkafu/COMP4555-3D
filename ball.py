@@ -27,12 +27,12 @@ class Ball(pygame.sprite.Sprite):
         # reverse y when the ball reaches top or bottom
         if self.rect.top <= 0:
             if self.velocity[1] < 0:
-                # pygame.mixer.Sound.play(PONG_SOUND)
+                pygame.mixer.Sound.play(PONG_SOUND)
                 self.bounce("y")
 
         if self.rect.bottom >= HEIGHT:
             if self.velocity[1] > 0:
-                # pygame.mixer.Sound.play(PONG_SOUND)
+                pygame.mixer.Sound.play(PONG_SOUND)
                 self.bounce("y")
 
         # reverse x when the ball collides the board
@@ -43,20 +43,22 @@ class Ball(pygame.sprite.Sprite):
             # if it has bounced off already (x < 0)
             # then don't change its direction
             if self.velocity[0] > 0:
-                # pygame.mixer.Sound.play(PONG_SOUND)
+                pygame.mixer.Sound.play(PONG_SOUND)
                 self.bounce("x")
 
         if self.rect.colliderect(self.opponent.rect):
             if self.velocity[0] < 0:
-                # pygame.mixer.Sound.play(PONG_SOUND)
+                pygame.mixer.Sound.play(PONG_SOUND)
                 self.bounce("x")
 
         # when the ball reaches left or right, scores
         if self.rect.left <= 0 - 100:
+            pygame.mixer.Sound.play(SCORE_SOUND)
             self.player.score += 1
             self.crit_speed = 0
             self.restart()
         elif self.rect.right >= WIDTH + 100:
+            pygame.mixer.Sound.play(SCORE_SOUND)
             self.opponent.score += 1
             self.crit_speed = 0
             self.restart()
@@ -117,7 +119,6 @@ class Ball(pygame.sprite.Sprite):
             self.toggle_critical_speed(criticalspeed)
 
     def restart(self):
-        # pygame.mixer.Sound.play(SCORE_SOUND)
         self.speed = BALL_SPEED_NORMAL
         self.rect.center = (WIDTH / 2, HEIGHT / 2)
         self.velocity[0] *= random.choice((1, -1))
