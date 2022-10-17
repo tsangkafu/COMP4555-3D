@@ -1,17 +1,15 @@
+from pickle import GLOBAL
 import pygame
 from pygame.locals import *
 from pygame import mixer
 
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 512)
-mixer.music.load('lecture_code/media/music.ogg')
-mixer.music.play(loops = -1)
 
 import sys
 from settings import *
 from level import Level
 import random
-# import powerup
 from powerup import *
 
 class Game():
@@ -21,9 +19,11 @@ class Game():
         self.level = Level(self.screen)
         pygame.display.set_caption("Pong")
 
-
     def run(self):
         start_time = pygame.time.get_ticks()
+        mixer.music.load('lecture_code/media/music.ogg')
+        mixer.music.play(loops = -1)
+        music_playing = True
 
         while True:
             # event detection
@@ -31,6 +31,15 @@ class Game():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_m:
+                        if music_playing: 
+                            pygame.mixer.music.pause()
+                            music_playing = False
+                        else:
+                            pygame.mixer.music.unpause()
+                            music_playing = True
             
                 if self.level.end_game:
                     if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
