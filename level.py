@@ -115,8 +115,8 @@ class Level():
 
         #Background image
         bg_img = pygame.image.load("media/bgrImage.png")
-        bg_img = pygame.transform.scale(bg_img,(200,300))
-        self.screen.blit(bg_img, (400,640))
+        bg_img = pygame.transform.scale(bg_img,(200,200))
+        self.screen.blit(bg_img, (WIDTH / 2 - 100, HEIGHT / 2 - 100))
 
         self.player_round = self.get_round()
         pygame.draw.aaline(self.screen, OBJ_COLOR,
