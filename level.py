@@ -1,4 +1,5 @@
 from re import X
+from turtle import width
 import pygame
 import random
 from settings import *
@@ -113,11 +114,8 @@ class Level():
 
         self.screen.fill(BG_COLOR)
 
-        #Background image
-        bg_img = pygame.image.load("media/bgrImage.png")
-        bg_img = pygame.transform.scale(bg_img,(200,200))
-        self.screen.blit(bg_img, (WIDTH / 2 - 100, HEIGHT / 2 - 100))
-
+        self.create_logo(OBJ_COLOR)
+        
         self.player_round = self.get_round()
         pygame.draw.aaline(self.screen, OBJ_COLOR,
                            (WIDTH / 2, 0), (WIDTH / 2, HEIGHT))
@@ -359,3 +357,14 @@ class Level():
         text_surface = FONT.render(text, True, color)
         self.screen.blit(text_surface, (get_center_pos(text, FONT)[
                          0], get_center_pos(text, FONT)[1] + 60))
+
+    def create_logo(self, color):
+        #Background image
+        bg_img = pygame.image.load("media/bgrImage.png")
+        bg_img = pygame.transform.scale(bg_img,(200,200))
+        bg_img.set_alpha(80)
+        self.screen.blit(bg_img, (WIDTH / 2 - 100, HEIGHT / 2 - 100))
+
+        txt_surface = END_GAME_FONT.render("3D", True, color)
+        txt_surface.set_alpha(80)
+        self.screen.blit(txt_surface, (WIDTH/2 - 39, HEIGHT/2 - 20))
