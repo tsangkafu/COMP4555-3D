@@ -64,6 +64,7 @@ class Game():
                 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             pygame.display.flip()
+
             self.clock.tick(FPS)
 
 
