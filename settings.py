@@ -1,4 +1,6 @@
 import pygame
+pygame.init()
+pygame.mixer.pre_init(44100, -16, 2, 512)
 
 HEIGHT = 800
 WIDTH = 1280
@@ -38,4 +40,10 @@ COLOR_LIST = [POWERUP1_COLOR, POWERUP2_COLOR, POWERUP3_COLOR]
 
 # BUNGUE CONSTS
 BUNGIE_SIZE = (180, 10)
-BUNGUE_COLOR = (7, 143, 226)
+BUNGIE_COLOR = (7, 143, 226)
+
+# SOUNDS
+PONG_SOUND = pygame.mixer.Sound("./media/pong.ogg")
+SCORE_SOUND = pygame.mixer.Sound("./media/score.ogg")
+POWERUP_SOUND = pygame.mixer.Sound("./media/powerup.ogg")
+BUNGIE_SOUND = pygame.mixer.Sound("./media/bungie.ogg")
