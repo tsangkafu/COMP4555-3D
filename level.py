@@ -296,9 +296,9 @@ class Level():
             text = "OPPONENT SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
             self.screen.blit(player_surface, (25, 15))
-        elif self.opponent.speed > BOARD_SPEED_NORMAL and self.pl_sizeEfct:
+        elif self.opponent.speed > BOARD_SPEED_NORMAL and self.op_sizeEfct:
             self.pl_speedEfct = True
-            text = "PLAYER SPEED INCREASE - ACTIVE"
+            text = "OPPONENT SPEED INCREASE - ACTIVE"
             player_surface = font.render(str(text), True, TEXT_COLOR)
             self.screen.blit(player_surface, (25, 35))
 
