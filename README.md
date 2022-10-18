@@ -23,6 +23,10 @@
     - Added randomness to the bounce angle/speed of the ball.
     - This Mod adds increased variability and improves the expected behaviour of how the ball should bounce when hitting the paddle at an extreme angle.
     
+- Background & Background Music (by Daniel Baranowski): 
+	- Adds a remix of a soundtrack from the Pac-man Theme and a nice-looking logo of the 3 Daniels (3D). The music will play in an infinite loop and can be 	muted using an "m" button (thanks to Daniel Yankov and his personal preference).
+	Song credit: Arsenic1987 "Pac-Man Theme (Remix)
+   
 - Powerup mod: 
     - 3 powerup submods that works for both the human and AI opponent depending on who hit the ball last. 
     - Powerups activate for a short time when the ball touches the powerup, Multiple powerups may be active at the same time.
