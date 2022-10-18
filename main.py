@@ -1,19 +1,15 @@
+from pickle import GLOBAL
 import pygame
-pygame.init()
-pygame.mixer.pre_init(44100, -16, 2, 512)
+from pygame.locals import *
+from pygame import mixer
 
-import sys
-from settings import *
-from level import Level
 import random
-# import powerup
 from powerup import *
+from level import Level
+from settings import *
+import sys
 
 
-POWERUP_SIZE = (50, 50)
-POWERUP1_COLOR = (200, 0, 200)
-POWERUP2_COLOR = (255, 255, 0)
-POWERUP3_COLOR = (0, 255, 255)
 
 class Game():
     def __init__(self):
@@ -22,10 +18,12 @@ class Game():
         self.level = Level(self.screen)
         pygame.display.set_caption("Pong")
 
-
     def run(self):
-            
         start_time = pygame.time.get_ticks()
+        mixer.music.load('media//music.ogg')
+        mixer.music.play(loops=-1)
+        mixer.music.set_volume(0.3)
+        music_playing = True
 
         while True:
             # event detection
@@ -33,23 +31,40 @@ class Game():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-            
+
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_m:
+                        if music_playing:
+                            pygame.mixer.music.pause()
+                            music_playing = False
+                        else:
+                            pygame.mixer.music.unpause()
+                            music_playing = True
+
+                if self.level.end_game:
+                    if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
+                        self.level = Level(self.screen)
+                        break
+
             self.level.run()
-           
-            # ~~~~ powerup position randomize block ~~~~~
-            time_elapsed = pygame.time.get_ticks()
-            changeHeight = False
 
-            if (time_elapsed - start_time) > 5000:
-                changeHeight = True
+            if not self.level.end_game:
+                # ~~~~ powerup position randomize block ~~~~~
+                time_elapsed = pygame.time.get_ticks()
+                changeHeight = False
 
-            if changeHeight:
-                start_time = pygame.time.get_ticks()
-                Powerup.changeHeight(self.level.powerup)
-            #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                if (time_elapsed - start_time) > 3000:
+                    changeHeight = True
+
+                if changeHeight:
+                    start_time = pygame.time.get_ticks()
+                    Powerup.changeHeight(self.level.powerup)
+                # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             pygame.display.flip()
+
             self.clock.tick(FPS)
+
 
 if __name__ == '__main__':
     game = Game()
