@@ -40,7 +40,7 @@
 	- Paddle speed increase (Cyan) - Temporarily increases the paddle speed to make it easier to reach the ball from far away.
 - Bungie mod:
     - Top and bottom (horizontal center of screen) "barriers" added that increase the speed of the ball and make a sound on impact
-    - Allow the player to combat the bot more efficiently, as the player can predict when a bungie will be hit and where the ball will go, whereas the bot simply follows the ball at a limited speed
+    - Allows the player to combat the bot more efficiently, as the player can predict when a bungie will be hit and where the ball will go, whereas the bot simply follows the ball at a limited speed
 - Win/Loss Screen:
     - The game ends and displays an appropriate message when the score reaches 5 for either the player or the opponent, and the game will reset on any input.
     - This mod provides an objective for the player by providing a way to win the game.
