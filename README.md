@@ -16,7 +16,7 @@
 # Included mods:
 
 - Color Theme Mod (by Daniel Faratro):
-    Enables the user to switch between 4 preset color themes using keys 1 through 4 on the keyboard. This allows to user to select a preferred color scheme that may better suit their visual tastes and offer a more appealing visual experience with this rather simple game.
+	- Enables the user to switch between 4 preset color themes using keys 1 through 4 on the keyboard. This allows to user to select a preferred color scheme that 		 may better suit their visual tastes and offer a more appealing visual experience with this rather simple game.
     
 - Alternative physics:
     - Added different bounce physics when the ball hits the top/bottom of the paddle.
