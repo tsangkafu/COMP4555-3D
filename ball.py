@@ -114,7 +114,6 @@ class Ball(pygame.sprite.Sprite):
         self.toggle_bungie_speed(bungieSpeed)
 
         if (self.rect.right <= WIDTH - 20 and self.rect.colliderect(self.player.rect)):
-            print('activate')
             self.velocity[1] *= -1
             self.toggle_critical_speed(criticalspeed)
 
@@ -159,8 +158,9 @@ class Ball(pygame.sprite.Sprite):
             # need to preserve the sign, aka the direction the ball is going in
             isNegative = True if coordSpeed < 0 else False
             absoluteValue = abs(coordSpeed)
-            newSpeed = BALL_SPEED_NORMAL + \
-                random.randint(-3, 3) if onOff == "off" else BALL_SPEED_BUNGIE
+            newSpeed = BALL_SPEED_NORMAL if onOff == "off" else BALL_SPEED_BUNGIE
+            if i == 1:
+                newSpeed += random.randint(-4, 4)
             if isNegative:
                 newSpeed *= -1
             self.velocity[i] = newSpeed
