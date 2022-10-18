@@ -10,9 +10,6 @@ from settings import *
 import sys
 
 
-pygame.init()
-pygame.mixer.pre_init(44100, -16, 2, 512)
-
 
 class Game():
     def __init__(self):
@@ -25,6 +22,7 @@ class Game():
         start_time = pygame.time.get_ticks()
         mixer.music.load('media//music.ogg')
         mixer.music.play(loops=-1)
+        mixer.music.set_volume(0.3)
         music_playing = True
 
         while True:
@@ -64,6 +62,7 @@ class Game():
                 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             pygame.display.flip()
+
             self.clock.tick(FPS)
 
 
