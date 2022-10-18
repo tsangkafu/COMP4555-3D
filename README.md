@@ -30,8 +30,12 @@
     - Every few seconds powerups spawn/reset at a random height at the center of the screen.
     - Each powerup has a unique colour to help identify it.
     - These mods provide a fun side objective to aim for and helps makes it temporarily easier/harder to score for added variability.
-- Powerup Submods:
+- Powerup submods:
 	- Ball size increase (Yellow) - Temporarily increases the size of the ball to make it easier to physically block the ball and easier to collect more powerups.
 	- Paddle Size increase (Purple) - Temporarily increases the size of the paddle to make it easier to physically block the ball.
 	- Paddle speed increase (Cyan) - Temporarily increases the paddle speed to make it easier to reach the ball from far away.
+	- 
+- Win/Loss Screen:
+    - The game ends and displays an appropriate message when the score reaches 5 for either the player or the opponent, and the game will reset on any input.
+    - This mod provides an objective for the player by providing a way to win the game.
 
