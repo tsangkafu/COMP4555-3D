@@ -328,13 +328,13 @@ class Level():
             if self.ball.velocity[1] > 0:
                 self.ball.toggle_bungie_speed("on")
             else:
-                self.ball.bounce("y", "on")
+                self.ball.bounce("y", "on", "off")
         elif self.ball.rect.colliderect(self.bungueTop.rect):
             # pygame.mixer.Sound.play(BUNGIE_SOUND)
             if self.ball.velocity[1] < 0:
                 self.ball.toggle_bungie_speed("on")
             else:
-                self.ball.bounce("y", "on")
+                self.ball.bounce("y", "on", "off")
 
     def end_screen(self, color):
         def get_center_pos(text, font):

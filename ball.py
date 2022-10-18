@@ -94,7 +94,6 @@ class Ball(pygame.sprite.Sprite):
                         self.velocity[1] *= -1
 
             elif self.rect.colliderect(self.opponent.rect):
-                self.crit_speed = 0
                 # if the center of the ball is outside of the board
                 # meaning it's hitting the paddle on the upper edge
                 if self.rect.center[1] < self.opponent.rect.topright[1]:
@@ -112,10 +111,9 @@ class Ball(pygame.sprite.Sprite):
         self.toggle_bungie_speed(bungieSpeed)
 
         if (self.rect.right <= WIDTH - 20 and self.rect.colliderect(self.player.rect)):
-            print('activate')
             self.velocity[1] *= -1
             self.toggle_critical_speed(criticalspeed)
-
+        
     def restart(self):
         # pygame.mixer.Sound.play(SCORE_SOUND)
         self.speed = BALL_SPEED_NORMAL
@@ -124,31 +122,28 @@ class Ball(pygame.sprite.Sprite):
         self.velocity[1] *= random.choice((1, -1))
 
     def toggle_critical_speed(self, onOff):
-        for i, coordSpeed in enumerate(self.velocity):
             # need to preserve the sign, aka the direction the ball is going in
-            isNegative = True if coordSpeed < 0 else False
-            absoluteValue = abs(coordSpeed)
-            newSpeedx = 0
-            newSpeedy = 0
-            if self.rect.center[1] < self.player.rect.topleft[1] or self.rect.center[1] > self.player.rect.bottomleft[1]:
-                newSpeedx = BALL_SPEED_NORMAL / 2
-                newSpeedy = BALL_SPEED_NORMAL * 2
-                if self.rect.center[1] < self.player.rect.topleft[1]:
-                    if self.velocity[1] > 0:
-                        self.velocity[1] *= -1
-                elif self.rect.center[1] > self.player.rect.bottomleft[1]:
-                    if self.velocity[1] < 0:
-                        self.velocity[1] *= -1
-            else:
-                newSpeedx = BALL_SPEED_NORMAL * 2
-                newSpeedy = BALL_SPEED_NORMAL * 2
-
-            if isNegative:
-                newSpeedx *= -1
-                newSpeedy *= -1
-
-            self.velocity[0] = newSpeedx
+        newSpeedx = 0
+        newSpeedy = 0
+        critSpeed = BALL_SPEED_NORMAL * 2 
+        critFungle = BALL_SPEED_NORMAL / 2 
+        if self.rect.center[1] - BALL_RADIUS + 10 <= self.player.rect.top or self.rect.center[1] + BALL_RADIUS - 10 >= self.player.rect.bottom:
+            newSpeedx = critFungle
+            newSpeedy = critSpeed
+        elif self.rect.center[1] > self.player.rect.topleft[1] or self.rect.center[1] < self.player.rect.bottomleft[1]:
+            newSpeedx = critSpeed
+            newSpeedy = critFungle
+ 
+        newSpeedx *= -1 
+        self.velocity[0] = newSpeedx
+    
+        if self.velocity[1] < 0:
+            newSpeedy *= 1
+            self.velocity[1] = newSpeedy 
+        else: 
+            newSpeedy *= -1 
             self.velocity[1] = newSpeedy
+
 
     # def const_crit_speed(self, coordx, coordy):
         # if coordx > BALL_SPEED_NORMAL or coordy > BALL_SPEED_NORMAL
@@ -157,7 +152,6 @@ class Ball(pygame.sprite.Sprite):
         for i, coordSpeed in enumerate(self.velocity):
             # need to preserve the sign, aka the direction the ball is going in
             isNegative = True if coordSpeed < 0 else False
-            absoluteValue = abs(coordSpeed)
             newSpeed = BALL_SPEED_NORMAL + \
                 random.randint(-3, 3) if onOff == "off" else BALL_SPEED_BUNGIE
             if isNegative:
