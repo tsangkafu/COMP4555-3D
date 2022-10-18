@@ -124,6 +124,7 @@ class Ball(pygame.sprite.Sprite):
 
     def toggle_critical_speed(self, onOff):
             # need to preserve the sign, aka the direction the ball is going in
+        pygame.mixer.Sound.play(CRITICAL_SOUND)
         newSpeedx = 0
         newSpeedy = 0
         critSpeed = BALL_SPEED_NORMAL * 2 
@@ -153,15 +154,13 @@ class Ball(pygame.sprite.Sprite):
         for i, coordSpeed in enumerate(self.velocity):
             # need to preserve the sign, aka the direction the ball is going in
             isNegative = True if coordSpeed < 0 else False
-<<<<<<< HEAD
+
             newSpeed = BALL_SPEED_NORMAL + \
                 random.randint(-3, 3) if onOff == "off" else BALL_SPEED_BUNGIE
-=======
             absoluteValue = abs(coordSpeed)
             newSpeed = BALL_SPEED_NORMAL if onOff == "off" else BALL_SPEED_BUNGIE
             if i == 1:
                 newSpeed += random.randint(-4, 4)
->>>>>>> 57cd65c95ec3a0533f529cde18b2414a6eeebea7
             if isNegative:
                 newSpeed *= -1
             self.velocity[i] = newSpeed
