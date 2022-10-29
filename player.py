@@ -1,68 +1,73 @@
 import pygame
+import globals
+import bullet
 
-from settings import *
+class Player():
+
+    ######################################################################
+    # CONSTRUCTOR
+    
+    def __init__(self, spritesDict):
+        self.spritesDict = spritesDict
+        
+        self.image = pygame.image.load("./media/images/spaceship.png")
+        
+        self.x = (globals.DISPLAY_WIDTH / 2) - (self.get_width() / 2)
+        self.y = globals.DISPLAY_HEIGHT - (self.get_height() + 30) # 30 being the distance from the bottom
+        
+        self.speedX = 3
+        self.speedY = 0
+
+        self.curSpeedX = 0
+        self.curSpeedY = 0
 
 
-class Player(pygame.sprite.Sprite):
+    ######################################################################
+    # GETTERS
 
-    # pos = position
-    # group = sprite group
-    def __init__(self, size, pos, color, group, screen):
-        super().__init__(group)
-        self.name = "player"
-        self.score = 0
-        self.speed = 7
-        self.image = pygame.Surface(size)
-        self.image.fill(color)
-        self.rect = self.image.get_rect(topleft=pos)
-        self.vector = pygame.math.Vector2()
-        self.start = 0
-        self.criticalCD = 0
-        self.critical_end = 0
-        self.deactivatestart = 0
-        self.active = 0
-        self.powerup_start_time = 0
-        self.powerup_end_time = 0
-        self.screen = screen
-        self.color_setting = 1
+    def get_width(self):
+        return self.image.get_width()
 
-    def update(self):
-        # get key press and move up or down
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP] and not self.rect.top <= 0:
-            self.rect.y -= self.speed
-        elif keys[pygame.K_DOWN] and not self.rect.bottom >= HEIGHT:
-            self.rect.y += self.speed
-        elif keys[pygame.K_1]:
-            self.color_setting = 1
-        elif keys[pygame.K_2]:
-            self.color_setting = 2
-        elif keys[pygame.K_3]:
-            self.color_setting = 3
-        elif keys[pygame.K_4]:
-            self.color_setting = 4
+    def get_height(self):
+        return self.image.get_height()
 
-        self.critical_end = pygame.time.get_ticks()
-        if keys[pygame.K_SPACE]:
-            if (self.critical_end - self.criticalCD > 2500) or self.start == 0:
-                self.start = 1
-                self.criticalHitactive()
 
-        if (self.critical_end - self.criticalCD > 300 and self.active == 1):
-            self.criticalDeactivate()
+    ######################################################################
+    # OTIONAL
+        
+    def user_input(self, event):
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT:
+                self.curSpeedX = self.speedX
+            if event.key == pygame.K_LEFT:
+                self.curSpeedX = self.speedX * -1
+            if event.key == pygame.K_DOWN:
+                self.curSpeedY = self.speedY
+            if event.key == pygame.K_UP:
+                self.curSpeedY = self.speedY * -1
+            if event.key == pygame.K_SPACE:
+                self.shoot()
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_LEFT:
+                self.curSpeedX = 0
+            if event.key == pygame.K_DOWN or event.key == pygame.K_UP:
+                self.curSpeedY = 0
 
-    def updateColor(self, color):
-        # theme color change
-        self.image.fill(color)
 
-    def criticalHitactive(self):
-        while self.rect.right != WIDTH - 56:
-            self.rect.x -= 1
-        self.criticalCD = pygame.time.get_ticks()
-        self.active = 1
+    def update_location(self):
+        oldX = self.x
+        oldY = self.y
 
-    def criticalDeactivate(self):
-        while self.rect.right != WIDTH:
-            self.rect.x += 1
-        self.deactivatestart = pygame.time.get_ticks()
-        self.active = 0
+        self.x += self.curSpeedX
+        self.y += self.curSpeedY
+
+        if globals.collision(self, self.spritesDict["walls"]):
+            self.x = oldX
+            self.y = oldY
+
+
+    ######################################################################
+    # OTHER
+
+    def shoot(self):
+        self.spritesDict["bullets"].append(bullet.Bullet(self.spritesDict, self.x, self.y))
