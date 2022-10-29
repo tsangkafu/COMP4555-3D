@@ -26,7 +26,7 @@ class Sprites():
         self.dict["background"].append(background.Background())
 
         self.dict["player"] = []
-        self.dict["player"].append(player.Player(self.dict))
+        self.dict["player"].append(player.Player(pygame.sprite.Group(), self.dict))
 
         self.dict["enemies"] = []
         for i in range(6):
@@ -39,7 +39,7 @@ class Sprites():
 
         def run():
             #print(f"RAM memory % used: {psutil.virtual_memory()[2]}")
-            print(f"RAM Used (GB): {psutil.virtual_memory()[3]/1000000000}")
+            # print(f"RAM Used (GB): {psutil.virtual_memory()[3]/1000000000}")
             rm_unsused_sprites()
             user_input()
             update_locations()

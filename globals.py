@@ -1,5 +1,10 @@
-DISPLAY_WIDTH = 800
-DISPLAY_HEIGHT = 600
+import os
+import pygame
+
+DISPLAY_WIDTH = 1440
+DISPLAY_HEIGHT = 1080
+IMAGE_SCALE = 0.8
+TILE = 90
 
 
 
@@ -60,3 +65,12 @@ def dict_to_list(inputDict):
         for sprite in listItem:
             outputArr.append(sprite)
     return outputArr
+
+def count_image(path):
+    count = 0
+    for file in os.listdir(path):
+        if os.path.isfile(os.path.join(path, file)): count += 1
+    return count
+
+def scale_image(image):
+    return pygame.transform.smoothscale(image, (image.get_width() * IMAGE_SCALE, image.get_height() * IMAGE_SCALE))
