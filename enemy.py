@@ -3,6 +3,7 @@ import globals
 import random
 import os
 
+
 class Enemy(pygame.sprite.Sprite):
 
     ######################################################################
@@ -26,7 +27,7 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, groups, level, color, pos):#spritesDict):
         super().__init__(groups)
         #self.spritesDict = spritesDict
-
+        self.level = level
         # you can change to tank_blue/tank_pink
         self.color = color
         # change this to change the animation set of the enemy
@@ -42,17 +43,25 @@ class Enemy(pygame.sprite.Sprite):
         self.animation = []
         # loop through each image and append it to the animation list
         for i in range(num_of_img):
-            image = globals.scale_image(pygame.image.load(os.path.join(path, str(i) + ".png")).convert_alpha())
-            self.animation.append(image)
+            # scale only enemies that is not level 1 (cause level 1 is small already)
+            if level != 1:
+                image = globals.scale_image(pygame.image.load(os.path.join(path, str(i) + ".png")).convert_alpha())
+                self.animation.append(image)
+            else:
+                self.animation.append(pygame.image.load(os.path.join(path, str(i) + ".png")).convert_alpha())
             
         self.current_frame = random.randint(0, len(self.animation) - 1)
         self.image = self.animation[self.current_frame]
         
         self.rect = self.image.get_rect(topleft = pos)
 
-        self.hp = 1
+        self.hp = 10
 
         self.speed = 3
+
+        # velocity[0] = speed X
+        # velocity[1] = speed Y
+        self.velocity = [self.speed, self.speed]
         
         # self.x = random.randint(0, globals.DISPLAY_WIDTH - self.get_width())
         # self.y = random.randint(0, globals.DISPLAY_HEIGHT - 300) # 300 being the distance from the bottom
@@ -74,6 +83,22 @@ class Enemy(pygame.sprite.Sprite):
     ######################################################################
     # OTIONAL
 
+    def update(self):
+    # change direction when on border
+        if self.rect.right >= globals.DISPLAY_WIDTH or self.rect.left <= 0:
+            self.speed *= -1
+
+        self.rect.x += self.speed
+
+        # animate the enemy
+        # current frame increment being the speed of how fast the animation is
+        self.current_frame += 0.2
+
+        # reset the frame when the current frame exceed the number of available image
+        if self.current_frame >= len(self.animation):
+            self.current_frame = 0
+        self.image = self.animation[int(self.current_frame)]
+
     # def update_location(self):
     #     oldX = self.x
     #     oldY = self.y
@@ -92,17 +117,3 @@ class Enemy(pygame.sprite.Sprite):
     #             elif wallSprite.description == "horizontal bottom":
     #                 self.shouldDelete = True
             
-    def update(self):
-        if self.rect.right >= globals.DISPLAY_WIDTH or self.rect.left <= 0:
-            self.speed *= -1
-
-        self.rect.x += self.speed
-
-        # animate the enemy
-        # current frame increment being the speed of how fast the animation is
-        self.current_frame += 0.2
-
-        # reset the frame when the current frame exceed the number of available image
-        if self.current_frame >= len(self.animation):
-            self.current_frame = 0
-        self.image = self.animation[int(self.current_frame)]

@@ -1,6 +1,6 @@
 import pygame
 import globals
-import bullet
+from bullet import Bullet
 import os
 
 class Player(pygame.sprite.Sprite):
@@ -36,7 +36,11 @@ class Player(pygame.sprite.Sprite):
         # pass in the rect (position) of the base (things that look like balls) so that the weapon can follow
         self.weapon = Weapon(groups, self.rect)
         
-        self.speed = 7
+        self.speed = 10
+
+        self.bullet_sprites = pygame.sprite.Group()
+
+        self.bullet = 1
 
         # self.curSpeedX = 0
         # self.curSpeedY = 0
@@ -61,6 +65,11 @@ class Player(pygame.sprite.Sprite):
             self.rect.x -= self.speed
         elif keys[pygame.K_RIGHT] and self.rect.right <= globals.DISPLAY_WIDTH:
             self.rect.x += self.speed
+        
+        if keys[pygame.K_SPACE]:
+            # limit the bullet that the player can shot
+            if len(self.bullet_sprites) < self.bullet:
+                Bullet(self.bullet_sprites, self.weapon.rect)
 
         # animate the player
         # current frame increment being the speed of how fast the animation is
@@ -88,7 +97,9 @@ class Player(pygame.sprite.Sprite):
     # # OTHER
 
     # def shoot(self):
-    #     self.spritesDict["bullets"].append(bullet.Bullet(self.spritesDict, self.x, self.y))
+        # self.spritesDict["bullets"].append(bullet.Bullet(self.spritesDict, self.x, self.y))
+
+
 
 class Weapon(pygame.sprite.Sprite):
     def __init__(self, groups, base_rect):
