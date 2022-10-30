@@ -77,4 +77,5 @@ class Level():
                         Exposion(self.exposion_sprites, 1, self.player.rect.center)
                     else:
                         Exposion(self.exposion_sprites, 2, self.player.rect.center)
-                        self.player_sprites.empty()
+                        self.player.weapon.kill()
+                        self.player.kill()
