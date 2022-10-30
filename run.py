@@ -6,7 +6,7 @@ from sprites import Sprites
 
 #################################################################
 
-class Game():
+class Game():                             
     def __init__(self):
         pygame.init()
         self.clock = pygame.time.Clock()

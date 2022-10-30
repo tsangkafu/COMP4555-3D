@@ -6,7 +6,8 @@ class Exposion(pygame.sprite.Sprite):
     # key being the enemy level
     # value being the exposion type
     EXPO_MAP = {
-        1: 4
+        1: 4,
+        2: 2
     }
     # level being the level of the enemy, different enemy will have different exposure animation
     # pos being the position of the

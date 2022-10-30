@@ -2,6 +2,7 @@ import pygame
 import globals
 import random
 import os
+from bullet import Bullet
 
 
 class Enemy(pygame.sprite.Sprite):
@@ -15,9 +16,20 @@ class Enemy(pygame.sprite.Sprite):
     # level 0 being the basic ufo
     # level 1 - 6 are new enemy (level 5 being the biggest, level 6 is just some normal enemy)
     # here provided a list that what colors are available in what enemies
-    ENEMIES = {
-        0: ["red", "pink", "blue"],
-        1: ["red", "blue"],
+    # bullet being the bullet type that the enemy has, there's 3 bullet type
+    ENEMIES_CONFIG = {
+        0: {
+            "color": ["red", "pink", "blue"],
+            "hp": 2,
+            "bullet": 1,
+            "cd": 20000
+        },
+        1: {
+            "color": ["red", "blue"],
+            "hp": 1,
+            "bullet": 1,
+            "cd": 20000
+        },
         2: ["red", "blue"],
         3: ["blue", "yellow"],
         4: ["green", "blue"],
@@ -28,6 +40,8 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(groups)
         #self.spritesDict = spritesDict
         self.level = level
+        self.name = "enemy"
+        self.bullet_sprites = pygame.sprite.Group()
         # you can change to tank_blue/tank_pink
         self.color = color
         # change this to change the animation set of the enemy
@@ -55,7 +69,10 @@ class Enemy(pygame.sprite.Sprite):
         
         self.rect = self.image.get_rect(topleft = pos)
 
-        self.hp = 10
+        self.hp = Enemy.ENEMIES_CONFIG[self.level]["hp"]
+        self.bullet = Enemy.ENEMIES_CONFIG[self.level]["bullet"]
+        self.cd = Enemy.ENEMIES_CONFIG[self.level]["cd"]
+        self.cd_tracker = pygame.time.get_ticks() - random.randint(0, self.cd)
 
         self.speed = 3
 
@@ -98,6 +115,19 @@ class Enemy(pygame.sprite.Sprite):
         if self.current_frame >= len(self.animation):
             self.current_frame = 0
         self.image = self.animation[int(self.current_frame)]
+
+        self.shoot()
+
+    # shoot every {cd} second
+    def shoot(self):
+        now = pygame.time.get_ticks()
+        if now - self.cd_tracker >= self.cd:
+            Bullet(self.bullet_sprites, self)
+            self.cd_tracker = now
+
+
+
+
 
     # def update_location(self):
     #     oldX = self.x

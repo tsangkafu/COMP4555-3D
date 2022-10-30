@@ -3,7 +3,7 @@ import pygame
 
 DISPLAY_WIDTH = 1440
 DISPLAY_HEIGHT = 1080
-IMAGE_SCALE = 0.8
+IMAGE_SCALE = 0.7
 TILE = 90
 
 
@@ -73,4 +73,4 @@ def count_image(path):
     return count
 
 def scale_image(image):
-    return pygame.transform.smoothscale(image, (image.get_width() * IMAGE_SCALE, image.get_height() * IMAGE_SCALE))
+    return pygame.transform.smoothscale(image, (image.get_width() * IMAGE_SCALE, image.get_height() * IMAGE_SCALE)).convert_alpha()

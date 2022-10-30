@@ -11,7 +11,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, groups):#, spritesDict):
         super().__init__(groups)
         # self.spritesDict = spritesDict
-
+        self.name = "player"
         # you can change to tank_blue/tank_pink
         self.color = "green"
 
@@ -40,7 +40,9 @@ class Player(pygame.sprite.Sprite):
 
         self.bullet_sprites = pygame.sprite.Group()
 
-        self.bullet = 1
+        self.bullet = 3
+
+        self.hp = 3
 
         # self.curSpeedX = 0
         # self.curSpeedY = 0
@@ -69,7 +71,7 @@ class Player(pygame.sprite.Sprite):
         if keys[pygame.K_SPACE]:
             # limit the bullet that the player can shot
             if len(self.bullet_sprites) < self.bullet:
-                Bullet(self.bullet_sprites, self.weapon.rect)
+                Bullet(self.bullet_sprites, self)
 
         # animate the player
         # current frame increment being the speed of how fast the animation is

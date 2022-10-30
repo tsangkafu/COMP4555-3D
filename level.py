@@ -37,11 +37,16 @@ class Level():
 
             self.player.bullet_sprites.draw(self.screen)
             self.player.bullet_sprites.update()
+            
+            for enemy in self.enemy_sprites:
+                enemy.bullet_sprites.draw(self.screen)
+                enemy.bullet_sprites.update()
 
             self.detect_collision()
 
             self.exposion_sprites.draw(self.screen)
             self.exposion_sprites.update()
+            
 
 
     def populate_enemies(self):
@@ -50,7 +55,7 @@ class Level():
                 x = j * globals.TILE
                 y = i * globals.TILE
                 if col != " ":
-                    color = random.choice(enemy.Enemy.ENEMIES[int(col)])
+                    color = random.choice(enemy.Enemy.ENEMIES_CONFIG[int(col)]["color"])
                     enemy.Enemy(self.enemy_sprites, int(col), color, (x, y))
 
     def detect_collision(self):
@@ -62,3 +67,14 @@ class Level():
             if enemy.hp <= 0:
                 enemy.kill()
                 Exposion(self.exposion_sprites, enemy.level, enemy.rect.center)
+
+        for enemy in self.enemy_sprites:
+            for bullet in enemy.bullet_sprites:
+                if bullet.rect.colliderect(self.player.weapon.rect):
+                    bullet.kill()
+                    self.player.hp -= 1
+                    if self.player.hp > 0:
+                        Exposion(self.exposion_sprites, 1, self.player.rect.center)
+                    else:
+                        Exposion(self.exposion_sprites, 2, self.player.rect.center)
+                        self.player_sprites.empty()
