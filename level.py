@@ -7,6 +7,8 @@ import enemy
 import random
 import globals
 from exposion import Exposion
+from powerup import Powerup
+
 
 class Level():
     def __init__(self, screen, level):
@@ -24,6 +26,9 @@ class Level():
         self.player = Player(self.player_sprites)
 
         self.exposion_sprites = pygame.sprite.Group()
+
+        self.powerup_sprites = pygame.sprite.Group()
+
     
     # all the level behaviors here
     def run(self):
@@ -46,8 +51,16 @@ class Level():
 
             self.exposion_sprites.draw(self.screen)
             self.exposion_sprites.update()
-            
 
+            self.powerup_sprites.draw(self.screen)
+            self.powerup_sprites.update()
+
+            if self.player.hp == 3:
+                pygame.draw.rect(self.screen, (0,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
+            elif self.player.hp == 2:
+                pygame.draw.rect(self.screen, (255,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()*(2/3), 10))
+            elif self.player.hp == 1:
+                pygame.draw.rect(self.screen, (255,0,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()/3, 10))
 
     def populate_enemies(self):
         for i, row in enumerate(LEVELS[int(self.level)]):
@@ -67,6 +80,10 @@ class Level():
             if enemy.hp <= 0:
                 enemy.kill()
                 Exposion(self.exposion_sprites, enemy.level, enemy.rect.center)
+                # drop rate is inverse of decimal, so 25% 
+                if random.random() > 0.75:
+                    powerup = Powerup(self.powerup_sprites, enemy.rect.center)
+                    self.powerup_sprites.add(powerup)
 
         for enemy in self.enemy_sprites:
             for bullet in enemy.bullet_sprites:
@@ -79,3 +96,15 @@ class Level():
                         Exposion(self.exposion_sprites, 2, self.player.rect.center)
                         self.player.weapon.kill()
                         self.player.kill()
+        
+        #powerup collision, activate different effects depending on powerup.type
+        powerups_collided = pygame.sprite.groupcollide(self.powerup_sprites, self.player_sprites, True, False)
+        for powerup in powerups_collided:
+            if powerup.type == 'heal':
+                # max hp = 3
+                if self.player.hp < 3: 
+                    self.player.hp += 1
+                    # for testing until hp bar
+                    # print(self.player.hp)
+                    
+           

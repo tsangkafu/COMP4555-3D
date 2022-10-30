@@ -2,7 +2,7 @@ import os
 import pygame
 
 DISPLAY_WIDTH = 1440
-DISPLAY_HEIGHT = 1080
+DISPLAY_HEIGHT = 890
 IMAGE_SCALE = 0.7
 TILE = 90
 
