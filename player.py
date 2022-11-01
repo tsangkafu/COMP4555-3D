@@ -35,15 +35,13 @@ class Player(pygame.sprite.Sprite):
 
         # pass in the rect (position) of the base (things that look like balls) so that the weapon can follow
         self.weapon = Weapon(groups, self.rect)
-        
         self.speed = 10
-
         self.bullet_sprites = pygame.sprite.Group()
-
         self.bullet = 3
+        self.shoot_cooldown = 0
 
         self.hp = 3
-
+        self.shield = 0
         # self.curSpeedX = 0
         # self.curSpeedY = 0
 
@@ -70,8 +68,14 @@ class Player(pygame.sprite.Sprite):
         
         if keys[pygame.K_SPACE]:
             # limit the bullet that the player can shot
-            if len(self.bullet_sprites) < self.bullet:
-                Bullet(self.bullet_sprites, self)
+            if self.shoot_cooldown == 0:
+                if len(self.bullet_sprites) < self.bullet:
+                    self.shoot_cooldown = 20
+                    Bullet(self.bullet_sprites, self)
+
+        # decrement shoot_cooldown overtime
+        if self.shoot_cooldown > 0:
+            self.shoot_cooldown -= 1
 
         # animate the player
         # current frame increment being the speed of how fast the animation is

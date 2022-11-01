@@ -7,8 +7,8 @@ import enemy
 import random
 import globals
 from exposion import Exposion
+from hit import Hit
 from powerup import Powerup
-
 
 class Level():
     def __init__(self, screen, level):
@@ -26,6 +26,7 @@ class Level():
         self.player = Player(self.player_sprites)
 
         self.exposion_sprites = pygame.sprite.Group()
+        self.hit_sprites = pygame.sprite.Group()
 
         self.powerup_sprites = pygame.sprite.Group()
 
@@ -52,6 +53,9 @@ class Level():
             self.exposion_sprites.draw(self.screen)
             self.exposion_sprites.update()
 
+            self.hit_sprites.draw(self.screen)
+            self.hit_sprites.update()
+
             self.powerup_sprites.draw(self.screen)
             self.powerup_sprites.update()
 
@@ -61,6 +65,8 @@ class Level():
                 pygame.draw.rect(self.screen, (255,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()*(2/3), 10))
             elif self.player.hp == 1:
                 pygame.draw.rect(self.screen, (255,0,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()/3, 10))
+            if self.player.shield == 1:
+                pygame.draw.rect(self.screen, (0,255,255), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
 
     def populate_enemies(self):
         for i, row in enumerate(LEVELS[int(self.level)]):
@@ -76,6 +82,7 @@ class Level():
         enemy_collided = pygame.sprite.groupcollide(self.enemy_sprites, self.player.bullet_sprites, False, True)
         # loop through the dict
         for enemy in enemy_collided:
+            Hit(self.hit_sprites, enemy.rect.center)
             enemy.hp -= 1
             if enemy.hp <= 0:
                 enemy.kill()
@@ -88,11 +95,15 @@ class Level():
         for enemy in self.enemy_sprites:
             for bullet in enemy.bullet_sprites:
                 if bullet.rect.colliderect(self.player.weapon.rect):
+                    Hit(self.hit_sprites, self.player.rect.center)
                     bullet.kill()
-                    self.player.hp -= 1
-                    if self.player.hp > 0:
-                        Exposion(self.exposion_sprites, 1, self.player.rect.center)
+                    if self.player.shield == 0: 
+                        self.player.hp -= 1
                     else:
+                        self.player.shield -= 1
+                    # if self.player.hp > 0:
+                    #     Exposion(self.exposion_sprites, 1, self.player.rect.center)
+                    if self.player.hp == 0:
                         Exposion(self.exposion_sprites, 2, self.player.rect.center)
                         self.player.weapon.kill()
                         self.player.kill()
@@ -104,7 +115,7 @@ class Level():
                 # max hp = 3
                 if self.player.hp < 3: 
                     self.player.hp += 1
-                    # for testing until hp bar
-                    # print(self.player.hp)
-                    
+            if powerup.type == 'shield':
+                if self.player.shield < 1: 
+                    self.player.shield += 1   
            
