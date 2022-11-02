@@ -29,7 +29,9 @@ class Level():
         self.hit_sprites = pygame.sprite.Group()
 
         self.powerup_sprites = pygame.sprite.Group()
-
+  
+        self.powerup_start = 0
+        self.powerup_timer = pygame.time.get_ticks()
     
     # all the level behaviors here
     def run(self):
@@ -67,6 +69,12 @@ class Level():
                 pygame.draw.rect(self.screen, (255,0,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()/3, 10))
             if self.player.shield == 1:
                 pygame.draw.rect(self.screen, (0,255,255), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
+
+            self.powerup_timer = pygame.time.get_ticks()
+            if self.powerup_timer - self.powerup_start > 5000:
+                self.player.currWeapon = "normal"
+                self.player.bullet = 3
+                self.powerup_start = pygame.time.get_ticks()
 
     def populate_enemies(self):
         for i, row in enumerate(LEVELS[int(self.level)]):
@@ -111,11 +119,14 @@ class Level():
         #powerup collision, activate different effects depending on powerup.type
         powerups_collided = pygame.sprite.groupcollide(self.powerup_sprites, self.player_sprites, True, False)
         for powerup in powerups_collided:
+            # max hp = 3
             if powerup.type == 'heal':
-                # max hp = 3
                 if self.player.hp < 3: 
                     self.player.hp += 1
             if powerup.type == 'shield':
                 if self.player.shield < 1: 
                     self.player.shield += 1   
-           
+            if powerup.type == 'twin':
+                self.player.currWeapon = 'twin'
+                self.player.bullet = 9
+                self.powerup_start = pygame.time.get_ticks()

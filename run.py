@@ -17,7 +17,7 @@ class Game():
     def run(self):
         self.level = Level(self.screen, self.level)
 
-        while 1==1:
+        while (1):
             self.level.run()
             
             # sprites.animate()
