@@ -49,15 +49,6 @@ class Bullet(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (0, 0))
         
 
-        # self.x = x
-        # self.y = y
-
-        # self.curSpeedX = 0
-        # self.curSpeedY = -10
-
-        # self.shouldDelete = False
-
-
     ######################################################################
     # GETTERS
 
@@ -102,36 +93,3 @@ class Bullet(pygame.sprite.Sprite):
                 self.kill()
                 # clean up memory
                 del self
-
-        
-
-
-    # def update_location(self):
-    #     oldX = self.x
-    #     oldY = self.y
-
-    #     self.x += self.curSpeedX
-    #     self.y += self.curSpeedY
-
-
-    #     wallsHitArr = globals.collision(self, self.spritesDict["walls"])
-    #     if wallsHitArr:
-    #         self.x = oldX
-    #         self.y = oldY
-    #         for wallSprite in wallsHitArr:
-    #             if wallSprite.description == "horizontal top":
-    #                 self.shouldDelete = True
-
-    #     # bullet collides with enemy
-    #     enemySpritesHitArr = globals.collision(self, self.spritesDict["enemies"])
-    #     if enemySpritesHitArr:
-    #         # mark the bullet itself for deletion
-    #         self.shouldDelete = True
-
-    #         # mark the hit enemies for deletion
-    #         for enemySprite in enemySpritesHitArr:
-    #             enemySprite.shouldDelete = True
-            
-    #         # create new enemies
-    #         for i in range(len(enemySpritesHitArr)):
-    #             self.spritesDict["enemies"].append(enemy.Enemy(self.spritesDict))

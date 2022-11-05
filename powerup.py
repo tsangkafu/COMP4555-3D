@@ -7,7 +7,7 @@ class Powerup(pygame.sprite.Sprite):
     def __init__(self, groups, center):
         super().__init__(groups)
         #available powerups: heal, twin, heart, shield, laser, plasma 
-        self.type = random.choice(['heal','twin','shield'])
+        self.type = random.choice(['heal', 'twin', 'shield'])
 
 
         path = f".//media//image//bullet + fx + powerup + coin//powerups//{str(self.type)}"
@@ -37,5 +37,5 @@ class Powerup(pygame.sprite.Sprite):
         # kill the powerup if it goes off the bottom of the screen
         if self.rect.top > globals.DISPLAY_HEIGHT:
             self.kill()
-
-
+            # clean up memory
+            del self

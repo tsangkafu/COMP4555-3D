@@ -31,9 +31,7 @@ class Player(pygame.sprite.Sprite):
         # 10 being the offset from the bottom
         self.rect = self.image.get_rect(center = (globals.DISPLAY_WIDTH / 2, globals.DISPLAY_HEIGHT - self.get_height() + 10))
         
-
         # pass in the rect (position) of the base (things that look like balls) so that the weapon can follow
-        self.currWeapon = "normal"
         self.weapon = Weapon(groups, self.rect)
         self.hp_bar = HealthBar(groups, self)
         self.speed = 10
@@ -45,8 +43,6 @@ class Player(pygame.sprite.Sprite):
         self.hp = 3
         self.shield = 0
         
-        # self.curSpeedX = 0
-        # self.curSpeedY = 0
 
 
     ######################################################################
@@ -74,13 +70,12 @@ class Player(pygame.sprite.Sprite):
             if self.shoot_cooldown == 0:
                 if len(self.bullet_sprites) < self.bullet:
                     self.shoot_cooldown = 20
-                    if self.currWeapon == "normal":
+                    if self.weapon.type == "normal":
                         pygame.mixer.Sound.play(globals.NORMAL_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, 0)
-                    if self.currWeapon == "twin":
+                    if self.weapon.type == "twin":
                         pygame.mixer.Sound.play(globals.TWIN_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, -2)
-                        Bullet(self.bullet_sprites, self, 0)
                         Bullet(self.bullet_sprites, self, 2)
 
         # decrement shoot_cooldown on each loop
@@ -96,36 +91,17 @@ class Player(pygame.sprite.Sprite):
             self.current_frame = 0
         self.image = self.animation[int(self.current_frame)]
 
-        # Not sure how to change the weapon sprite.. 
-        # if self.currWeapon == "twin":
-        #     self.weapon = TwinWeapon(groups, self.rect)
-
-
-
-    # def update_location(self):
-    #     oldX = self.x
-    #     oldY = self.y
-
-    #     self.x += self.curSpeedX
-    #     self.y += self.curSpeedY
-
-    #     if globals.collision(self, self.spritesDict["walls"]):
-    #         self.x = oldX
-    #         self.y = oldY
-
-
-    # ######################################################################
-    # # OTHER
-
-    # def shoot(self):
-        # self.spritesDict["bullets"].append(bullet.Bullet(self.spritesDict, self.x, self.y))
-
-
+WEAPON_MAP = {
+    "normal": 0,
+    "twin": 1,
+    "laser": 2,
+    "plasma": 3
+}
 
 class Weapon(pygame.sprite.Sprite):
     def __init__(self, groups, base_rect):
         super().__init__(groups)
-        self.name = "normal"
+        self.type = "normal"
         self.base_rect = base_rect
         # scale the image
         self.image = globals.scale_image(pygame.image.load(os.path.join(".//media//image//tank+weapon//weapon", "0.png")).convert_alpha())
@@ -134,19 +110,10 @@ class Weapon(pygame.sprite.Sprite):
     def update(self):
         self.rect.center = (self.base_rect.center[0], self.base_rect.center[1] - 20)
 
-    def switch_weapon(self):
-        pass
-
-class TwinWeapon(pygame.sprite.Sprite):
-    def __init__(self, groups, base_rect):
-        super().__init__(groups)
-        self.base_rect = base_rect
-        # scale the image
-        self.image = globals.scale_image(pygame.image.load(os.path.join(".//media//image//tank+weapon//weapon", "1.png")).convert_alpha())
-        self.rect = self.image.get_rect(center = self.base_rect.center)
-
-    def update(self):
-        self.rect.center = (self.base_rect.center[0], self.base_rect.center[1] - 20)
+    def switch_weapon(self, type):
+        self.type = type
+        weapon_index = WEAPON_MAP[type]
+        self.image = globals.scale_image(pygame.image.load(os.path.join(".//media//image//tank+weapon//weapon", str(weapon_index) + ".png")).convert_alpha())
 
 class HealthBar(pygame.sprite.Sprite):
     def __init__(self, groups, player):
@@ -168,5 +135,42 @@ class HealthBar(pygame.sprite.Sprite):
             self.image.fill((255, 255, 0))
         else:
             self.image.fill((255, 0, 0))
-
         self.rect.center = self.player_rect.midbottom
+
+class Shield(pygame.sprite.Sprite):
+    def __init__(self, groups, player):
+        super().__init__(groups)
+        self.player = player
+        self.player_rect = player.rect
+        self.hp = 2
+        # count the number of image in one file, this will change because different sprite has different files
+        path = ".//media//image//bullet + fx + powerup + coin//bubbleshield"
+        num_of_img = globals.count_image(path)
+        
+        # a list that store all the image of a sprite
+        self.animation = []
+        # loop through each image and append it to the animation list
+        for i in range(num_of_img):
+            # scale the image
+            image = globals.scale_image(pygame.image.load(os.path.join(path, str(i) + ".png")).convert_alpha())
+            self.animation.append(image)
+            
+        self.current_frame = 0
+        self.image = self.animation[self.current_frame]
+        # 10 being the offset from the bottom
+        self.rect = self.image.get_rect(center = (globals.DISPLAY_WIDTH / 2, globals.DISPLAY_HEIGHT - self.get_height() + 10))
+
+    def update(self):
+        self.rect.center = self.player_rect.center
+
+        # current frame increment being the speed of how fast the animation is
+        self.current_frame += 0.2
+
+        # reset the frame when the current frame exceed the number of available image
+        if self.current_frame >= len(self.animation):
+            self.current_frame = 0
+        self.image = self.animation[int(self.current_frame)]
+
+        if self.hp <= 0:
+            self.kill()
+            del self

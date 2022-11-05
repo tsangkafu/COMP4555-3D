@@ -22,7 +22,7 @@ class Enemy(pygame.sprite.Sprite):
             "color": ["red", "pink", "blue"],
             "hp": 2,
             "bullet": 1,
-            "cd": 20000
+            "cd": 15000
         },
         1: {
             "color": ["red", "blue"],
@@ -44,7 +44,7 @@ class Enemy(pygame.sprite.Sprite):
             "color": ["green", "blue"],
             "hp": 20,
             "bullet": 3,
-            "cd": 500,
+            "cd": 400,
             "score_value": 1500
         },
         6: ["orange", "red"]
@@ -53,6 +53,7 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(groups)
         #self.spritesDict = spritesDict
         self.level = level
+        self.group = groups
         self.name = "enemy"
         self.bullet_sprites = pygame.sprite.Group()
         # you can change to tank_blue/tank_pink
@@ -89,17 +90,8 @@ class Enemy(pygame.sprite.Sprite):
 
         self.speed = 3
 
-        # velocity[0] = speed X
-        # velocity[1] = speed Y
         self.velocity = [self.speed, self.speed]
         self.score_value = Enemy.ENEMIES_CONFIG[self.level]["score_value"]
-        # self.x = random.randint(0, globals.DISPLAY_WIDTH - self.get_width())
-        # self.y = random.randint(0, globals.DISPLAY_HEIGHT - 300) # 300 being the distance from the bottom
-
-        # self.curSpeedX = 2
-        # self.curSpeedY = 0
-
-        # self.shouldDelete = False
 
     ######################################################################
     # GETTERS
@@ -114,12 +106,16 @@ class Enemy(pygame.sprite.Sprite):
     # OTIONAL
 
     def update(self):
+        # if len(self.group) <= 20 and self.speed != 10:
+        #     if self.speed > 0:
+        #         self.speed = 10
+        #     else:
+        #         self.speed = -10
+
     # change direction when on border
         if self.rect.right >= globals.DISPLAY_WIDTH or self.rect.left <= 0:
             self.speed *= -1
-
         self.rect.x += self.speed
-
         # animate the enemy
         # current frame increment being the speed of how fast the animation is
         self.current_frame += 0.2
@@ -138,26 +134,3 @@ class Enemy(pygame.sprite.Sprite):
             pygame.mixer.Sound.play(globals.SMALL_ENEMY_LASER_SOUND)
             Bullet(self.bullet_sprites, self, 0)
             self.cd_tracker = now
-
-
-
-
-
-    # def update_location(self):
-    #     oldX = self.x
-    #     oldY = self.y
-
-    #     self.x += self.curSpeedX
-    #     self.y += self.curSpeedY
-
-    #     wallsHitArr = globals.collision(self, self.spritesDict["walls"])
-    #     if wallsHitArr:
-    #         self.x = oldX
-    #         self.y = oldY
-    #         for wallSprite in wallsHitArr:
-    #             if wallSprite.description.startswith("vertical"):
-    #                 self.curSpeedX *= -1
-    #                 self.y += 40
-    #             elif wallSprite.description == "horizontal bottom":
-    #                 self.shouldDelete = True
-            

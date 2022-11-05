@@ -65,18 +65,9 @@ class Level():
             self.powerup_sprites.draw(self.screen)
             self.powerup_sprites.update()
 
-            # if self.player.hp == 3:
-            #     pygame.draw.rect(self.screen, (0,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
-            # elif self.player.hp == 2:
-            #     pygame.draw.rect(self.screen, (255,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()*(2/3), 10))
-            # elif self.player.hp == 1:
-            #     pygame.draw.rect(self.screen, (255,0,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()/3, 10))
-            # if self.player.shield == 1:
-            #     pygame.draw.rect(self.screen, (0,255,255), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
-
             self.powerup_timer = pygame.time.get_ticks()
-            if self.powerup_timer - self.powerup_start > 5000:
-                self.player.currWeapon = "normal"
+            if self.powerup_timer - self.powerup_start > 10000:
+                self.player.weapon.switch_weapon("normal")
                 self.player.bullet = 3
                 self.powerup_start = pygame.time.get_ticks()
 
@@ -139,9 +130,9 @@ class Level():
                     self.player.hp += 1
             if powerup.type == 'shield':
                 if self.player.shield < 1:
-                    self.player.shield += 1   
+                    self.player.shield += 1
             if powerup.type == 'twin':
-                self.player.currWeapon = 'twin'
+                self.player.weapon.switch_weapon("twin")
                 self.player.bullet = 9
                 self.powerup_start = pygame.time.get_ticks()
             del powerup
