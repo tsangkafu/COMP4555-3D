@@ -73,8 +73,10 @@ class Player(pygame.sprite.Sprite):
                 if len(self.bullet_sprites) < self.bullet:
                     self.shoot_cooldown = 20
                     if self.currWeapon == "normal":
+                        pygame.mixer.Sound.play(globals.NORMAL_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, 0)
                     if self.currWeapon == "twin":
+                        pygame.mixer.Sound.play(globals.TWIN_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, -2)
                         Bullet(self.bullet_sprites, self, 0)
                         Bullet(self.bullet_sprites, self, 2)

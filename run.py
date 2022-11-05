@@ -8,7 +8,7 @@ from sprites import Sprites
 
 class Game():                             
     def __init__(self):
-        pygame.init()
+        # pygame.init()
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((globals.DISPLAY_WIDTH, globals.DISPLAY_HEIGHT)) 
         pygame.display.set_caption("Space Invaders")

@@ -91,9 +91,11 @@ class Level():
         # loop through the dict
         for enemy in enemy_collided:
             Hit(self.hit_sprites, enemy.rect.center)
+            pygame.mixer.Sound.play(globals.ENEMY_HIT_SOUND) 
             enemy.hp -= 1
             if enemy.hp <= 0:
                 enemy.kill()
+                pygame.mixer.Sound.play(globals.EXPLOSION_SOUND) 
                 Exposion(self.exposion_sprites, enemy.level, enemy.rect.center)
                 # drop rate is inverse of decimal, so 25% 
                 if random.random() > 0.75:
@@ -105,13 +107,16 @@ class Level():
                 if bullet.rect.colliderect(self.player.weapon.rect):
                     Hit(self.hit_sprites, self.player.rect.center)
                     bullet.kill()
-                    if self.player.shield == 0: 
+                    if self.player.shield == 0:
+                        pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)  
                         self.player.hp -= 1
                     else:
+                        pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND) 
                         self.player.shield -= 1
                     # if self.player.hp > 0:
                     #     Exposion(self.exposion_sprites, 1, self.player.rect.center)
                     if self.player.hp == 0:
+                        pygame.mixer.Sound.play(globals.PLAYER_EXPLOSION_SOUND) 
                         Exposion(self.exposion_sprites, 2, self.player.rect.center)
                         self.player.weapon.kill()
                         self.player.kill()
@@ -119,6 +124,7 @@ class Level():
         #powerup collision, activate different effects depending on powerup.type
         powerups_collided = pygame.sprite.groupcollide(self.powerup_sprites, self.player_sprites, True, False)
         for powerup in powerups_collided:
+            pygame.mixer.Sound.play(globals.POWERUP_SOUND) 
             # max hp = 3
             if powerup.type == 'heal':
                 if self.player.hp < 3: 

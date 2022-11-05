@@ -122,6 +122,7 @@ class Enemy(pygame.sprite.Sprite):
     def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.cd_tracker >= self.cd:
+            pygame.mixer.Sound.play(globals.SMALL_ENEMY_LASER_SOUND)
             Bullet(self.bullet_sprites, self, 0)
             self.cd_tracker = now
 
