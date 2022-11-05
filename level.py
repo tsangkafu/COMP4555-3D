@@ -70,7 +70,6 @@ class Level():
             self.powerup_timer = pygame.time.get_ticks()
             if self.powerup_timer - self.powerup_start > 10000:
                 self.player.weapon.switch_weapon("normal")
-                self.player.bullet = 3
                 self.powerup_start = pygame.time.get_ticks()
 
             score = self.font.render("SCORE: "+str(self.score_value), True, (0, 255, 150))
@@ -107,12 +106,14 @@ class Level():
         for enemy in self.enemy_sprites:
             for bullet in enemy.bullet_sprites:
                 # colide with shield if the shield exists
-                if (self.shield != None):
+                if self.shield != None:
                     if bullet.rect.colliderect(self.shield):
                         Hit(self.hit_sprites, self.player.rect.center)
                         bullet.kill()
-                        pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
                         self.shield.hp -= 1
+                        if self.shield.hp <= 0:
+                            self.shield = None
+                        pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
 
                 # collide with player
                 if bullet.rect.colliderect(self.player.weapon.rect):
@@ -136,11 +137,10 @@ class Level():
                 if self.player.hp < 3: 
                     self.player.hp += 1
             if powerup.type == 'shield':
-                # if self.player.shield < 1:
-                #     self.player.shield += 1
-                self.shield = Shield(self.player_sprites, self.player)
+                if self.shield == None:
+                    self.shield = Shield(self.player_sprites, self.player)
             if powerup.type == 'twin':
                 self.player.weapon.switch_weapon("twin")
-                self.player.bullet = 9
                 self.powerup_start = pygame.time.get_ticks()
+
             del powerup

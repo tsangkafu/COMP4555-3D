@@ -44,7 +44,7 @@ class Enemy(pygame.sprite.Sprite):
             "color": ["green", "blue"],
             "hp": 20,
             "bullet": 3,
-            "cd": 400,
+            "cd": 500,
             "score_value": 1500
         },
         6: ["orange", "red"]
@@ -106,11 +106,15 @@ class Enemy(pygame.sprite.Sprite):
     # OTIONAL
 
     def update(self):
-        # if len(self.group) <= 20 and self.speed != 10:
-        #     if self.speed > 0:
-        #         self.speed = 10
-        #     else:
-        #         self.speed = -10
+        # increase the enemy speed and decrease cd when sprite number is less than 10
+        if len(self.group) <= 10 and self.speed != 10 and self.speed != -10:
+            if self.speed > 0:
+                self.speed = 10
+            else:
+                self.speed = -10
+
+            self.cd *= 0.3
+            self.cd_tracker = pygame.time.get_ticks() - random.randint(0, self.cd)
 
     # change direction when on border
         if self.rect.right >= globals.DISPLAY_WIDTH or self.rect.left <= 0:

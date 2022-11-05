@@ -32,7 +32,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect(center = (globals.DISPLAY_WIDTH / 2, globals.DISPLAY_HEIGHT - self.get_height() + 10))
         
         # pass in the rect (position) of the base (things that look like balls) so that the weapon can follow
-        self.weapon = Weapon(groups, self.rect)
+        self.weapon = Weapon(groups, self)
         self.hp_bar = HealthBar(groups, self)
         self.speed = 10
         self.bullet_sprites = pygame.sprite.Group()
@@ -69,7 +69,6 @@ class Player(pygame.sprite.Sprite):
             # limit the bullet that the player can shot
             if self.shoot_cooldown == 0:
                 if len(self.bullet_sprites) < self.bullet:
-                    self.shoot_cooldown = 20
                     if self.weapon.type == "normal":
                         pygame.mixer.Sound.play(globals.NORMAL_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, 0)
@@ -77,6 +76,7 @@ class Player(pygame.sprite.Sprite):
                         pygame.mixer.Sound.play(globals.TWIN_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, -2)
                         Bullet(self.bullet_sprites, self, 2)
+                    self.shoot_cooldown = 10
 
         # decrement shoot_cooldown on each loop
         if self.shoot_cooldown > 0:
@@ -91,29 +91,31 @@ class Player(pygame.sprite.Sprite):
             self.current_frame = 0
         self.image = self.animation[int(self.current_frame)]
 
+# mapping for the image file and bullet number, the first value being the image index, the second being the bullet number
 WEAPON_MAP = {
-    "normal": 0,
-    "twin": 1,
-    "laser": 2,
-    "plasma": 3
+    "normal": [0, 3],
+    "twin": [1, 6],
+    "laser": [2, 1],
+    "plasma": [3, 3]
 }
 
 class Weapon(pygame.sprite.Sprite):
-    def __init__(self, groups, base_rect):
+    def __init__(self, groups, player):
         super().__init__(groups)
         self.type = "normal"
-        self.base_rect = base_rect
+        self.player = player
         # scale the image
         self.image = globals.scale_image(pygame.image.load(os.path.join(".//media//image//tank+weapon//weapon", "0.png")).convert_alpha())
-        self.rect = self.image.get_rect(center = self.base_rect.center)
+        self.rect = self.image.get_rect(center = self.player.rect.center)
 
     def update(self):
-        self.rect.center = (self.base_rect.center[0], self.base_rect.center[1] - 20)
+        self.rect.center = (self.player.rect.center[0], self.player.rect.center[1] - 20)
 
     def switch_weapon(self, type):
         self.type = type
-        weapon_index = WEAPON_MAP[type]
+        weapon_index = WEAPON_MAP[type][0]
         self.image = globals.scale_image(pygame.image.load(os.path.join(".//media//image//tank+weapon//weapon", str(weapon_index) + ".png")).convert_alpha())
+        self.player.bullet = WEAPON_MAP[type][1]
 
 class HealthBar(pygame.sprite.Sprite):
     def __init__(self, groups, player):
