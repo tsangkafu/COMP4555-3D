@@ -28,7 +28,8 @@ class Enemy(pygame.sprite.Sprite):
             "color": ["red", "blue"],
             "hp": 1,
             "bullet": 1,
-            "cd": 20000
+            "cd": 20000,
+            "score_value": 10
         },
         2: ["red", "blue"],
         3: ["blue", "yellow"],
@@ -79,7 +80,7 @@ class Enemy(pygame.sprite.Sprite):
         # velocity[0] = speed X
         # velocity[1] = speed Y
         self.velocity = [self.speed, self.speed]
-        
+        self.score_value = Enemy.ENEMIES_CONFIG[self.level]["score_value"]
         # self.x = random.randint(0, globals.DISPLAY_WIDTH - self.get_width())
         # self.y = random.randint(0, globals.DISPLAY_HEIGHT - 300) # 300 being the distance from the bottom
 

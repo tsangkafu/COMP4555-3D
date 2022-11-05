@@ -20,10 +20,15 @@ PLAYER_HIT_SOUND = pygame.mixer.Sound("./Audio/sfx/impactPlate_medium_002.ogg")
 SMALL_ENEMY_LASER_SOUND = pygame.mixer.Sound("./Audio/sfx/laserSmall_004.ogg")
 SMALL_ENEMY_EXPLOSION_SOUND = pygame.mixer.Sound("./Audio/sfx/explosionCrunch_000.ogg")
 ENEMY_HIT_SOUND = pygame.mixer.Sound("./Audio/sfx/impactPlate_medium_001.ogg")
-
 # EXPLOSION
 EXPLOSION_SOUND = pygame.mixer.Sound("./Audio/sfx/explosionCrunch_000.ogg")
+# MUSIC
+LEVEL_1_MUSIC = pygame.mixer.music.load("./Audio/music/level1.mp3")
+pygame.mixer.music.play(-1) 
+
 # SET VOLUME
+pygame.mixer.music.set_volume(0.5)
+
 NORMAL_LASER_SOUND.set_volume(0.20)
 TWIN_LASER_SOUND.set_volume(0.25)
 SMALL_ENEMY_LASER_SOUND.set_volume(0.25)

@@ -16,6 +16,7 @@ class Game():
 
     def run(self):
         self.level = Level(self.screen, self.level)
+        music_playing = True
 
         while (1):
             self.level.run()
@@ -25,6 +26,16 @@ class Game():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
+
+                if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_m:
+                            if music_playing:
+                                pygame.mixer.music.pause()
+                                music_playing = False
+                            else:
+                                pygame.mixer.music.unpause()
+                                music_playing = True
+
 
             pygame.display.flip()
             self.clock.tick(60)

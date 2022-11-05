@@ -32,6 +32,10 @@ class Level():
   
         self.powerup_start = 0
         self.powerup_timer = pygame.time.get_ticks()
+
+        # Score Board
+        self.score_value = 0
+        self.font = pygame.font.Font("./media/fonts/Retro Gaming.ttf", 24)
     
     # all the level behaviors here
     def run(self):
@@ -76,6 +80,9 @@ class Level():
                 self.player.bullet = 3
                 self.powerup_start = pygame.time.get_ticks()
 
+            score = self.font.render("SCORE: "+str(self.score_value), True, (0, 255, 150))
+            self.screen.blit(score, (10, 10))
+
     def populate_enemies(self):
         for i, row in enumerate(LEVELS[int(self.level)]):
             for j, col in enumerate(row):
@@ -97,8 +104,9 @@ class Level():
                 enemy.kill()
                 pygame.mixer.Sound.play(globals.EXPLOSION_SOUND) 
                 Exposion(self.exposion_sprites, enemy.level, enemy.rect.center)
+                self.score_value += enemy.score_value 
                 # drop rate is inverse of decimal, so 25% 
-                if random.random() > 0.75:
+                if random.random() > 0.80:
                     powerup = Powerup(self.powerup_sprites, enemy.rect.center)
                     self.powerup_sprites.add(powerup)
 
