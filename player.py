@@ -7,7 +7,6 @@ class Player(pygame.sprite.Sprite):
 
     ######################################################################
     # CONSTRUCTOR
-    
     def __init__(self, groups):#, spritesDict):
         super().__init__(groups)
         # self.spritesDict = spritesDict
@@ -34,16 +33,16 @@ class Player(pygame.sprite.Sprite):
         
 
         # pass in the rect (position) of the base (things that look like balls) so that the weapon can follow
+        self.currWeapon = "normal"
         self.weapon = Weapon(groups, self.rect)
-        
         self.speed = 10
-
         self.bullet_sprites = pygame.sprite.Group()
-
         self.bullet = 3
+        self.shoot_cooldown = 0
 
         self.hp = 3
-
+        self.shield = 0
+        
         # self.curSpeedX = 0
         # self.curSpeedY = 0
 
@@ -59,7 +58,7 @@ class Player(pygame.sprite.Sprite):
 
 
     ######################################################################
-    # OTIONAL
+    # OPTIONAL
         
     def update(self):
         keys = pygame.key.get_pressed()
@@ -70,8 +69,19 @@ class Player(pygame.sprite.Sprite):
         
         if keys[pygame.K_SPACE]:
             # limit the bullet that the player can shot
-            if len(self.bullet_sprites) < self.bullet:
-                Bullet(self.bullet_sprites, self)
+            if self.shoot_cooldown == 0:
+                if len(self.bullet_sprites) < self.bullet:
+                    self.shoot_cooldown = 20
+                    if self.currWeapon == "normal":
+                        Bullet(self.bullet_sprites, self, 0)
+                    if self.currWeapon == "twin":
+                        Bullet(self.bullet_sprites, self, -2)
+                        Bullet(self.bullet_sprites, self, 0)
+                        Bullet(self.bullet_sprites, self, 2)
+
+        # decrement shoot_cooldown on each loop
+        if self.shoot_cooldown > 0:
+            self.shoot_cooldown -= 1
 
         # animate the player
         # current frame increment being the speed of how fast the animation is
@@ -81,6 +91,11 @@ class Player(pygame.sprite.Sprite):
         if self.current_frame >= len(self.animation):
             self.current_frame = 0
         self.image = self.animation[int(self.current_frame)]
+
+        # Not sure how to change the weapon sprite.. 
+        # if self.currWeapon == "twin":
+        #     self.weapon = TwinWeapon(groups, self.rect)
+
 
 
     # def update_location(self):
@@ -109,6 +124,17 @@ class Weapon(pygame.sprite.Sprite):
         self.base_rect = base_rect
         # scale the image
         self.image = globals.scale_image(pygame.image.load(os.path.join(".//media//image//tank+weapon//weapon", "0.png")).convert_alpha())
+        self.rect = self.image.get_rect(center = self.base_rect.center)
+
+    def update(self):
+        self.rect.center = (self.base_rect.center[0], self.base_rect.center[1] - 20)
+
+class TwinWeapon(pygame.sprite.Sprite):
+    def __init__(self, groups, base_rect):
+        super().__init__(groups)
+        self.base_rect = base_rect
+        # scale the image
+        self.image = globals.scale_image(pygame.image.load(os.path.join(".//media//image//tank+weapon//weapon", "1.png")).convert_alpha())
         self.rect = self.image.get_rect(center = self.base_rect.center)
 
     def update(self):

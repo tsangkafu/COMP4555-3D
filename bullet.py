@@ -17,7 +17,7 @@ class Bullet(pygame.sprite.Sprite):
 
     # pass in the rect where the bullet should be shot from
     # ship can be enemy or player, bullet will adjust its action
-    def __init__(self, groups, ship): #spritesDict, x, y):
+    def __init__(self, groups, ship, x_speed): #spritesDict, x, y):
         super().__init__(groups)
         # self.spritesDict = spritesDict
         self.ship = ship
@@ -34,6 +34,8 @@ class Bullet(pygame.sprite.Sprite):
             self.rect = self.image.get_rect(center = self.pos)
 
         self.speed = 10
+        self.x_speed = x_speed
+
         # velocity[0] = speed X
         # velocity[1] = speed Y
         self.velocity = [self.speed, self.speed]
@@ -85,6 +87,8 @@ class Bullet(pygame.sprite.Sprite):
             bullet_animation()
 
             self.rect.y -= self.speed
+            self.rect.x += self.x_speed
+
             # "kill" the bullet when its out of screen
             if self.rect.y <= 0 - self.get_height():
                 self.kill()
@@ -92,6 +96,7 @@ class Bullet(pygame.sprite.Sprite):
         else:
             bullet_animation()
             self.rect.y += self.speed
+
 
             if self.rect.y >= globals.DISPLAY_HEIGHT + self.get_height():
                 self.kill()

@@ -122,7 +122,7 @@ class Enemy(pygame.sprite.Sprite):
     def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.cd_tracker >= self.cd:
-            Bullet(self.bullet_sprites, self)
+            Bullet(self.bullet_sprites, self, 0)
             self.cd_tracker = now
 
 
