@@ -1,5 +1,5 @@
 import pygame
-from player import Player
+from player import Player, Shield
 from background import Background
 import psutil
 from levels import LEVELS
@@ -36,6 +36,8 @@ class Level():
         # Score Board
         self.score_value = 0
         self.font = pygame.font.Font("./media/fonts/Retro Gaming.ttf", 24)
+
+        self.shield = None
     
     # all the level behaviors here
     def run(self):
@@ -104,21 +106,26 @@ class Level():
 
         for enemy in self.enemy_sprites:
             for bullet in enemy.bullet_sprites:
+                # colide with shield if the shield exists
+                if (self.shield != None):
+                    if bullet.rect.colliderect(self.shield):
+                        Hit(self.hit_sprites, self.player.rect.center)
+                        bullet.kill()
+                        pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
+                        self.shield.hp -= 1
+
+                # collide with player
                 if bullet.rect.colliderect(self.player.weapon.rect):
                     Hit(self.hit_sprites, self.player.rect.center)
                     bullet.kill()
-                    if self.player.shield == 0:
-                        pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)  
-                        self.player.hp -= 1
-                    else:
-                        pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND) 
-                        self.player.shield -= 1
-                    # if self.player.hp > 0:
-                    #     Exposion(self.exposion_sprites, 1, self.player.rect.center)
+                    self.player.hp -= 1
+                    pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
                     if self.player.hp == 0:
                         pygame.mixer.Sound.play(globals.PLAYER_EXPLOSION_SOUND) 
                         Exposion(self.exposion_sprites, 2, self.player.rect.center)
                         self.player_sprites.empty()
+
+                    del bullet
         
         #powerup collision, activate different effects depending on powerup.type
         powerups_collided = pygame.sprite.groupcollide(self.powerup_sprites, self.player_sprites, True, False)
@@ -129,8 +136,9 @@ class Level():
                 if self.player.hp < 3: 
                     self.player.hp += 1
             if powerup.type == 'shield':
-                if self.player.shield < 1:
-                    self.player.shield += 1
+                # if self.player.shield < 1:
+                #     self.player.shield += 1
+                self.shield = Shield(self.player_sprites, self.player)
             if powerup.type == 'twin':
                 self.player.weapon.switch_weapon("twin")
                 self.player.bullet = 9

@@ -152,13 +152,12 @@ class Shield(pygame.sprite.Sprite):
         # loop through each image and append it to the animation list
         for i in range(num_of_img):
             # scale the image
-            image = globals.scale_image(pygame.image.load(os.path.join(path, str(i) + ".png")).convert_alpha())
+            image = pygame.image.load(os.path.join(path, str(i) + ".png")).convert_alpha()
             self.animation.append(image)
             
         self.current_frame = 0
         self.image = self.animation[self.current_frame]
-        # 10 being the offset from the bottom
-        self.rect = self.image.get_rect(center = (globals.DISPLAY_WIDTH / 2, globals.DISPLAY_HEIGHT - self.get_height() + 10))
+        self.rect = self.image.get_rect(center = self.player_rect.center)
 
     def update(self):
         self.rect.center = self.player_rect.center

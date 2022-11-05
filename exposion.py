@@ -40,5 +40,6 @@ class Exposion(pygame.sprite.Sprite):
         # reset the frame when the current frame exceed the number of available image
         if self.current_frame >= len(self.animation):
             self.kill()
-            self.current_frame = 0
-        self.image = self.animation[int(self.current_frame)]
+            del self
+        else:
+            self.image = self.animation[int(self.current_frame)]

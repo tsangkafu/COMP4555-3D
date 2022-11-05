@@ -40,13 +40,14 @@ class Game():
             
             # GO TO NEXT STAGE
             if len(self.level.enemy_sprites) == 0:
-                if self.stage < 3: 
+                if self.stage < 3:
                     stage_clear_text = self.font.render("STAGE: " + str(self.stage) + " CLEARED", True, ( 0, 255, 150))
                     stage_clear_text_2 = self.sub_text.render("PRESS ANY KEY TO CONTINUE", True, (0, 255, 150))
                     self.screen.blit(stage_clear_text, (globals.DISPLAY_WIDTH/2 - stage_clear_text.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text.get_height()/2 - 30))
                     self.screen.blit(stage_clear_text_2, (globals.DISPLAY_WIDTH/2 - stage_clear_text_2.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_2.get_height()/2 + 30))
                     if event.type == pygame.MOUSEBUTTONDOWN or event.type == pygame.KEYDOWN:
                         self.stage += 1
+                        del self.level
                         self.level = Level(self.screen, self.stage)
                 if self.stage == 3:
                     stage_clear_text = self.font.render("ALL STAGES CLEARED:", True, (0, 255, 150))
