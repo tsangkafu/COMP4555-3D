@@ -31,10 +31,22 @@ class Enemy(pygame.sprite.Sprite):
             "cd": 20000,
             "score_value": 10
         },
-        2: ["red", "blue"],
+        2: {
+            "color": ["red", "blue"],
+            "hp": 2,
+            "bullet": 2,
+            "cd": 15000,
+            "score_value": 25
+        },
         3: ["blue", "yellow"],
         4: ["green", "blue"],
-        5: ["green", "blue"],
+        5: {
+            "color": ["green", "blue"],
+            "hp": 20,
+            "bullet": 3,
+            "cd": 500,
+            "score_value": 1500
+        },
         6: ["orange", "red"]
     }
     def __init__(self, groups, level, color, pos):#spritesDict):
