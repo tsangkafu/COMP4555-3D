@@ -100,6 +100,8 @@ class Bullet(pygame.sprite.Sprite):
 
             if self.rect.y >= globals.DISPLAY_HEIGHT + self.get_height():
                 self.kill()
+                # clean up memory
+                del self
 
         
 

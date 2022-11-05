@@ -131,7 +131,7 @@ class Enemy(pygame.sprite.Sprite):
 
         self.shoot()
 
-    # shoot every {cd} second
+    # shoot every {cd} millisecond
     def shoot(self):
         now = pygame.time.get_ticks()
         if now - self.cd_tracker >= self.cd:

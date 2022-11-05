@@ -65,14 +65,14 @@ class Level():
             self.powerup_sprites.draw(self.screen)
             self.powerup_sprites.update()
 
-            if self.player.hp == 3:
-                pygame.draw.rect(self.screen, (0,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
-            elif self.player.hp == 2:
-                pygame.draw.rect(self.screen, (255,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()*(2/3), 10))
-            elif self.player.hp == 1:
-                pygame.draw.rect(self.screen, (255,0,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()/3, 10))
-            if self.player.shield == 1:
-                pygame.draw.rect(self.screen, (0,255,255), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
+            # if self.player.hp == 3:
+            #     pygame.draw.rect(self.screen, (0,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
+            # elif self.player.hp == 2:
+            #     pygame.draw.rect(self.screen, (255,255,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()*(2/3), 10))
+            # elif self.player.hp == 1:
+            #     pygame.draw.rect(self.screen, (255,0,0), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width()/3, 10))
+            # if self.player.shield == 1:
+            #     pygame.draw.rect(self.screen, (0,255,255), (self.player.rect.x, self.player.rect.y + self.player.get_height() - 10, self.player.get_width(), 10))
 
             self.powerup_timer = pygame.time.get_ticks()
             if self.powerup_timer - self.powerup_start > 5000:
@@ -104,11 +104,12 @@ class Level():
                 enemy.kill()
                 pygame.mixer.Sound.play(globals.EXPLOSION_SOUND) 
                 Exposion(self.exposion_sprites, enemy.level, enemy.rect.center)
-                self.score_value += enemy.score_value 
+                self.score_value += enemy.score_value
                 # drop rate is inverse of decimal, so 25% 
                 if random.random() > 0.80:
                     powerup = Powerup(self.powerup_sprites, enemy.rect.center)
                     self.powerup_sprites.add(powerup)
+                del enemy
 
         for enemy in self.enemy_sprites:
             for bullet in enemy.bullet_sprites:
@@ -126,8 +127,7 @@ class Level():
                     if self.player.hp == 0:
                         pygame.mixer.Sound.play(globals.PLAYER_EXPLOSION_SOUND) 
                         Exposion(self.exposion_sprites, 2, self.player.rect.center)
-                        self.player.weapon.kill()
-                        self.player.kill()
+                        self.player_sprites.empty()
         
         #powerup collision, activate different effects depending on powerup.type
         powerups_collided = pygame.sprite.groupcollide(self.powerup_sprites, self.player_sprites, True, False)
@@ -138,9 +138,10 @@ class Level():
                 if self.player.hp < 3: 
                     self.player.hp += 1
             if powerup.type == 'shield':
-                if self.player.shield < 1: 
+                if self.player.shield < 1:
                     self.player.shield += 1   
             if powerup.type == 'twin':
                 self.player.currWeapon = 'twin'
                 self.player.bullet = 9
                 self.powerup_start = pygame.time.get_ticks()
+            del powerup

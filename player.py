@@ -35,11 +35,13 @@ class Player(pygame.sprite.Sprite):
         # pass in the rect (position) of the base (things that look like balls) so that the weapon can follow
         self.currWeapon = "normal"
         self.weapon = Weapon(groups, self.rect)
+        self.hp_bar = HealthBar(groups, self)
         self.speed = 10
         self.bullet_sprites = pygame.sprite.Group()
         self.bullet = 3
         self.shoot_cooldown = 0
 
+        self.max_hp = 3
         self.hp = 3
         self.shield = 0
         
@@ -123,6 +125,7 @@ class Player(pygame.sprite.Sprite):
 class Weapon(pygame.sprite.Sprite):
     def __init__(self, groups, base_rect):
         super().__init__(groups)
+        self.name = "normal"
         self.base_rect = base_rect
         # scale the image
         self.image = globals.scale_image(pygame.image.load(os.path.join(".//media//image//tank+weapon//weapon", "0.png")).convert_alpha())
@@ -130,6 +133,9 @@ class Weapon(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.center = (self.base_rect.center[0], self.base_rect.center[1] - 20)
+
+    def switch_weapon(self):
+        pass
 
 class TwinWeapon(pygame.sprite.Sprite):
     def __init__(self, groups, base_rect):
@@ -141,3 +147,26 @@ class TwinWeapon(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.center = (self.base_rect.center[0], self.base_rect.center[1] - 20)
+
+class HealthBar(pygame.sprite.Sprite):
+    def __init__(self, groups, player):
+        super().__init__(groups)
+        self.player = player
+        self.player_rect = player.rect
+        self.hp_bar_w = self.player_rect.w
+        self.image = pygame.Surface((self.hp_bar_w, 10)).convert_alpha()
+        self.image.fill((0, 255, 0))
+        self.rect = self.image.get_rect(center = self.player_rect.center)
+    
+    def update(self):
+        ratio = self.player.hp / self.player.max_hp
+        new_hp_bar_w = self.hp_bar_w * ratio
+        self.image = pygame.Surface((new_hp_bar_w, 10)).convert_alpha()
+        if ratio == 1:
+            self.image.fill((0, 255, 0))
+        elif ratio > 0.5:
+            self.image.fill((255, 255, 0))
+        else:
+            self.image.fill((255, 0, 0))
+
+        self.rect.center = self.player_rect.midbottom
