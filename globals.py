@@ -11,6 +11,12 @@ TILE = 90
 
 # SOUNDS
 POWERUP_SOUND = pygame.mixer.Sound("./Audio/sfx/forceField_003.ogg")
+# UI SOUNDS
+GAMEOVER_SOUND = pygame.mixer.Sound("./Audio/sfx/jingles_HIT15.ogg")
+STAGECLEAR_SOUND = pygame.mixer.Sound("./Audio/sfx/jingles_HIT07.ogg")
+FINALWIN_SOUND =  pygame.mixer.Sound("./Audio/sfx/jingles_HIT10.ogg")
+NEXTSTAGE_SOUND = pygame.mixer.Sound("./Audio/sfx/jingles_HIT16.ogg")
+RETRY_SOUND = pygame.mixer.Sound("./Audio/sfx/jingles_HIT04.ogg")
 # PLAYER SOUNDS
 NORMAL_LASER_SOUND = pygame.mixer.Sound("./Audio/sfx/laserSmall_002.ogg")
 TWIN_LASER_SOUND = pygame.mixer.Sound("./Audio/sfx/laserSmall_003.ogg")
@@ -31,6 +37,12 @@ LEVEL_3_MUSIC = "./Audio/music/level3.mp3"
 # SET VOLUME
 pygame.mixer.music.set_volume(0.5)
 
+
+GAMEOVER_SOUND.set_volume(0.20)
+STAGECLEAR_SOUND.set_volume(0.20)
+FINALWIN_SOUND.set_volume(0.20)
+NEXTSTAGE_SOUND.set_volume(0.20)
+RETRY_SOUND.set_volume(0.20)
 NORMAL_LASER_SOUND.set_volume(0.20)
 TWIN_LASER_SOUND.set_volume(0.25)
 PLASMA_LASER_SOUND.set_volume(0.15)

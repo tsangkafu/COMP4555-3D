@@ -46,6 +46,7 @@ class Game():
                     self.screen.blit(stage_clear_text, (globals.DISPLAY_WIDTH/2 - stage_clear_text.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text.get_height()/2 - 30))
                     self.screen.blit(stage_clear_text_2, (globals.DISPLAY_WIDTH/2 - stage_clear_text_2.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_2.get_height()/2 + 30))
                     if pygame.key.get_pressed()[pygame.K_RETURN]:
+                        pygame.mixer.Sound.play(globals.NEXTSTAGE_SOUND)
                         self.stage += 1
                         score = self.level.score_value
                         del self.level
@@ -74,6 +75,7 @@ class Game():
                 stage_clear_text_3 = self.sub_text.render("PRESS ENTER TO TRY AGAIN", True, (0, 255, 150))
                 self.screen.blit(stage_clear_text_3, (globals.DISPLAY_WIDTH/2 - stage_clear_text_3.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_3.get_height()/2 + 100))
                 if pygame.key.get_pressed()[pygame.K_RETURN]:
+                    pygame.mixer.Sound.play(globals.RETRY_SOUND) 
                     self.stage = 1 # restarts to first level
                     del self.level
                     self.level = Level(self.screen, self.stage, 0)
