@@ -1,7 +1,6 @@
 import pygame
 from player import Player, Shield
 from background import Background
-import psutil
 from levels import LEVELS
 import enemy
 import random
@@ -11,7 +10,7 @@ from hit import Hit
 from powerup import Powerup
 
 class Level():
-    def __init__(self, screen, level):
+    def __init__(self, screen, level, score):
         self.screen = screen
         self.level = level
 
@@ -34,7 +33,7 @@ class Level():
         self.powerup_timer = pygame.time.get_ticks()
 
         # Score Board
-        self.score_value = 0
+        self.score_value = score
         self.font = pygame.font.Font("./media/fonts/Retro Gaming.ttf", 24)
 
         self.shield = None
@@ -129,18 +128,21 @@ class Level():
 
                 # collide with player
                 if bullet.rect.colliderect(self.player.weapon.rect):
-                    Hit(self.hit_sprites, self.player.rect.center)
-                    bullet.kill()
-                    self.player.hp -= 1
+                    if self.player.hp > 0:
+                        Hit(self.hit_sprites, self.player.rect.center)
+                        bullet.kill()
+                        pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
+                        self.player.hp -= 1
+                        # detract score for getting hit
+                        self.score_value -= 20                  
+                        
                     
-                    #detract score for getting hit
-                    self.score_value -= 20
-
-                    pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
                     if self.player.hp == 0:
                         pygame.mixer.Sound.play(globals.PLAYER_EXPLOSION_SOUND) 
                         Exposion(self.exposion_sprites, 2, self.player.rect.center)
                         self.player_sprites.empty()
+                        self.player.hp -=1 #bring hp below 0 to prevent repeated explosion effect
+
 
                     del bullet
         
@@ -165,3 +167,6 @@ class Level():
                 self.player.weapon.switch_weapon("plasma")
                 self.powerup_start = pygame.time.get_ticks()
             del powerup
+
+
+
