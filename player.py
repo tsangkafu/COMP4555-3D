@@ -79,6 +79,7 @@ class Player(pygame.sprite.Sprite):
                         Bullet(self.bullet_sprites, self, 2)
                         self.shoot_cooldown = 20
                     if self.weapon.type == "plasma":
+                        pygame.mixer.Sound.play(globals.PLASMA_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, 0)
                         self.shoot_cooldown = 5
                     

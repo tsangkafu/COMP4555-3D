@@ -14,6 +14,7 @@ POWERUP_SOUND = pygame.mixer.Sound("./Audio/sfx/forceField_003.ogg")
 # PLAYER SOUNDS
 NORMAL_LASER_SOUND = pygame.mixer.Sound("./Audio/sfx/laserSmall_002.ogg")
 TWIN_LASER_SOUND = pygame.mixer.Sound("./Audio/sfx/laserSmall_003.ogg")
+PLASMA_LASER_SOUND = pygame.mixer.Sound("./Audio/sfx/laserSmall_000.ogg")
 PLAYER_EXPLOSION_SOUND = pygame.mixer.Sound("./Audio/sfx/explosionCrunch_004.ogg")
 PLAYER_HIT_SOUND = pygame.mixer.Sound("./Audio/sfx/impactPlate_medium_002.ogg")
 # ENEMY SOUNDS
@@ -32,6 +33,7 @@ pygame.mixer.music.set_volume(0.5)
 
 NORMAL_LASER_SOUND.set_volume(0.20)
 TWIN_LASER_SOUND.set_volume(0.25)
+PLASMA_LASER_SOUND.set_volume(0.15)
 SMALL_ENEMY_LASER_SOUND.set_volume(0.25)
 POWERUP_SOUND.set_volume(0.12)
 EXPLOSION_SOUND.set_volume(0.04)
