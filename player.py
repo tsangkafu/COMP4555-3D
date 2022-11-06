@@ -72,11 +72,16 @@ class Player(pygame.sprite.Sprite):
                     if self.weapon.type == "normal":
                         pygame.mixer.Sound.play(globals.NORMAL_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, 0)
+                        self.shoot_cooldown = 20
                     if self.weapon.type == "twin":
                         pygame.mixer.Sound.play(globals.TWIN_LASER_SOUND)
                         Bullet(self.bullet_sprites, self, -2)
                         Bullet(self.bullet_sprites, self, 2)
-                    self.shoot_cooldown = 10
+                        self.shoot_cooldown = 20
+                    if self.weapon.type == "plasma":
+                        Bullet(self.bullet_sprites, self, 0)
+                        self.shoot_cooldown = 5
+                    
 
         # decrement shoot_cooldown on each loop
         if self.shoot_cooldown > 0:
@@ -96,7 +101,7 @@ WEAPON_MAP = {
     "normal": [0, 3],
     "twin": [1, 6],
     "laser": [2, 1],
-    "plasma": [3, 3]
+    "plasma": [3, 10]
 }
 
 class Weapon(pygame.sprite.Sprite):

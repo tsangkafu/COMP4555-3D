@@ -23,8 +23,13 @@ class Bullet(pygame.sprite.Sprite):
         self.ship = ship
         if self.ship.name == "player":
             self.pos = (ship.rect.midtop[0], ship.rect.midtop[1])
-            path = ".//media//image//bullet + fx + powerup + coin//shot//normalshot"
-            self.image = globals.scale_image(pygame.image.load(os.path.join(path, "shot_0.png")).convert_alpha())
+            if self.ship.weapon.type == "plasma":
+                path = ".//media//image//bullet + fx + powerup + coin//shot"
+                self.image = globals.scale_image(pygame.image.load(os.path.join(path, "plasmashot_big.png")).convert_alpha())
+            else:
+                path = ".//media//image//bullet + fx + powerup + coin//shot//normalshot"
+                self.image = globals.scale_image(pygame.image.load(os.path.join(path, "shot_0.png")).convert_alpha())
+            
             self.rect = self.image.get_rect(center = self.pos)
         # enemy bullet start pos
         else:

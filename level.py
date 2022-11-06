@@ -68,7 +68,7 @@ class Level():
             self.powerup_sprites.update()
 
             self.powerup_timer = pygame.time.get_ticks()
-            if self.powerup_timer - self.powerup_start > 10000:
+            if self.powerup_timer - self.powerup_start > 5000:
                 self.player.weapon.switch_weapon("normal")
                 self.powerup_start = pygame.time.get_ticks()
 
@@ -97,8 +97,8 @@ class Level():
                 pygame.mixer.Sound.play(globals.EXPLOSION_SOUND) 
                 Exposion(self.exposion_sprites, enemy.level, enemy.rect.center)
                 self.score_value += enemy.score_value
-                # drop rate is inverse of decimal, so 25% 
-                if random.random() > 0.80:
+                # drop rate is inverse of decimal, so 15% 
+                if random.random() > 0.85:
                     powerup = Powerup(self.powerup_sprites, enemy.rect.center)
                     self.powerup_sprites.add(powerup)
                 del enemy
@@ -142,5 +142,10 @@ class Level():
             if powerup.type == 'twin':
                 self.player.weapon.switch_weapon("twin")
                 self.powerup_start = pygame.time.get_ticks()
-
+            # if powerup.type == "laser":
+            #     self.player.weapon.switch_weapon("laser")
+            #     self.powerup_start = pygame.time.get_ticks()
+            if powerup.type == "plasma":
+                self.player.weapon.switch_weapon("plasma")
+                self.powerup_start = pygame.time.get_ticks()
             del powerup
