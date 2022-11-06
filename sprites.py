@@ -1,5 +1,4 @@
 import pygame
-import psutil
 import globals
 import wall
 import background
