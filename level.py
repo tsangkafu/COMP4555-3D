@@ -16,7 +16,7 @@ class Level():
 
         self.enemy_sprites = pygame.sprite.Group()
 
-        self.background = Background()
+        self.background = Background(level)
 
         self.populate_enemies()
         
