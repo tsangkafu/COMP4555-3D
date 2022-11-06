@@ -132,6 +132,10 @@ class Level():
                     Hit(self.hit_sprites, self.player.rect.center)
                     bullet.kill()
                     self.player.hp -= 1
+                    
+                    #detract score for getting hit
+                    self.score_value -= 20
+
                     pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
                     if self.player.hp == 0:
                         pygame.mixer.Sound.play(globals.PLAYER_EXPLOSION_SOUND) 
