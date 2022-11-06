@@ -142,6 +142,7 @@ class Level():
                         Exposion(self.exposion_sprites, 2, self.player.rect.center)
                         self.player_sprites.empty()
                         self.player.hp -=1 #bring hp below 0 to prevent repeated explosion effect
+                        pygame.mixer.Sound.play(globals.GAMEOVER_SOUND) 
 
 
                     del bullet
