@@ -23,8 +23,9 @@ ENEMY_HIT_SOUND = pygame.mixer.Sound("./Audio/sfx/impactPlate_medium_001.ogg")
 # EXPLOSION
 EXPLOSION_SOUND = pygame.mixer.Sound("./Audio/sfx/explosionCrunch_000.ogg")
 # MUSIC
-LEVEL_1_MUSIC = pygame.mixer.music.load("./Audio/music/level1.mp3")
-pygame.mixer.music.play(-1) 
+LEVEL_1_MUSIC = "./Audio/music/level1.mp3"
+LEVEL_2_MUSIC = "./Audio/music/level2.mp3"
+LEVEL_3_MUSIC = "./Audio/music/level3.mp3"
 
 # SET VOLUME
 pygame.mixer.music.set_volume(0.5)

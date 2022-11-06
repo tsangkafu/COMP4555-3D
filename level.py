@@ -38,6 +38,18 @@ class Level():
         self.font = pygame.font.Font("./media/fonts/Retro Gaming.ttf", 24)
 
         self.shield = None
+
+        # Set level music
+        match level:
+            case 1:
+                pygame.mixer.music.load(globals.LEVEL_1_MUSIC)
+            case 2:
+                pygame.mixer.music.load(globals.LEVEL_2_MUSIC)
+            case 3:
+                pygame.mixer.music.load(globals.LEVEL_3_MUSIC)
+        
+        # Play Music
+        pygame.mixer.music.play(-1) 
     
     # all the level behaviors here
     def run(self):
