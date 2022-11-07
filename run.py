@@ -41,9 +41,9 @@ class Game():
             # GO TO NEXT STAGE
             if len(self.level.enemy_sprites) == 0:
                 pygame.mixer.Sound.play(globals.VICTORY_SOUND)
+                extraPoints = 500 * self.stage
                 if self.stage < 3:
                     stage_clear_text = self.font.render("STAGE: " + str(self.stage) + " CLEARED", True, ( 0, 255, 150))
-                    extraPoints = 500 * self.stage
                     stage_clear_text_3 = self.sub_text.render("+  " + str(extraPoints) + "   POINTS", True, ( 0, 255, 150))
                     stage_clear_text_2 = self.sub_text.render("PRESS ENTER TO CONTINUE", True, (0, 255, 150))
                     self.screen.blit(stage_clear_text, (globals.DISPLAY_WIDTH/2 - stage_clear_text.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text.get_height()/2 - 30))
@@ -62,16 +62,15 @@ class Game():
                     self.screen.blit(stage_clear_text, (globals.DISPLAY_WIDTH/2 - stage_clear_text.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text.get_height()/2 - 30))
                     stage_clear_text_2 = self.font.render("FINAL SCORE: " + str(self.level.score_value), True, (0, 255, 150))
                     self.screen.blit(stage_clear_text_2, (globals.DISPLAY_WIDTH/2 - stage_clear_text_2.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_2.get_height()/2 + 35))
-
-                    # code to make game restart after beating last level, does not work, causes level 3 to be skipped for some reason
-                    """
-                    stage_clear_text_4 = self.sub_text.render("PRESS ENTER TO PLAY AGAIN", True, (0, 255, 150))
-                    self.screen.blit(stage_clear_text_3, (globals.DISPLAY_WIDTH/2 - stage_clear_text_4.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_4.get_height()/2 + 100))
-                    if pygame.key.get_pressed()[pygame.K_RETURN]:
+                    
+                    stage_clear_text_4 = self.sub_text.render("PRESS N TO PLAY AGAIN", True, (0, 255, 150))
+                    self.screen.blit(stage_clear_text_4, (globals.DISPLAY_WIDTH/2 - stage_clear_text_4.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_4.get_height()/2 + 400))   
+                    if pygame.key.get_pressed()[pygame.K_n]:
                         self.stage = 1
                         del self.level
                         self.level = Level(self.screen, self.stage, 0)
-                    """
+                        
+                        
             # PLAYER DEATH RESTART SCREEN
             if self.level.player.hp <= 0:
                 stage_clear_text = self.font.render("GAME OVER", True, (0, 255, 150))
