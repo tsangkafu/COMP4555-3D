@@ -49,7 +49,8 @@ class Enemy(pygame.sprite.Sprite):
         },
         6: ["orange", "red"]
     }
-    def __init__(self, groups, level, color, pos):#spritesDict):
+
+    def __init__(self, groups, level, color, pos):  # spritesDict):
         super().__init__(groups)
         #self.spritesDict = spritesDict
         self.level = level
@@ -66,22 +67,24 @@ class Enemy(pygame.sprite.Sprite):
         # count the number of image in one file, this will change because different sprite has different files
         path = f".//media//image//invader_{str(level)}//invader_{str(level)}_{self.color}_{self.action}"
         num_of_img = globals.count_image(path)
-        
+
         # a list that store all the image of a sprite
         self.animation = []
         # loop through each image and append it to the animation list
         for i in range(num_of_img):
             # scale only enemies that is not level 1 (cause level 1 is small already)
             if level != 1:
-                image = globals.scale_image(pygame.image.load(os.path.join(path, str(i) + ".png")).convert_alpha())
+                image = globals.scale_image(pygame.image.load(
+                    os.path.join(path, str(i) + ".png")).convert_alpha())
                 self.animation.append(image)
             else:
-                self.animation.append(pygame.image.load(os.path.join(path, str(i) + ".png")).convert_alpha())
-            
+                self.animation.append(pygame.image.load(
+                    os.path.join(path, str(i) + ".png")).convert_alpha())
+
         self.current_frame = random.randint(0, len(self.animation) - 1)
         self.image = self.animation[self.current_frame]
-        
-        self.rect = self.image.get_rect(topleft = pos)
+
+        self.rect = self.image.get_rect(topleft=pos)
 
         self.hp = Enemy.ENEMIES_CONFIG[self.level]["hp"]
         self.bullet = Enemy.ENEMIES_CONFIG[self.level]["bullet"]
@@ -92,6 +95,8 @@ class Enemy(pygame.sprite.Sprite):
 
         self.velocity = [self.speed, self.speed]
         self.score_value = Enemy.ENEMIES_CONFIG[self.level]["score_value"]
+
+        self.enrage = False
 
     ######################################################################
     # GETTERS
@@ -113,12 +118,18 @@ class Enemy(pygame.sprite.Sprite):
             else:
                 self.speed = -10
 
+            self.enrage = True
             self.cd *= 0.3
             self.cd_tracker = pygame.time.get_ticks() - random.randint(0, self.cd)
 
     # change direction when on border
         if self.rect.right >= globals.DISPLAY_WIDTH or self.rect.left <= 0:
             self.speed *= -1
+            # start moving down the screen if there are less than 10 enemies left
+            if self.enrage:
+                if self.level < 5:
+                    self.rect.y += globals.TILE
+
         self.rect.x += self.speed
         # animate the enemy
         # current frame increment being the speed of how fast the animation is

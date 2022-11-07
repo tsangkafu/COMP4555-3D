@@ -3,14 +3,23 @@ import globals
 import os
 
 
-class Hit(pygame.sprite.Sprite):
+class Explosion(pygame.sprite.Sprite):
+    # key being the enemy level
+    # value being the explosion type
+    EXPO_MAP = {
+        1: 4,
+        2: 2,
+        5: 1
+    }
     # level being the level of the enemy, different enemy will have different exposure animation
     # pos being the position of the
-    def __init__(self, groups, pos):
+
+    def __init__(self, groups, level, pos):  # spritesDict):
         super().__init__(groups)
+        self.explosion = Explosion.EXPO_MAP[level]
 
         # count the number of image in one file, this will change because different sprite has different files
-        path = f".//media//image//bullet + fx + powerup + coin//hit_fx"
+        path = f".//media//image//exp_{self.explosion}"
         num_of_img = globals.count_image(path)
 
         # a list that store all the image of a sprite
