@@ -68,10 +68,10 @@ class Game():
                     stage_clear_text_2 = self.font.render("FINAL SCORE: " + str(score), True, (0, 255, 150))
                     self.screen.blit(stage_clear_text_2, (globals.DISPLAY_WIDTH/2 - stage_clear_text_2.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_2.get_height()/2 + 35))
                     stage_clear_text_3 = self.sub_text.render("BONUS: +" + str(extraPoints) + " POINTS", True, ( 0, 255, 150))
-                    self.screen.blit(stage_clear_text_3, (globals.DISPLAY_WIDTH/2 - stage_clear_text_3.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_3.get_height()/2 + 150))
+                    self.screen.blit(stage_clear_text_3, (globals.DISPLAY_WIDTH/2 - stage_clear_text_3.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_3.get_height()/2 + 100))
 
                     stage_clear_text_4 = self.sub_text.render("PRESS BACKSPACE TO PLAY AGAIN", True, (0, 255, 150))
-                    self.screen.blit(stage_clear_text_4, (globals.DISPLAY_WIDTH/2 - stage_clear_text_4.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_4.get_height()/2 + 100))
+                    self.screen.blit(stage_clear_text_4, (globals.DISPLAY_WIDTH/2 - stage_clear_text_4.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_4.get_height()/2 + 150))
                     if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
                         del self.level
                         self.stage = 1

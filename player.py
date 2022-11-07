@@ -75,8 +75,8 @@ class Player(pygame.sprite.Sprite):
                         self.shoot_cooldown = 20
                     if self.weapon.type == "twin":
                         pygame.mixer.Sound.play(globals.TWIN_LASER_SOUND)
-                        Bullet(self.bullet_sprites, self, -2)
-                        Bullet(self.bullet_sprites, self, 2)
+                        Bullet(self.bullet_sprites, self, -1)
+                        Bullet(self.bullet_sprites, self, 1)
                         self.shoot_cooldown = 20
                     if self.weapon.type == "plasma":
                         pygame.mixer.Sound.play(globals.PLASMA_LASER_SOUND)
