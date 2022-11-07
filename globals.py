@@ -17,6 +17,7 @@ STAGECLEAR_SOUND = pygame.mixer.Sound("./Audio/sfx/jingles_HIT07.ogg")
 FINALWIN_SOUND =  pygame.mixer.Sound("./Audio/sfx/jingles_HIT10.ogg")
 NEXTSTAGE_SOUND = pygame.mixer.Sound("./Audio/sfx/jingles_HIT16.ogg")
 RETRY_SOUND = pygame.mixer.Sound("./Audio/sfx/jingles_HIT04.ogg")
+VICTORY_SOUND = pygame.mixer.Sound("./Audio/sfx/victory.ogg")
 # PLAYER SOUNDS
 NORMAL_LASER_SOUND = pygame.mixer.Sound("./Audio/sfx/laserSmall_002.ogg")
 TWIN_LASER_SOUND = pygame.mixer.Sound("./Audio/sfx/laserSmall_003.ogg")
