@@ -7,7 +7,7 @@ class Powerup(pygame.sprite.Sprite):
     def __init__(self, groups, center):
         super().__init__(groups)
         #available powerups: heal, twin, heart, shield, laser, plasma 
-        self.type = random.choice(['heal', 'twin', 'shield', 'plasma', 'laser'])
+        self.type = random.choice(['heal', 'twin', 'shield', 'plasma']) #,'laser'
 
 
         path = f".//media//image//bullet + fx + powerup + coin//powerups//{str(self.type)}"

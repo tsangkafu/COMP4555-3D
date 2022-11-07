@@ -53,6 +53,7 @@ EXPLOSION_SOUND.set_volume(0.04)
 PLAYER_EXPLOSION_SOUND.set_volume(0.15)
 PLAYER_HIT_SOUND.set_volume(0.20)
 ENEMY_HIT_SOUND.set_volume(0.15)
+STAGECLEAR_SOUND.set_volume(0.20)
 
 def count_image(path):
     count = 0
