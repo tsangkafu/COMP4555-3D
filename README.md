@@ -15,14 +15,18 @@
 
 # Game Mods:
 - Levels
+  - 10 levels
   - Increasing difficulty
   - Different visuals, sounds and enemies types per level
-  - Enemy "enrage" mechanic: when enemy count gets below 10 the enemies move much faster and start traveling down the screen.
+  - Enemy "enrage" mechanism: when enemy count gets below 10 the enemies move much faster and shoot faster and start traveling down the screen
+    - if collide with enemy, shield will break or player will be deducted 2 hp
 - Custom sounds (not created by us)
 - Added mutable music
-- Custom graphics (not created by us)
+- Custom graphics (not created by us): different exposion, hit, bullet, weapon, base, enemy
 - Added a screen between levels and on game over
-- Added the option to restart after clearing all stages or on loss.
+- Score board system
+- Added the option to restart after clearing all stages
+- You can restart any level.
 - Player health bar
 - Powerups (% chance to drop on enemy kill): 
     - Heal - restores damaged hp by 1.
