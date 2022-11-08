@@ -24,7 +24,7 @@
 
 # Credits:
 - Graphics - "Space Invader Pack"
-  - https://graphicriver.net/item/space-invader-pack/17912020
+    - https://graphicriver.net/item/space-invader-pack/17912020
   - License PDF:
   - https://cdn.discordapp.com/attachments/1018936804545658960/1039359887731343450/69954220-space-invader-pack-license_1.pdf
 
