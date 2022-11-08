@@ -13,7 +13,7 @@ class Game():
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((globals.DISPLAY_WIDTH, globals.DISPLAY_HEIGHT)) 
         pygame.display.set_caption("Space Invaders")
-        self.stage = 1
+        self.stage = 5
         self.font = pygame.font.Font("./media/fonts/Retro Gaming.ttf", 72)
         self.sub_text = pygame.font.Font("./media/fonts/Retro Gaming.ttf", 48)
 

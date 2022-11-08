@@ -13,7 +13,7 @@ class Explosion(pygame.sprite.Sprite):
         3: 1,
         4: 1,
         5: 1,
-        6: 1
+        6: 3
     }
     # level being the level of the enemy, different enemy will have different exposure animation
     # pos being the position of the
