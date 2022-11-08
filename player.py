@@ -7,12 +7,16 @@ class Player(pygame.sprite.Sprite):
 
     ######################################################################
     # CONSTRUCTOR
-    def __init__(self, groups):#, spritesDict):
+    def __init__(self, groups, level):#, spritesDict):
         super().__init__(groups)
         # self.spritesDict = spritesDict
         self.name = "player"
-        # you can change to tank_blue/tank_pink
-        self.color = "green"
+        if level < 4:
+            self.color = "green"
+        elif level < 7:
+            self.color = "blue"
+        else:
+            self.color = "pink"
 
         # count the number of image in one file, this will change because different sprite has different files
         path = ".//media//image//tank+weapon//tank_"  + self.color
@@ -96,7 +100,7 @@ class Player(pygame.sprite.Sprite):
         if self.current_frame >= len(self.animation):
             self.current_frame = 0
         self.image = self.animation[int(self.current_frame)]
-        
+
 # mapping for the image file and bullet number, the first value being the image index, the second being the bullet number
 WEAPON_MAP = {
     "normal": [0, 3],
