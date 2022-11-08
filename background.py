@@ -7,7 +7,7 @@ class Background():
 
     def __init__(self, level):
         self.image = pygame.image.load(os.path.join(
-            ".//media//image//background", f"bg-{str(level)}.png")).convert()
+            ".//media//image//background", f"bg-{str(level % 3)}.png")).convert()
         self.image = pygame.transform.scale(
             self.image, (globals.DISPLAY_WIDTH, globals.DISPLAY_HEIGHT))
         self.x = 0

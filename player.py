@@ -96,7 +96,7 @@ class Player(pygame.sprite.Sprite):
         if self.current_frame >= len(self.animation):
             self.current_frame = 0
         self.image = self.animation[int(self.current_frame)]
-
+        
 # mapping for the image file and bullet number, the first value being the image index, the second being the bullet number
 WEAPON_MAP = {
     "normal": [0, 3],
@@ -136,6 +136,8 @@ class HealthBar(pygame.sprite.Sprite):
     def update(self):
         ratio = self.player.hp / self.player.max_hp
         new_hp_bar_w = self.hp_bar_w * ratio
+        if self.player.hp <= 0:
+            new_hp_bar_w = 0
         self.image = pygame.Surface((new_hp_bar_w, 10)).convert_alpha()
         if ratio == 1:
             self.image.fill((0, 255, 0))

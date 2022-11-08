@@ -174,7 +174,34 @@ class Level():
             del powerup
 
         # collision of player with enemy sprites
-        player_enemy_collision = pygame.sprite.groupcollide(
-            self.player_sprites, self.enemy_sprites, True, False)
-        for collision in player_enemy_collision:
-            self.player.hp = 0
+        for enemy in self.enemy_sprites:
+            # if collided with the shield
+            if self.shield != None:
+                if enemy.rect.colliderect(self.shield):
+                    enemy.kill()
+                    pygame.mixer.Sound.play(globals.ENEMY_HIT_SOUND)
+                    pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
+                    Explosion(self.explosion_sprites,
+                            enemy.level, enemy.rect.center)
+                    Hit(self.hit_sprites, self.player.rect.center)
+                    self.shield.hp = -3
+                    self.shield = None
+
+            if enemy.rect.colliderect(self.player.weapon.rect):
+                enemy.kill()
+                pygame.mixer.Sound.play(globals.ENEMY_HIT_SOUND)
+                Explosion(self.explosion_sprites,
+                          enemy.level, enemy.rect.center)
+                self.player.hp -= 2
+                # if the player is dead, play explosion, sounds and kill
+                if self.player.hp <= 0:
+                    Explosion(self.explosion_sprites, 2,
+                                self.player.rect.center)
+                    pygame.mixer.Sound.play(globals.PLAYER_EXPLOSION_SOUND)
+                    self.player_sprites.empty()
+
+                self.score_value -= 100
+
+                Hit(self.hit_sprites, self.player.rect.center)
+                pygame.mixer.Sound.play(globals.PLAYER_HIT_SOUND)
+                # detract score for getting hit

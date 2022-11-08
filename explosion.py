@@ -7,9 +7,13 @@ class Explosion(pygame.sprite.Sprite):
     # key being the enemy level
     # value being the explosion type
     EXPO_MAP = {
+        0: 3,
         1: 4,
         2: 2,
-        5: 1
+        3: 1,
+        4: 1,
+        5: 1,
+        6: 1
     }
     # level being the level of the enemy, different enemy will have different exposure animation
     # pos being the position of the
@@ -27,8 +31,12 @@ class Explosion(pygame.sprite.Sprite):
 
         # loop through each image and append it to the animation list
         for i in range(num_of_img):
-            image = globals.scale_image(pygame.image.load(
-                os.path.join(path, str(i) + ".png")).convert_alpha())
+            if self.explosion != 1:
+                image = globals.scale_image(pygame.image.load(
+                    os.path.join(path, str(i) + ".png")).convert_alpha())
+            else:
+                image = pygame.image.load(
+                    os.path.join(path, str(i) + ".png")).convert_alpha()
             self.animation.append(image)
 
         self.current_frame = 0

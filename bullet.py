@@ -35,7 +35,11 @@ class Bullet(pygame.sprite.Sprite):
         else:
             self.pos = (ship.rect.midbottom[0], ship.rect.midbottom[1])
             path = ".//media//image//bullet + fx + powerup + coin//bullet_" + str(ship.bullet)
-            self.image = globals.scale_image(pygame.image.load(os.path.join(path, "0.png")).convert_alpha())
+            if ship.level >= 3:
+                bullet = ship.level - 3
+                self.image = globals.scale_image(pygame.image.load(os.path.join(path, str(bullet) + ".png")).convert_alpha())
+            else:
+                self.image = globals.scale_image(pygame.image.load(os.path.join(path, "0.png")).convert_alpha())
             self.rect = self.image.get_rect(center = self.pos)
 
         self.speed = 10

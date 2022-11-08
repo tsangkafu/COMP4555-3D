@@ -20,9 +20,10 @@ class Enemy(pygame.sprite.Sprite):
     ENEMIES_CONFIG = {
         0: {
             "color": ["red", "pink", "blue"],
-            "hp": 2,
-            "bullet": 1,
-            "cd": 15000
+            "hp": 3,
+            "bullet": 3,
+            "cd": 10000,
+            "score_value": 50
         },
         1: {
             "color": ["red", "blue"],
@@ -38,16 +39,33 @@ class Enemy(pygame.sprite.Sprite):
             "cd": 15000,
             "score_value": 25
         },
-        3: ["blue", "yellow"],
-        4: ["green", "blue"],
+        3: {
+            "color": ["blue", "yellow"],
+            "hp": 10,
+            "bullet": 3,
+            "cd": 7000,
+            "score_value": 150},
+        4: {
+            "color": ["green", "blue"],
+            "hp": 15,
+            "bullet": 3,
+            "cd": 1500,
+            "score_value": 500
+        },
         5: {
             "color": ["green", "blue"],
-            "hp": 20,
+            "hp": 40,
             "bullet": 3,
             "cd": 500,
-            "score_value": 1500
+            "score_value": 1000
         },
-        6: ["orange", "red"]
+        6: {
+            "color": ["orange", "red"],
+            "hp": 7,
+            "bullet": 3,
+            "cd": 3000,
+            "score_value": 500
+        },
     }
 
     def __init__(self, groups, level, color, pos):  # spritesDict):
@@ -127,7 +145,7 @@ class Enemy(pygame.sprite.Sprite):
             self.speed *= -1
             # start moving down the screen if there are less than 10 enemies left
             if self.enrage:
-                if self.level < 5:
+                if self.level != 5 and self.level != 4:
                     self.rect.y += globals.TILE
 
         self.rect.x += self.speed

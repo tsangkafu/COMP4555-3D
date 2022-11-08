@@ -3,6 +3,7 @@ import globals
 import sys
 from level import Level
 from sprites import Sprites
+from levels import LEVELS
 
 #################################################################
 
@@ -12,7 +13,7 @@ class Game():
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.set_mode((globals.DISPLAY_WIDTH, globals.DISPLAY_HEIGHT)) 
         pygame.display.set_caption("Space Invaders")
-        self.stage = 1
+        self.stage = 7
         self.font = pygame.font.Font("./media/fonts/Retro Gaming.ttf", 72)
         self.sub_text = pygame.font.Font("./media/fonts/Retro Gaming.ttf", 48)
 
@@ -40,11 +41,25 @@ class Game():
                                 music_playing = True
             
             # GO TO NEXT STAGE
-            if len(self.level.enemy_sprites) == 0:
+            # PLAYER DEATH RESTART SCREEN
+            if self.level.player.hp <= 0:
+                stage_clear_text = self.font.render("GAME OVER", True, (0, 255, 150))
+                self.screen.blit(stage_clear_text, (globals.DISPLAY_WIDTH/2 - stage_clear_text.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text.get_height()/2 - 30))
+                stage_clear_text_2 = self.font.render("YOUR SCORE: " + str(self.level.score_value), True, (0, 255, 150))
+                self.screen.blit(stage_clear_text_2, (globals.DISPLAY_WIDTH/2 - stage_clear_text_2.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_2.get_height()/2 + 35))
+                stage_clear_text_3 = self.sub_text.render("PRESS ENTER TO TRY AGAIN", True, (0, 255, 150))
+                self.screen.blit(stage_clear_text_3, (globals.DISPLAY_WIDTH/2 - stage_clear_text_3.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_3.get_height()/2 + 100))
+                if pygame.key.get_pressed()[pygame.K_RETURN]:
+                    pygame.mixer.Sound.play(globals.RETRY_SOUND) 
+                    # self.stage = 1 # restarts to first level
+                    del self.level
+                    self.level = Level(self.screen, self.stage, 0)
+
+            if len(self.level.enemy_sprites) == 0 and self.level.player.hp > 0:
                 if (victory_sound_control):
                     pygame.mixer.Sound.play(globals.VICTORY_SOUND)
                     victory_sound_control = False
-                if self.stage < 3:
+                if self.stage < len(LEVELS):
                     stage_clear_text = self.font.render("STAGE: " + str(self.stage) + " CLEARED", True, ( 0, 255, 150))
                     extraPoints = 500 * self.stage
                     stage_clear_text_3 = self.sub_text.render("BONUS: +" + str(extraPoints) + " POINTS", True, ( 0, 255, 150))
@@ -60,9 +75,9 @@ class Game():
                         score = self.level.score_value + extraPoints
                         del self.level
                         self.level = Level(self.screen, self.stage, score)
-                if self.stage == 3:
+                elif self.stage == len(LEVELS):
                     extraPoints = 500 * self.stage
-                    score = self.level.score_value + extraPoints
+                    score = self.level.score_value + extraPoints 
                     stage_clear_text = self.font.render("ALL STAGES CLEARED:", True, (0, 255, 150))
                     self.screen.blit(stage_clear_text, (globals.DISPLAY_WIDTH/2 - stage_clear_text.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text.get_height()/2 - 30))
                     stage_clear_text_2 = self.font.render("FINAL SCORE: " + str(score), True, (0, 255, 150))
@@ -70,26 +85,12 @@ class Game():
                     stage_clear_text_3 = self.sub_text.render("BONUS: +" + str(extraPoints) + " POINTS", True, ( 0, 255, 150))
                     self.screen.blit(stage_clear_text_3, (globals.DISPLAY_WIDTH/2 - stage_clear_text_3.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_3.get_height()/2 + 100))
 
-                    stage_clear_text_4 = self.sub_text.render("PRESS BACKSPACE TO PLAY AGAIN", True, (0, 255, 150))
+                    stage_clear_text_4 = self.sub_text.render("PRESS ENTER TO PLAY AGAIN", True, (0, 255, 150))
                     self.screen.blit(stage_clear_text_4, (globals.DISPLAY_WIDTH/2 - stage_clear_text_4.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_4.get_height()/2 + 150))
-                    if pygame.key.get_pressed()[pygame.K_BACKSPACE]:
+                    if pygame.key.get_pressed()[pygame.K_RETURN]:
                         del self.level
                         self.stage = 1
                         self.level = Level(self.screen, self.stage, 0)
-
-            # PLAYER DEATH RESTART SCREEN
-            if self.level.player.hp <= 0:
-                stage_clear_text = self.font.render("GAME OVER", True, (0, 255, 150))
-                self.screen.blit(stage_clear_text, (globals.DISPLAY_WIDTH/2 - stage_clear_text.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text.get_height()/2 - 30))
-                stage_clear_text_2 = self.font.render("YOUR SCORE: " + str(self.level.score_value), True, (0, 255, 150))
-                self.screen.blit(stage_clear_text_2, (globals.DISPLAY_WIDTH/2 - stage_clear_text_2.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_2.get_height()/2 + 35))
-                stage_clear_text_3 = self.sub_text.render("PRESS ENTER TO TRY AGAIN", True, (0, 255, 150))
-                self.screen.blit(stage_clear_text_3, (globals.DISPLAY_WIDTH/2 - stage_clear_text_3.get_width()/2, globals.DISPLAY_HEIGHT/2 - stage_clear_text_3.get_height()/2 + 100))
-                if pygame.key.get_pressed()[pygame.K_RETURN]:
-                    pygame.mixer.Sound.play(globals.RETRY_SOUND) 
-                    self.stage = 1 # restarts to first level
-                    del self.level
-                    self.level = Level(self.screen, self.stage, 0)
 
             pygame.display.flip()
             self.clock.tick(60)
