@@ -40,9 +40,10 @@ class Level():
         self.shield = None
 
         # Set level music
-        if level == 1:
+        
+        if level == 1 or level == 4 or level == 7:
             pygame.mixer.music.load(globals.LEVEL_1_MUSIC)
-        elif level == 2:
+        elif level == 2 or level == 5 or level == 8:
             pygame.mixer.music.load(globals.LEVEL_2_MUSIC)
         else:
             pygame.mixer.music.load(globals.LEVEL_3_MUSIC)
